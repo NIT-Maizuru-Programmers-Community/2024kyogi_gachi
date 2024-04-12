@@ -1,1 +1,13 @@
-{}
+{
+    "food1":{
+   "name":"banana",
+   "color": "yellow" ,
+   "price": 200
+   },
+   "food2":{
+    "name": "apple",
+    "color": "red" ,
+   "price": 100
+   }
+   }
+   
