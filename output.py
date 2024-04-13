@@ -1,5 +1,6 @@
 #output
 import json
+import threading
 
 ###############    仮    ###########
 boardk=[[1,2,3],[1,3,1]]#盤面
@@ -13,6 +14,7 @@ TorFk=24#正誤
 
 
 def log_output(board,turn,time,use_type,use_coodenate,move_direc,TF):
+    write_lock = threading.Lock()
 
     log = {
            'board': board, 
@@ -23,9 +25,14 @@ def log_output(board,turn,time,use_type,use_coodenate,move_direc,TF):
            'move_direc':move_direc, 
            'TF':TF
            }
+    
+    with write_lock:
+        with open('log.json', 'a') as f:
+            json.dump(log, f,indent=3)
+            f.write(",")
 
-    with open('log.json', 'w',) as f:
-        json.dump(log, f,indent=3)
+for i in range(3):
+    log_output(boardk,turnk,timek,use_typek,use_coordinatek,move_direck,TorFk)
 
 
-log_output(boardk,turnk,timek,use_typek,use_coordinatek,move_direck,TorFk)
+
