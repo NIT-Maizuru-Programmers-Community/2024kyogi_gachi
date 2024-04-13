@@ -31,8 +31,5 @@ def log_output(board,turn,time,use_type,use_coodenate,move_direc,TF):
             json.dump(log, f,indent=3)
             f.write(",")
 
-for i in range(3):
-    log_output(boardk,turnk,timek,use_typek,use_coordinatek,move_direck,TorFk)
-
 
 
