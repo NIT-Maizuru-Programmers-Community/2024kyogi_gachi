@@ -16,7 +16,8 @@ TorFk=24#正誤
 def log_output(board,turn,time,use_type,use_coodenate,move_direc,TF):
     write_lock = threading.Lock()
 
-    log = {
+    log ={
+        turn:{
            'board': board, 
            'turn': turn, 
            'time': time, 
@@ -25,11 +26,16 @@ def log_output(board,turn,time,use_type,use_coodenate,move_direc,TF):
            'move_direc':move_direc, 
            'TF':TF
            }
+    }
     
     with write_lock:
         with open('log.json', 'a') as f:
             json.dump(log, f,indent=3)
             f.write(",")
+
+
+for i in range (4):
+    log_output(boardk,turnk*i,timek*i,use_typek,use_coordinatek,move_direck,TorFk*i)
 
 
 
