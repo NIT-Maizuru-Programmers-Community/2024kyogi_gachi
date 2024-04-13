@@ -11,8 +11,6 @@ general_patterns_cells=[[[1]],[[1,1],[1,1]],[[1,1],[0,0]],[[1,0],[1,0]],[[1,1,1,
                         [[1,1,1,1],[0,0,0,0],[1,1,1,1],[0,0,0,0]],[[1,0,1,0],[1,0,1,0],[1,0,1,0],[1,0,1,0]]]
 
 class BoardReload():
-    cover_count_x=0
-    cover_count_y=0
 
     def __init__(self,p,x,y,s,board_now):
 
@@ -21,6 +19,8 @@ class BoardReload():
         self.y=y
         self.s=s
         self.board_now=board_now
+        self.coverd_width=0
+        self.coverd_height=0
         self.flame_board=[]
         self.flame_nukigata=[]
 
@@ -38,11 +38,30 @@ class BoardReload():
                             
                             self.flame_board.append([x,y])
                             self.flame_nukigata.append([i,j])
-    
+                            self.coverd_width=i
+                            self.coverd_height=j
+                
+                print(self.flame_board)
+                print(self.flame_nukigata)
+                print(self.coverd_width)
+                print(self.coverd_height)
 
-    def pull_out(self):
+    def num_move(self):
          
-         self.cover_judge()
+        self.cover_judge()
+
+        if self.s==0:
+            for i in range(len(self.flame_nukigata)):
+              if general_patterns_cells[self.flame_nukigata[i][1]][self.flame_nukigata[i][0]]==1:
+        elif self.s==1:
+            
+        elif self.s==2:
+                
+        elif self.s==3:
+                         
+
+board_reload=BoardReload(7,-1,-1,0,board_now)
+board_reload.cover_judge()
          
 
 
