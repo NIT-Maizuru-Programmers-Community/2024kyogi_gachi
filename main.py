@@ -26,27 +26,23 @@ class BoardReload():
 
 
     def cover_judge(self):
+                
                 x=self.x
                 y=self.y
-                for i in range(general_patterns_width[self.p]):
-                    x=x+i
+                for i in range(0,general_patterns_width[self.p]):
+                    x=self.x+i
                     y=self.y
-                    for j in range(general_patterns_height[self.p]):
-                        y=y+j
+                    for j in range(0,general_patterns_height[self.p]):
+                        y=self.y+j
                         if x<board_width and y<board_height and x>=0 and y>=0:
                             
                             self.flame_board.append([x,y])
                             self.flame_nukigata.append([i,j])
-
-                print(self.flame_board)
-                print(self.flame_nukigata)
     
+
     def pull_out(self):
+         
          self.cover_judge()
-
-
-board_reload=BoardReload(general_patterns_p[7],-1,-1,0,board_now)
-board_reload.cover_judge()
          
 
 
