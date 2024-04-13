@@ -30,11 +30,16 @@ def log_output(board,turn,time,use_type,use_coodenate,move_direc,TF):
     
     with write_lock:
         with open('log.json', 'a') as f:
+            if turn==1:
+                f.write("[")
             json.dump(log, f,indent=3)
-            f.write(",")
+            if TF==0:
+                 f.write("]")
+            elif TF>0:
+                 f.write(",")
 
 
-for i in range (4):
+for i in range (1,4):
     log_output(boardk,turnk*i,timek*i,use_typek,use_coordinatek,move_direck,TorFk*i)
 
 
