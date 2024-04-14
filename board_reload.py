@@ -75,5 +75,5 @@ class BoardReload():
                          
 
 board_reload=BoardReload(1,0,0,0,board_now)
-board_reload.cover_judge()
+board_reload.num_move()
 print(board_now)
