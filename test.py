@@ -39,10 +39,24 @@ class BoardReload():
                             self.flame_nukigata.append([i,j])
 
     def num_move(self):
-        if(self.s==0):
-             nukigata_width = [i for i in self.flame_board if i[0] == 0]
-        print(result)
+        nuki=self.flame_board
+        nuki_line=int
+        depth=int
 
-board_reload=BoardReload(1,0,0,0,board_now)
+        if(self.s==0):
+             nuki_line = [i for i in self.flame_board if i[0] == self.flame_board[0][0]]
+             nuki_depth = [i for i in self.flame_board if i[1] == self.flame_board[0][1]]
+             depth=board_height-self.flame_board[0][0]
+             move_count=[]*len(nuki_line)
+             tyousei=self.flame_board[0]
+             for i in range(nuki_line[0][1],nuki_line[len(nuki_line)-1][1]+1): #(列)回繰り返す
+                   for j in range(nuki_depth[0][0],nuki_depth[len(nuki_depth)-1][0]+1): #(深さ)回繰り返す
+                        if(general_patterns_cells[self.p][i-tyousei[0]][j-tyousei[1]]==1):
+                             move_count[i]=3
+                             print(move_count)
+                             
+                  
+
+board_reload=BoardReload(1,1,1,0,board_now)
 board_reload.num_move()
-print(board_reload.cover_judge())
+#print(board_reload.cover_judge())
