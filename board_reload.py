@@ -67,13 +67,14 @@ class BoardReload():
                         tmp=y
                         once=False
                    for j in range(0,tmp):
-                        board_now[y+j][x],board_now[y+j-1][x]=board_now[y+j][x],board_now[y+j-1][x]
+                        board_now[y-j][x],board_now[y-j-1][x]=board_now[y-j-1][x],board_now[y-j][x]
+
         # elif self.s==2:
                 
         # elif self.s==3:
                          
 
-board_reload=BoardReload(1,0,2,1,board_now)
+board_reload=BoardReload(1,0,0,0,board_now)
 board_reload.num_move()
 print(board_now)
          
