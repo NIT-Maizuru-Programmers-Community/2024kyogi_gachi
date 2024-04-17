@@ -1,5 +1,5 @@
 class Judgec:
-    def judgek(self,update_bord,correct_bord):
+    def judge(self,update_bord,correct_bord):
         #更新されたボードをupdate_bord、正解のボードをcorrect_bord
         incorrect_total=0
         if update_bord==correct_bord:
