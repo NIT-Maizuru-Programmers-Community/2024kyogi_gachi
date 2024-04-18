@@ -3,6 +3,7 @@ import general_patterns
 import output
 import time
 import algorithm
+import sys
 
 
 
@@ -30,13 +31,18 @@ class simu(judge.Judgec,relord_kari,algorithm.karial):
 
         self.relord_judge_log()
 
+    def get_time(self):
+        self.now_time=time.time()
+        print(self.now_time)
+        return self.now_time
+
 
     
     def relord_judge_log(self):
 
         self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type)
 
-        self.end = time.time()
+        self.end = self.get_time()
 
         self.relord_board=self.relord(self.call_algotithm[0],[self.call_algotithm[1],self.call_algotithm[2]],self.call_algotithm[3],self.now_board)
         #処理後の盤面取得(use_type,zahyou,move_direc,before_board)
@@ -45,21 +51,27 @@ class simu(judge.Judgec,relord_kari,algorithm.karial):
 
         self.now_board=self.relord_board.copy()#盤面書き換え
         self.coordinate=[self.call_algotithm[1],self.call_algotithm[2]]#使用した座標
-        self.times=self.start-self.end#実行時間
-
+        self.times=self.end-self.start#実行時間
 
 
         output.log_output(self.relord_board,self.turn,self.times,self.call_algotithm[0],self.coordinate,self.call_algotithm[3],self.correct[1])
         #relord_board,turn,time,use_type,use_coodenate,move_direc,TF
 
+        if self.correct[0]:
+            sys.exit()
+
+
+
 
 start_time = time.time()#開始時間
-
+print(start_time)
 turn=1
 
+while True:
+    simul=simu(start_time,turn)
+    turn+=1
 
-simul=simu(start_time,turn)
-turn+=1
+
 
     
 
