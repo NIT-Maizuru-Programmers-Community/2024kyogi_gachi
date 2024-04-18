@@ -39,8 +39,6 @@ def log_output(board,turn,time,use_type,use_coodenate,move_direc,TF):
                  f.write(",")
 
 
-for i in range (1,4):
-    log_output(boardk,turnk*i,timek*i,use_typek,use_coordinatek,move_direck,TorFk*i)
 
 
 
