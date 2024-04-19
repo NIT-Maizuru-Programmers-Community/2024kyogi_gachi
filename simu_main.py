@@ -4,6 +4,7 @@ import output
 import time
 import algorithm
 import sys
+import board_reload_fujii
 
 
 
@@ -19,9 +20,9 @@ class relord_kari:
         return self.after_board
        
 
-class simu(judge.Judgec,relord_kari,algorithm.karial):
+class simu(judge.Judgec,board_reload_fujii.BoardOperation,algorithm.karial):
 
-    def __init__(self,start_time,turn):
+    def set(self,start_time,turn):
         self.correct_board=[[1,2,3],[3,2,2],[1,2,2]]#正解の盤面
         self.now_board=[[1,2,3],[3,2,2],[1,2,2]]#現在の盤面
         self.use_type=general_patterns.general_patterns_cells.copy()#使用できる抜き型
@@ -44,7 +45,7 @@ class simu(judge.Judgec,relord_kari,algorithm.karial):
 
         self.end = self.get_time()
 
-        self.relord_board=self.relord(self.call_algotithm[0],[self.call_algotithm[1],self.call_algotithm[2]],self.call_algotithm[3],self.now_board)
+        self.relord_board=self.board_update(self.call_algotithm[0],[self.call_algotithm[1],self.call_algotithm[2]],self.call_algotithm[3],self.now_board)
         #処理後の盤面取得(use_type,zahyou,move_direc,before_board)
 
         self.correct=self.judge(self.relord_board,self.now_board)#正誤判定
@@ -64,12 +65,15 @@ class simu(judge.Judgec,relord_kari,algorithm.karial):
 
 
 start_time = time.time()#開始時間
-print(start_time)
-turn=1
 
-while True:
-    simul=simu(start_time,turn)
-    turn+=1
+turn=1
+simul=simu()
+simul.set(start_time,turn)
+
+
+# while True:
+#     simul=simu(start_time,turn)
+#     turn+=1
 
 
 
