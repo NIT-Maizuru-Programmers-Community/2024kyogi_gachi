@@ -42,8 +42,8 @@ class BoardOperation:
         def is_inside(position): #指定した型の座標がボード内か判定
             if(position[0] < 0 
                     or position[1] < 0 
-                    or position[0] > self.board_size[0] 
-                    or position[1] > self.board_size[1]):
+                    or position[0] + 1 > self.board_size[0] 
+                    or position[1] + 1 > self.board_size[1]):
                 return False
             else:
                 return True
@@ -104,17 +104,17 @@ class BoardOperation:
 
         if(self.cutter_LU_posi[0] < 0): #上下左右それぞれどのぐらい削るかを算出
             reshape_left = self.cutter_LU_posi[0] * -1
-        if(self.cutter_LU_posi[0] + self.cutter_size[0] - 1 > self.board_size[0]):
-            reshape_right = (self.cutter_LU_posi[0] + self.cutter_size[0] - 1) - self.board_size[0]
+        if(self.cutter_LU_posi[0] + self.cutter_size[0] - 1 > self.board_size[0] - 1):
+            reshape_right = (self.cutter_LU_posi[0] + self.cutter_size[0] - 1) - (self.board_size[0] - 1)
         if(self.cutter_LU_posi[1] < 0):
             reshape_upper = self.cutter_LU_posi[1] * -1
-        if(self.cutter_LU_posi[1] + self.cutter_size[1] - 1 > self.board_size[1]):
-            reshape_lower = (self.cutter_LU_posi[1] + self.cutter_size[1] - 1) - self.board_size[1]
+        if(self.cutter_LU_posi[1] + self.cutter_size[1] - 1 > self.board_size[1] - 1):
+            reshape_lower = (self.cutter_LU_posi[1] + self.cutter_size[1] - 1) - (self.board_size[1] - 1)
         
         self.cutter_data = self.cutter_data[reshape_upper:self.cutter_size[1] - reshape_lower, 
                                             reshape_left:self.cutter_size[0] - reshape_right]
         self.cutter_size = [len(self.cutter_data[0]), len(self.cutter_data)]
-    
+
     def update_cutter_position(self): #型の指定位置を更新
         if(self.cover_case == 1):
             self.cutter_LU_posi = [0, 0]
@@ -201,3 +201,11 @@ class BoardOperation:
                 if(get_board_data([i, j]) == 5):
                     change_board_data([i, j], pickup_data.pop(0))
 
+test_board = [
+    [0, 1, 2],
+    [3, 0, 1],
+    [1, 2, 1]
+]
+test = BoardOperation()
+board = test.board_update(2, [0, 0], 2, test_board)
+print(board)
