@@ -9,16 +9,7 @@ import board_reload_fujii
 
 
 
-class relord_kari:
-    def relord(self,nukigata,zahyou,houkou,before_board):#nukigata,zahyou,houkou,before_boardを入力
-        self.nukigata=general_patterns.general_patterns_cells.copy()
-        self.zahyou=[1,2]
-        self.houkou=1
-        self.before_board=[[1,3,3],[1,2,3],[3,2,2]]
-        self.after_board=[[2,2,3],[2,1,1],[2,1,2]] 
 
-        return self.after_board
-       
 
 class simu(judge.Judgec,board_reload_fujii.BoardOperation,algorithm.karial):
 
@@ -45,7 +36,9 @@ class simu(judge.Judgec,board_reload_fujii.BoardOperation,algorithm.karial):
 
         self.end = self.get_time()
 
-        self.relord_board=self.board_update(self.call_algotithm[0],[self.call_algotithm[1],self.call_algotithm[2]],self.call_algotithm[3],self.now_board)
+        self.cutter_position=[self.call_algotithm[1],self.call_algotithm[2]]
+
+        self.relord_board=self.board_update(self.call_algotithm[0],self.cutter_position,self.call_algotithm[3],self.now_board)
         #処理後の盤面取得(use_type,zahyou,move_direc,before_board)
 
         self.correct=self.judge(self.relord_board,self.now_board)#正誤判定

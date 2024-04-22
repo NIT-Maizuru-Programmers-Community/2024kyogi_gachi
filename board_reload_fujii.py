@@ -201,12 +201,3 @@ class BoardOperation:
                 if(get_board_data([i, j]) == 5):
                     change_board_data([i, j], pickup_data.pop(0))
 
-test_board = [
-    [0, 1, 2, 3],
-    [3, 0, 1, 2],
-    [1, 2, 1, 0],
-    [3, 0, 2, 3]
-]
-test = BoardOperation()
-board = test.board_update(2, [-1, -1], 0, test_board)
-print(board)
