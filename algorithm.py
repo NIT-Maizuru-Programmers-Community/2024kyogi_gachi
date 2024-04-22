@@ -12,6 +12,6 @@ class karial:
         self.use_type=2
         self.x=0
         self.y=0
-        self.shorten_direc=3
+        self.shorten_direc=1
 
         return [self.use_type,self.x,self.y,self.shorten_direc]
