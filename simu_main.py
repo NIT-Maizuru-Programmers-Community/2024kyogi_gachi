@@ -22,8 +22,6 @@ class simu(judge.Judgec,board_reload_fujii.BoardOperation,algorithm.karial):
     def get_time(self):
         self.now_time=time.time()
         return self.now_time
-
-
     
     def relord_judge_log(self):
 
@@ -36,7 +34,7 @@ class simu(judge.Judgec,board_reload_fujii.BoardOperation,algorithm.karial):
         self.relord_board=self.board_update(self.call_algotithm[0],self.cutter_position,self.call_algotithm[3],self.now_board)
         #処理後の盤面取得(use_type,zahyou,move_direc,before_board)
 
-        self.correct=self.judge(self.relord_board,self.now_board)#正誤判定
+        self.correct=self.judge(self.relord_board,self.correct_board)#正誤判定
 
         self.now_board=self.relord_board.copy()#盤面書き換え
         self.times=self.end-self.start#実行時間
@@ -45,8 +43,8 @@ class simu(judge.Judgec,board_reload_fujii.BoardOperation,algorithm.karial):
         output.log_output(self.relord_board,self.turn,self.times,self.call_algotithm[0],self.cutter_position,self.call_algotithm[3],self.correct[1])
         #relord_board,turn,time,use_type,use_coodenate,move_direc,TF
 
-        if self.correct[0]:
-            sys.exit()
+        if self.correct[1]==0:
+             sys.exit()
 
 
 
