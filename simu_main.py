@@ -7,14 +7,10 @@ import sys
 import board_reload_fujii
 
 
-
-
-
-
 class simu(judge.Judgec,board_reload_fujii.BoardOperation,algorithm.karial):
 
     def set(self,start_time,turn):
-        self.correct_board=[[1,2,3],[3,2,2],[1,2,2]]#正解の盤面
+        self.correct_board=[[1,2,3],[1,2,3],[1,2,3]]#正解の盤面
         self.now_board=[[1,1,1],[2,2,2],[3,3,3]]#現在の盤面
         self.use_type=general_patterns.general_patterns_cells.copy()#使用できる抜き型
 
@@ -56,15 +52,12 @@ class simu(judge.Judgec,board_reload_fujii.BoardOperation,algorithm.karial):
 
 
 start_time = time.time()#開始時間
-
-turn=1
 simul=simu()
-simul.set(start_time,turn)
+
+for i in range(1,20):
+    simul.set(start_time,i)
 
 
-# while True:
-#     simul=simu(start_time,turn)
-#     turn+=1
 
 
 

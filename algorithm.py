@@ -9,9 +9,9 @@ class karial:
         self.correct=correct_board
         self.cut=cut_type
 
-        self.use_type=2
-        self.x=0
-        self.y=0
+        self.use_type=1
+        self.x=1
+        self.y=1
         self.shorten_direc=1
 
         return [self.use_type,self.x,self.y,self.shorten_direc]
