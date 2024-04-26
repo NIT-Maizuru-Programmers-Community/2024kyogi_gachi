@@ -5,7 +5,8 @@ class BoardOperation:
         self.cutter = [
             [[1]],
             [[1, 1], [1, 1]],
-            [[1, 1, 1, 1], [0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0]]
+            [[1, 1, 1, 1], [0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0]],
+            [[1, 0], [1, 0]]
             ]
 
     def board_update(self, cutter_num, cutter_LU_posi, move_direction, board):
@@ -20,11 +21,13 @@ class BoardOperation:
         self.set_board_size()
         #型とボードの重なり方を調べる
         self.check_cover_case()
+        #print(f"case={self.cover_case}")
         if(self.cover_case == 10):
             print("cover case error")
         elif(self.cover_case != 0):
             self.reshape_cutter_size()
             self.update_cutter_position()
+        #print(f"cutter size={self.cutter_size}")
         #ボードの操作
         self.change_board()
 
@@ -37,17 +40,17 @@ class BoardOperation:
     
     def set_board_size(self): #ボードのサイズを取得
         self.board_size = [len(self.board[0]), len(self.board)]
+    
+    def is_inside(self, position): #指定した型の座標がボード内か判定
+        if(position[0] < 0 
+                or position[1] < 0 
+                or position[0] + 1 > self.board_size[0] 
+                or position[1] + 1 > self.board_size[1]):
+            return False
+        else:
+            return True
 
     def check_cover_case(self): #四隅がボード内かどうかを調べて型の位置を分類
-        def is_inside(position): #指定した型の座標がボード内か判定
-            if(position[0] < 0 
-                    or position[1] < 0 
-                    or position[0] + 1 > self.board_size[0] 
-                    or position[1] + 1 > self.board_size[1]):
-                return False
-            else:
-                return True
-            
         inside = [True, True, True, True]
         over_left_upper = [False, False, False, True]
         over_left_lower = [False, True, False, False]
@@ -59,15 +62,15 @@ class BoardOperation:
         over_right = [True, False, True, False]
 
         corners_is_inside = []
-        corners_is_inside.append(is_inside(self.cutter_LU_posi)) #左上
+        corners_is_inside.append(self.is_inside(self.cutter_LU_posi)) #左上
 
-        corners_is_inside.append(is_inside([self.cutter_LU_posi[0] + self.cutter_size[0] - 1, 
+        corners_is_inside.append(self.is_inside([self.cutter_LU_posi[0] + self.cutter_size[0] - 1, 
                                             self.cutter_LU_posi[1]])) #右上
         
-        corners_is_inside.append(is_inside([self.cutter_LU_posi[0], 
+        corners_is_inside.append(self.is_inside([self.cutter_LU_posi[0], 
                                             self.cutter_LU_posi[1] + self.cutter_size[1] - 1])) #左下
         
-        corners_is_inside.append(is_inside([self.cutter_LU_posi[0] + self.cutter_size[0] - 1,
+        corners_is_inside.append(self.is_inside([self.cutter_LU_posi[0] + self.cutter_size[0] - 1,
                                             self.cutter_LU_posi[1] + self.cutter_size[1] - 1])) #右下
 
         if(corners_is_inside == inside):
@@ -142,7 +145,7 @@ class BoardOperation:
         def get_cutter_data(position): #型の指定した座標にある値を返す
             return self.cutter_data[position[1]][position[0]]
         
-        def change_board_data(position, data): #ボードの値を変更する
+        def change_board_data(position, data): #ボードの値を変更する              
             self.board[position[1]][position[0]] = data
 
         def distination_posi(position, rate):
@@ -171,33 +174,68 @@ class BoardOperation:
         pickup_data = [] #型の1の場所を抜き取る
         for i in range(cutter_first_direction):
             for j in range(cutter_second_direction):
-                if(get_cutter_data([i, j]) == 1):
-                    if(is_xy):
-                        board_position = [self.cutter_LU_posi[0] + i, self.cutter_LU_posi[1] + j]
-                    else:
-                        board_position = [self.cutter_LU_posi[0] + j, self.cutter_LU_posi[1] + i]
+                if(is_xy and get_cutter_data([i, j]) == 1):
+                    board_position = [self.cutter_LU_posi[0] + i, self.cutter_LU_posi[1] + j]
+                    pickup_data.append(get_board_data(board_position))
+                    change_board_data(board_position, 4) #抜き取った位置をマーク=4
+                elif(not is_xy and get_cutter_data([j, i]) == 1):
+                    board_position = [self.cutter_LU_posi[0] + j, self.cutter_LU_posi[1] + i]
                     pickup_data.append(get_board_data(board_position))
                     change_board_data(board_position, 4) #抜き取った位置をマーク=4
 
-        if(is_xy):
+        if(is_xy): #上下左右の指定によって走査する方向を決定する
+            board_first_start = self.cutter_LU_posi[0]
             board_first_direction = self.cutter_size[0] + self.cutter_LU_posi[0]
-            board_second_direction = self.board_size[1]
+            board_line_size = self.board_size[1]
         else:
+            board_first_start = self.cutter_LU_posi[1]
             board_first_direction = self.cutter_size[1] + self.cutter_LU_posi[1]
-            board_second_direction = self.board_size[0]
+            board_line_size = self.board_size[0]
+        if(self.move_direction == 0 or self.move_direction == 2):
+            if(is_xy):
+                board_second_end = self.board_size[1]
+            else:
+                board_second_end = self.board_size[0]
+            board_second_start = 0
+            board_second_step = 1
+        else:
+            if(is_xy):
+                board_second_start = self.board_size[1] - 1
+            else:
+                board_second_start = self.board_size[0] - 1
+            board_second_end = -1
+            board_second_step = -1
 
-        for i in range(board_first_direction): #上下左右に寄せて空いたところを埋める
+        for i in range(board_first_start, board_first_direction): #上下左右に寄せて空いたところを埋める
             hole_count = 0
-            for j in range(board_second_direction): #上下左右に寄せて空いたところをマークする
-                data = get_board_data([i, j])
+            for j in range(board_second_start, board_second_end, board_second_step): #上下左右に寄せて空いたところをマークする
+                if(is_xy):
+                    x, y = i, j
+                else:
+                    x, y = j, i
+
+                data = get_board_data([x, y])
+                #print(f"posi=[{x},{y}], data={self.board}")
                 if(data == 4):
                     hole_count += 1
-                    change_board_data([i, j], 5) #移動済みをマーク=5
+                    change_board_data([x, y], 5) #移動済みをマーク=5
                 elif(hole_count != 0):
-                    change_board_data(distination_posi([i, j], hole_count), data)
-                    change_board_data([i, j], 5) #移動済みをマーク=5
+                    new_position = distination_posi([x, y], hole_count)
+                    if(self.is_inside(new_position)):
+                        change_board_data(new_position, data)
+                        change_board_data([x, y], 5) #移動済みをマーク=5
+                    else:
+                        break
+            #print(self.board)
+            for j in range(board_line_size): #空いているところを埋める
+                if(get_board_data([x, j]) == 5):
+                    change_board_data([x, j], pickup_data.pop(0))
 
-            for j in range(board_second_direction): #空いているところを埋める
-                if(get_board_data([i, j]) == 5):
-                    change_board_data([i, j], pickup_data.pop(0))
-
+test_board = [
+    [0, 1, 2],
+    [1, 2, 3],
+    [2, 3, 0]
+]
+test = BoardOperation()
+board = test.board_update(3, [0, 0], 0, test_board)
+print(board)
