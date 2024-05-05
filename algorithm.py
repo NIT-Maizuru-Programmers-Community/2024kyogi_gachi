@@ -9,7 +9,7 @@ class karial:
         self.correct=correct_board
         self.cut=cut_type
 
-        self.use_type=1
+        self.use_type=5
         self.x=1
         self.y=1
         self.shorten_direc=2

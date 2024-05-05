@@ -10,8 +10,24 @@ import board_reload_fujii
 class simu(judge.Judgec,board_reload_fujii.BoardOperation,algorithm.karial):
 
     def set(self,start_time,turn):
-        self.correct_board=[[1,2,3],[1,2,3],[1,2,3]]#正解の盤面
-        self.now_board=[[1,1,1],[2,2,2],[3,3,3]]#現在の盤面
+        self.correct_board=[[1,1,1,1,1,1],
+                            [2,2,2,2,2,3],
+                            [3,3,3,3,3,2],
+                            [2,2,2,2,2,2],
+                            [1,1,1,1,1,1]] #正解の盤面
+
+
+        self.now_board=[[1,1,1,1,1,1],
+                        [2,2,2,2,2,2],
+                        [3,3,3,3,3,3],
+                        [2,2,2,2,2,2],
+                        [1,1,1,1,1,1]]#現在の盤面
+
+
+
+
+
+
         self.use_type=general_patterns.general_patterns_cells.copy()#使用できる抜き型
         self.start=start_time
         self.turn=turn
@@ -45,6 +61,4 @@ class simu(judge.Judgec,board_reload_fujii.BoardOperation,algorithm.karial):
 
 start_time = time.time()#開始時間
 simul=simu()
-
-for i in range(1,20):
-    simul.set(start_time,i)
+simul.set(start_time,1)
