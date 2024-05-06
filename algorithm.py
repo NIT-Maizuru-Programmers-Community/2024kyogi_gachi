@@ -10,8 +10,7 @@ class karial:
         self.cut=cut_type
 
         self.use_type=5
-        self.x=0
-        self.y=0
-        self.shorten_direc=1
-
+        self.x=1
+        self.y=-2
+        self.shorten_direc=3
         return [self.use_type,self.x,self.y,self.shorten_direc]
