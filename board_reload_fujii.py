@@ -208,11 +208,16 @@ class BoardOperation:
 
         for i in range(board_first_start, board_first_direction): #上下左右に寄せて空いたところを埋める
             hole_count = 0
+            if(is_xy):
+                x = i
+            else:
+                y = i
+
             for j in range(board_second_start, board_second_end, board_second_step): #上下左右に寄せて空いたところをマークする
                 if(is_xy):
-                    x, y = i, j
+                    y = j
                 else:
-                    x, y = j, i
+                    x = j
 
                 data = get_board_data([x, y])
                 #print(f"posi=[{x},{y}], data={self.board}")
@@ -226,16 +231,22 @@ class BoardOperation:
                         change_board_data([x, y], 5) #移動済みをマーク=5
                     else:
                         break
-            #print(self.board)
-            for j in range(board_line_size): #空いているところを埋める
-                if(get_board_data([x, j]) == 5):
-                    change_board_data([x, j], pickup_data.pop(0))
+            print(self.board)
+            for line in range(board_line_size): #空いているところを埋める
+                if(is_xy):
+                    y = line
+                else:
+                    x = line
+                if(get_board_data([x, y]) == 5):
+                    change_board_data([x, y], pickup_data.pop(0))
 
 test_board = [
-    [0, 1, 2],
-    [1, 2, 3],
-    [2, 3, 0]
+    [1, 1, 1, 1, 1, 1],
+    [2, 2, 2, 2, 2, 2],
+    [3, 3, 3, 3, 3, 3],
+    [2, 2, 2, 2, 2, 2],
+    [1, 1, 1, 1, 1, 1]
 ]
 test = BoardOperation()
-board = test.board_update(3, [0, 0], 0, test_board)
+board = test.board_update(2, [0, 0], 2, test_board)
 print(board)
