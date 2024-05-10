@@ -1,14 +1,16 @@
 import numpy as np
+import general_patterns
 
 class BoardOperation:
     def __init__(self):
-        self.cutter = [
-            [[1]],
-            [[1, 1], [1, 1]],
-            [[1, 1, 1, 1], [0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0]],
-            [[1, 0], [1, 0]],
-            [[1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0], [1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0]]
-            ]
+        # self.cutter = [
+        #     [[1]],
+        #     [[1, 1], [1, 1]],
+        #     [[1, 1, 1, 1], [0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0]],
+        #     [[1, 0], [1, 0]],
+        #     [[1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0], [1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0]]
+        #     ]
+        self.cutter = general_patterns.general_patterns_cells
 
     def board_update(self, cutter_num, cutter_LU_posi, move_direction, board):
         self.cutter_num = cutter_num
@@ -260,12 +262,12 @@ class BoardOperation:
                 if(get_board_data([x, y]) == 5):
                     change_board_data([x, y], pickup_data.pop(0))
 
-test_board = [
-    [1, 1, 1, 1],
-    [2, 2, 2, 2],
-    [3, 3, 3, 3],
-    [2, 2, 2, 2]
-]
-test = BoardOperation()
-board = test.board_update(1, [0, 0], 0, test_board)
-print(board)
+# test_board = [
+#     [1, 1, 1, 1],
+#     [2, 2, 2, 2],
+#     [3, 3, 3, 3],
+#     [2, 2, 2, 2]
+# ]
+# test = BoardOperation()
+# board = test.board_update(1, [0, 0], 0, test_board)
+# print(board)
