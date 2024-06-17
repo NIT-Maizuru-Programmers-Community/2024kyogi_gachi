@@ -45,6 +45,7 @@ class simu(judge.Judgec,board_reload_fujii.BoardOperation,algorithm.karial):
 
 start_time = time.time()#開始時間
 simul=simu()
-
-for i in range(1,20):
-    simul.set(start_time,i)
+turn=1
+while True:
+    simul.set(start_time,turn)
+    turn+=1
