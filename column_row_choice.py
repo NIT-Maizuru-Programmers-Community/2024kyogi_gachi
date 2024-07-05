@@ -11,7 +11,7 @@ now_board=[[3,2,3,1,2],
            [1,1,3,0,1]]
 
 
-def column_row_choice(now_board,goal_board):#列or行の選択,行ならTrueで列ならFalseで返す
+def clchoice(now_board,goal_board):#列or行の選択,行ならTrueで列ならFalseで返す
 #行:row(縦方向),列:column(横方向)
     def count_element(board_array):#入力された1行または列の各要素数を取得
             element=[0,0,0,0]
