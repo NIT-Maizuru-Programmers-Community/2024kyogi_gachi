@@ -78,4 +78,4 @@ def clchoice(now_board,goal_board):#列or行の選択,行ならTrueで列ならF
 
     return is_column_row
 
-print(column_row_choice(now_board,goal_board))
+print(clchoice(now_board,goal_board))
