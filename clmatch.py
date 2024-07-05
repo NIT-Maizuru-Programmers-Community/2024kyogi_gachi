@@ -35,7 +35,6 @@ def clmatch(now_board,goal_board,dir,layer,width,height):
             #不一致ピースの幅が0の場合はunknown_xを1ずらす
             if(c-unknown_x == 0):
                 unknown_x += 1
-                print("a")
                 continue
 
             #不一致ピースの幅が0以外の場合,変更を加える必要があるので使用する抜き型を決定
@@ -55,7 +54,7 @@ def clmatch(now_board,goal_board,dir,layer,width,height):
             #unknown_xを更新
             unknown_x+=2**n
 
-            print("i")
+            print(now_board)
         
         print(now_board)
 
