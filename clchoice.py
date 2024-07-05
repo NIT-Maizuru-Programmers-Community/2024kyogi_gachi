@@ -10,7 +10,8 @@ now_board=[[3,2,3,1,2],
            [2,1,3,2,3],
            [1,1,3,0,1]]
 
-def clchoice(board,goal):
+
+def clchoice(board,goal):#列or行か決定
 
     def icchi(row1,row2):#now,goal
         def compare(hai1,hai2):#一致度確認一行の配列
@@ -25,7 +26,7 @@ def clchoice(board,goal):
         score_yoko=0
         score_tate=0
         for a in range(2):#0:横,1:縦
-            for b in range(len(row1[0])):
+            for b in range(len(row1[0])):#
                 for c in range(len(row1[0])):
                     if a==0:
                         score_yoko=score_yoko+compare(row1[a][b],row2[a][c])
@@ -66,6 +67,8 @@ def clchoice(board,goal):
     
     now_element=get_num(board)
     goal_element=get_num(goal)
+    print(now_element)
+    print(goal_element)
 
     return icchi(now_element,goal_element)#now,goal
 
