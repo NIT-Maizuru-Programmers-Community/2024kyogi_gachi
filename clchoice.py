@@ -13,34 +13,29 @@ now_board=[[3,2,3,1,2],
 def clchoice(board,goal):
 
     def icchi(row1,row2):#now,goal
-         def compare(hai1,hai2):#一致度確認一行の配列
-             score=0
-             for i in range(4):
-                 if (hai1[i]<hai2[i]):
-                     score=score+hai1[i]
-                 if (hai1[i]>=hai2[i]):
-                     score=score+hai2[i]
-             return score
+        def compare(hai1,hai2):#一致度確認一行の配列
+            score=0
+            for i in range(4):
+                if (hai1[i]<hai2[i]):
+                    score=score+hai1[i]
+                if (hai1[i]>=hai2[i]):
+                    score=score+hai2[i]
+            return score
                  
-         score_yoko=0
-         score_tate=0
-         for a in range(2):#0:横,1:縦
-             for b in range(len(row1[0])):
-                 for c in range(len(row1[0])):
-                     if a==0:
-                         score_yoko=score_yoko+compare(row1[a][b],row2[a][c])
-                     else:
-                         score_tate=score_tate+compare(row1[a][b],row2[a][c])
+        score_yoko=0
+        score_tate=0
+        for a in range(2):#0:横,1:縦
+            for b in range(len(row1[0])):
+                for c in range(len(row1[0])):
+                    if a==0:
+                        score_yoko=score_yoko+compare(row1[a][b],row2[a][c])
+                    else:
+                        score_tate=score_tate+compare(row1[a][b],row2[a][c])
         
-         if score_yoko < score_tate:
-             return False
-         if score_yoko > score_tate:
-             return True
-        
-                         
-                     
-         
-
+        if score_yoko < score_tate:
+            return False
+        if score_yoko > score_tate:
+            return True
 
     def get_num(board):#配列の要素を取得
         board_element_yoko=[]
@@ -74,9 +69,6 @@ def clchoice(board,goal):
 
     return icchi(now_element,goal_element)#now,goal
 
-                        
-         
-    
 
 
 print(clchoice(goal_board,now_board))
