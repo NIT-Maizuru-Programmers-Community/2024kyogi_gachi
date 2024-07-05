@@ -65,8 +65,8 @@ while running:
     board_y = board_size[0]
     board_x = board_size[1]
     
-    turn_text = font.render(f"trun:{board_turn}", True, (0,0,0))
-    TF_text = font.render(f"TF:{(100-TF)/100}%", True, (0,0,0))
+    turn_text = font.render(f"turn:{board_turn}", True, (0,0,0))
+    TF_text = font.render(f"TF:{(100-TF)}%", True, (0,0,0))
     time_text = font.render(f"time:{time}s", True, (0,0,0))
 
     for y in range(board_y):
