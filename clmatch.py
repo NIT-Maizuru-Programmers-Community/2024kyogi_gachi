@@ -21,7 +21,7 @@ def clmatch(now_board,goal_board,dir,layer,width,height):
     cutter_num = 0
     goal_list = goal_board[layer]
     if(dir == 0):
-        while(unknown_x - 1 != width):
+        while(unknown_x < width):
 
             now_list = now_board[layer]
             target=goal_list[unknown_x] #target
@@ -31,33 +31,34 @@ def clmatch(now_board,goal_board,dir,layer,width,height):
             while(now_list[c] != target):
                 c += 1
             
-                #(c-unknown_x)は不一致ピースの幅
-                #不一致ピースの幅が0の場合はunknown_xを1ずらす
-                if(c-unknown_x == 0):
-                    unknown_x += 1
-                    break
+            #(c-unknown_x)は不一致ピースの幅
+            #不一致ピースの幅が0の場合はunknown_xを1ずらす
+            if(c-unknown_x == 0):
+                unknown_x += 1
+                print("a")
+                continue
 
-                #不一致ピースの幅が0以外の場合,変更を加える必要があるので使用する抜き型を決定
-                n=0
-                while(2**n <c-unknown_x):
-                    n+=1
-                n-=1
-                if(n==0):
-                    cutter_num=1
-                else:cutter_num=3*n-1
+            #不一致ピースの幅が0以外の場合,変更を加える必要があるので使用する抜き型を決定
+            n=0
+            while(2**n <c-unknown_x):
+                n+=1
+            n-=1
+            if(n==0):
+                cutter_num=1
+            else:cutter_num=3*n-1
 
-                #now_boardを更新
-                move=BoardOperation()
-                now_board = move.board_update(cutter_num, [unknown_x, layer], 2, now_board)
-            
 
-                #unknown_xを更新
-                unknown_x+=2**n
-            print("HI")
-            
+            #now_boardを更新
+            move=BoardOperation()
+            now_board = move.board_update(cutter_num, [unknown_x, layer], 2, now_board)
 
-    #now_board[0][0]=10
-    print(now_board)
-    return 0
+            #unknown_xを更新
+            unknown_x+=2**n
+
+            print("i")
+        
+        print(now_board)
+
+    return now_board
 
 clmatch(now_board,goal_board,dir,layer,width,height)
