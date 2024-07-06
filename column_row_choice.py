@@ -30,13 +30,13 @@ def clchoice(now_board,goal_board):#列or行の選択,行ならTrueで列ならF
             return element
     
 
-    def count_column_row(board):#行ごとと列ごとの要素数を1つの配列に
+    def count_column_row(board):#行ごとと列ごとの各要素数を1つの配列に
         board_element_column=[]
         board_element_row=[]
         board_row=[list(x) for x in zip(*board)]#行で参照のため転地
         for column in range(len(board)):
             board_element_column.append(count_element(board[column]))
-        for row in range(len(board)):
+        for row in range(len(board_row)):
             board_element_row.append(count_element(board_row[row]))
         
         return [board_element_column,board_element_row]
