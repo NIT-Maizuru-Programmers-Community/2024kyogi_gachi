@@ -10,9 +10,13 @@ now_board=[[3,2,3,1,2],
            [2,1,3,2,3],
            [1,1,3,0,1]]
 
+yoseruhoukou_kari=True#行:row(縦方向)
+soroeruretu=0
 
-def clchoice(now_board,goal_board):#列or行の選択,行ならTrueで列ならFalseで返す
-#行:row(縦方向),列:column(横方向)
+#寄せる動作を大会基準の配列で返す
+def column_row_send(now_board,goal_board,send_direction):#(現在の盤面,ゴール盤面,行か列か)
+    #send_directionがTrueなら行で揃える,Falseなら列で
+
     def count_element(board_array):#入力された1行または列の各要素数を取得
             element=[0,0,0,0]
             for i in range(len(board_array)):
@@ -30,7 +34,7 @@ def clchoice(now_board,goal_board):#列or行の選択,行ならTrueで列ならF
             return element
     
 
-    def count_column_row(board):#行ごとと列ごとの要素数を1つの配列に
+    def count_column_row(board):#行ごとと列ごとの各要素数を1つの配列に
         board_element_column=[]
         board_element_row=[]
         board_row=[list(x) for x in zip(*board)]#行で参照のため転地
@@ -41,7 +45,6 @@ def clchoice(now_board,goal_board):#列or行の選択,行ならTrueで列ならF
         
         return [board_element_column,board_element_row]
     
-
     def compare_element(array1,array2):#要素の一致数を取得
             score=0
             for i in range(4):
@@ -51,31 +54,23 @@ def clchoice(now_board,goal_board):#列or行の選択,行ならTrueで列ならF
                     score=score+array2[i]
             return score
     
+    def serch_match_line(now_board,goal_board):
+         for line in range()
 
-    def match_check(now,goal):#nowの要素数1つとgoalの要素数全部
-        score_match=0
-        for goal_length in range(len(goal)):
-            score_match=score_match+compare_element(now,goal[goal_length])
-        return score_match
 
+
+
+    def serch_most_match(now_element,goal_element,send_position):#揃えたいgoalと最も一致数が高いやつ探す,入力はnowの要素数全部と任意のgoalの場所
+         print("shine")
+    
+
+
+    
+    now_element=count_column_row(now_board)
     goal_element=count_column_row(goal_board)
-    now_board_tposition=[list(x) for x in zip(*now_board)]#行と列入れ替え
-    column_score=0
-    row_score=0
 
-    for column_number in range(len(now_board[0])):#列の要素数の一致数
-        now_column=count_element(now_board[column_number]) 
-        column_score=column_score+match_check(now_column,goal_element[0])
-    
-    for row_number in range(len(now_board_tposition[0])):#行の要素数の一致度
-        now_row=count_element(now_board_tposition[row_number]) 
-        row_score=row_score+match_check(now_row,goal_element[1])
-    
-    if column_score < row_score:
-        is_column_row=False
-    if column_score > row_score:
-        is_column_row=True
+    #False(0):列,True(1):行
+    #列:column(横方向)で寄せる場合
+    for i in range(len):
 
-    return is_column_row
 
-print(clchoice(now_board,goal_board))
