@@ -263,11 +263,11 @@ class BoardOperation:
                     change_board_data([x, y], pickup_data.pop(0))
 
 # test_board = [
-#     [1, 1, 1, 1],
-#     [2, 2, 2, 2],
-#     [3, 3, 3, 3],
-#     [2, 2, 2, 2]
-# ]
+#      [1, 1, 1, 1],
+#      [2, 2, 2, 2],
+#      [3, 3, 3, 3],
+#      [2, 2, 2, 2]
+#      ]
 # test = BoardOperation()
 # board = test.board_update(1, [0, 0], 0, test_board)
 # print(board)
