@@ -2,7 +2,7 @@ from board_reload_fujii import BoardOperation
 dir=0 #0:上 1:左
 layer=0 #n層目
 goal_board=[[3,1,3,2,2],
-            [2,3,1,1,2],
+            [0,2,1,1,2],
             [2,1,3,0,2],
             [3,1,3,2,3],
             [2,1,3,0,1]]
@@ -20,6 +20,8 @@ def clmatch(now_board,goal_board,dir,layer,width,height):
     unknown_x = 0 #未知部分の最初のx座標(=一致部の最後のx座標+1),最初はすべて未知
     cutter_num = 0
     goal_list = goal_board[layer]
+
+    #上方向
     if(dir == 0):
         while(unknown_x < width):
 
@@ -52,12 +54,15 @@ def clmatch(now_board,goal_board,dir,layer,width,height):
             now_board = move.board_update(cutter_num, [unknown_x, layer], 2, now_board)
 
             #unknown_xを更新
-            unknown_x+=2**n
+            unknown_x+=int(2**n)
 
             print(now_board)
         
-        print(now_board)
+        #print(now_board)
 
+    #左方向
+    #if(dir == 0):
+        
     return now_board
 
-clmatch(now_board,goal_board,dir,layer,width,height)
+print(clmatch(now_board,goal_board,dir,layer,width,height))
