@@ -71,7 +71,7 @@ def clmatch(now_board,goal_board,dir,layer,width,height):
     #左方向
     if(dir == 1):
 
-        #boardを時計回りに90度回転　ChatGPT
+        #boardを時計回りに90度回転(ChatGPT)
         rotated_now_board = [[0 for _ in range(height)] for _ in range(width)]
         for i in range(height):
             for j in range(width):
@@ -80,7 +80,7 @@ def clmatch(now_board,goal_board,dir,layer,width,height):
         rotated_goal_board = [[0 for _ in range(height)] for _ in range(width)]
         for i in range(height):
             for j in range(width):
-                rotated_now_board[j][height - 1 - i] = goal_board[i][j]
+                rotated_goal_board[j][height - 1 - i] = goal_board[i][j]
 
                 
         rotated_now_list = rotated_now_board[layer]
@@ -117,7 +117,11 @@ def clmatch(now_board,goal_board,dir,layer,width,height):
 
             #now_boardを更新
             move=BoardOperation()
-            now_board = move.board_update(cutter_num, [unknown_x, layer], 1, now_board) #転置により、x座標とy座標が反転
+
+            #ボード上のある座標(x,y)　ボードを反時計回りに回転させたときのx,y座標(x',y')は,x'=y,y'=width-x-1の関係がある
+            #さらに,回転後のy座標から,抜き型の一辺の長さ=find_n(c-unknown_x)に1を引いたものを引く必要がある
+            #回転前の(x,y)=(unknown_x,layer)
+            now_board = move.board_update(cutter_num, [layer, width-unknown_x-find_n(c-unknown_x)], 1, now_board)
             nowboard_log.append([cutter_num, [unknown_x, layer], 2])
 
 
