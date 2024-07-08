@@ -16,8 +16,9 @@ print(c)
 
 
 
-
-
+ar=[]
+ar.extend([])
+print(ar)
 board_row=[list(x) for x in zip(*goal_board)]#行で参照のため転地
 
 print(board_row)
