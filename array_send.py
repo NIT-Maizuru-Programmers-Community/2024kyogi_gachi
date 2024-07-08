@@ -13,7 +13,7 @@ now_board=[[3,2,3,1,2],
            [2,1,3,0,3]]
 
 yoseruhoukou_kari=True#行:row(縦方向)
-soroeruretu=3
+soroeruretu=2
 
 #寄せる動作を大会基準の配列で返す
 def column_row_send(now_board,goal_board,send_direction,send_position):#(現在の盤面,ゴール盤面,行か列か,何列目または何行目をそろえるのか)
@@ -105,14 +105,52 @@ def column_row_send(now_board,goal_board,send_direction,send_position):#(現在�
     goal_element=count_column_row_any(goal_board,send_direction,send_position)#goalの任意の場所の各要素数を取得
 
     now_match_position=serch_most_match(now_element,goal_element,send_position)
-    print(now_match_position)
+    print(f"{now_match_position}番目")
 
 
     #False(0):列,True(1):行
+
     #列:column(横方向)で寄せる場合
+
+    #0層に揃える場合
+    if send_position==0:
+        p=22#抜き型番号,全部1,256
+        x=0#左端
+        y=now_match_position-256#いい感じになるよ(多分)
+        s=0#上
+        return [p,x,y,s]
+    
+    operate_array=[]#詰めるための操作を記録
+
+    #そろうまでループ
+    for i in range(1):
+    #2層以降
+        if (now_match_position % 2==0 and send_position % 2==0) or (now_match_position % 2==1 and send_position % 2==1):#偶奇が一致してる
+            print("一致")
+            p=23##抜き型番号,横に1段ずつ,256
+            x=0#左端
+            y=send_position+1#そのままでかぶる
+            s=0#上
+            shorten_distance=(now_match_position-y)//2 + (now_match_position-y)%2#詰めることができる距離
+    
+        if (now_match_position % 2==1 and send_position % 2==0) or (now_match_position % 2==0 and send_position % 2==1):#偶奇が不一致
+            print("不一致")
+            p=23#抜き型番号,横に1段ずつ,256
+            x=0#左端
+            y=send_position#そのままでもかぶらない
+            s=0#上
+            shorten_distance=(now_match_position-y)//2 + (now_match_position-y)%2#詰めることができる距離
+
+            now_match_position-=shorten_distance#更新後
+        
+
+
+
+
+    
+
+        
     
 
 
-
-
-column_row_send(now_board,goal_board,yoseruhoukou_kari,soroeruretu)
+print(column_row_send(now_board,goal_board,yoseruhoukou_kari,soroeruretu))

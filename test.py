@@ -5,7 +5,14 @@ goal_board=[[1,2,3,2,1],
             [2,1,3,0,1],
             [2,1,3,0,3]]#0:3,1:9,2:9,3:9
 
+a=3
+if a % 2==1:
+    print("h偶数")
 
+now_match_position=7
+send_position=2
+c=(now_match_position-send_position)//2 + (now_match_position-send_position)%2
+print(c)
 
 
 
