@@ -110,6 +110,7 @@ def column_row_send(now_board,goal_board,send_direction,send_position):#(現在�
 
     #False(0):列,True(1):行
     #列:column(横方向)で寄せる場合
+    
 
 
 
