@@ -12,8 +12,8 @@ now_board=[[3,2,3,1,2],
            [1,1,3,0,1],
            [2,1,3,0,3]]
 
-yoseruhoukou_kari=False
-soroeruretu=1
+yoseruhoukou_kari=True
+soroeruretu=3
 
 #寄せる動作を大会基準の配列で返す
 def column_row_send(now_board,goal_board,send_direction,send_position):#(現在の盤面,ゴール盤面,行か列か,何列目または何行目をそろえるのか)
@@ -143,7 +143,7 @@ def column_row_send(now_board,goal_board,send_direction,send_position):#(現在�
 
 
     #行:row(縦方向)で寄せる場合
-    if send_direction==False:
+    if send_direction==True:
         #0層に揃える場合
         if send_position==0:
             p=24#抜き型番号,全部1,256
