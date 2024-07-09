@@ -147,8 +147,8 @@ def column_row_send(now_board,goal_board,send_direction,send_position):#(現在�
         #0層に揃える場合
         if send_position==0:
             p=24#抜き型番号,全部1,256
-            x=now_match_position-256#左端
-            y=0#いい感じになるよ(多分)
+            x=now_match_position-256#いい感じになるよ(多分)
+            y=0#一番上
             s=2#上
             return [p,x,y,s]
     
