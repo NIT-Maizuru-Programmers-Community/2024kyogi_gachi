@@ -30,10 +30,21 @@ def clchoice(now_board,goal_board):#列or行の選択,行ならTrueで列ならF
             return element
     
 
+    def transposition(board):#転置
+        board_row=[]
+        for column in range(len(board[0])):
+            row_array=[]
+            for row in range(len(board)):
+                row_array.append(board[row][column])
+            board_row.append(row_array)
+        
+        return board_row
+    
+
     def count_column_row(board):#行ごとと列ごとの各要素数を1つの配列に
         board_element_column=[]
         board_element_row=[]
-        board_row=[list(x) for x in zip(*board)]#行で参照のため転地
+        board_row=transposition(board)#行で参照のため転地
         for column in range(len(board)):
             board_element_column.append(count_element(board[column]))
         for row in range(len(board_row)):
@@ -59,7 +70,7 @@ def clchoice(now_board,goal_board):#列or行の選択,行ならTrueで列ならF
         return score_match
 
     goal_element=count_column_row(goal_board)
-    now_board_tposition=[list(x) for x in zip(*now_board)]#行と列入れ替え
+    now_board_tposition=transposition(now_board)#行と列入れ替え(転置)
     column_score=0
     row_score=0
 

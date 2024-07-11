@@ -12,7 +12,7 @@ now_board=[[3,2,3,1,2],
            [1,1,3,0,1],
            [2,1,3,0,3]]
 
-yoseruhoukou_kari=True
+yoseruhoukou_kari=False
 soroeruretu=3
 
 #寄せる動作を大会基準の配列で返す
@@ -36,6 +36,17 @@ def column_row_send(now_board,goal_board,is_row,send_position):#(現在の盤面
         return element
     
 
+    def transposition(board):#転置
+        board_row=[]
+        for column in range(len(board[0])):
+            row_array=[]
+            for row in range(len(board)):
+                row_array.append(board[row][column])
+            board_row.append(row_array)
+        
+        return board_row
+
+
     def count_column_row(board,is_row):#各要素数を1つの配列にまとめる,行または列で作成
         #行ならTrueで列ならFalse
         board_element=[]
@@ -43,7 +54,7 @@ def column_row_send(now_board,goal_board,is_row,send_position):#(現在の盤面
             for column in range(len(board)):
                 board_element.append(count_element(board[column]))
         else:#行の場合
-            board_row=[list(x) for x in zip(*board)]#列と行入れ替え
+            board_row=transposition(board)#列と行入れ替え
             for row in range(len(board_row)):
                 board_element.append(count_element(board_row[row]))
             
@@ -54,7 +65,7 @@ def column_row_send(now_board,goal_board,is_row,send_position):#(現在の盤面
         if is_row==False:#列の場合
             board_element_column_row=count_element(board[send_position])
         else:#行の場合
-            board_row=[list(x) for x in zip(*board)]#行で参照のため転置
+            board_row=transposition(board)#行で参照のため転置
             board_element_column_row=count_element(board_row[send_position])
 
         return board_element_column_row
