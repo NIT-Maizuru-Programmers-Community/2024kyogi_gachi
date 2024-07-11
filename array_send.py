@@ -39,15 +39,11 @@ def column_row_send(now_board,goal_board,is_row,send_position):#(現在の盤面
     def count_column_row(board,is_row):#各要素数を1つの配列にまとめる,行または列で作成
         #行ならTrueで列ならFalse
         board_element=[]
-
-
         if is_row==False:#列の場合
             for column in range(len(board)):
                 board_element.append(count_element(board[column]))
-        
-        if is_row==True:#行の場合
-            board_row=[list(x) for x in zip(*board)]#行で参照のため転地
-
+        else:#行の場合
+            board_row=[list(x) for x in zip(*board)]#列と行入れ替え
             for row in range(len(board_row)):
                 board_element.append(count_element(board_row[row]))
             
@@ -55,11 +51,10 @@ def column_row_send(now_board,goal_board,is_row,send_position):#(現在の盤面
 
     
     def count_column_row_any(board,is_row,send_position):#任意の場所の各要素数を取得
-
         if is_row==False:#列の場合
             board_element_column_row=count_element(board[send_position])
         else:#行の場合
-            board_row=[list(x) for x in zip(*board)]#行で参照のため転地
+            board_row=[list(x) for x in zip(*board)]#行で参照のため転置
             board_element_column_row=count_element(board_row[send_position])
 
         return board_element_column_row
@@ -78,16 +73,11 @@ def column_row_send(now_board,goal_board,is_row,send_position):#(現在の盤面
     #揃えたいgoalと最も一致数が高いやつ探す(揃えたいnowの場所探す)
     def serch_most_match(now_element,goal_element,send_position):#入力はnowの要素数全部と任意のgoalの場所,列か行か
         match_score=[0,0]#[何列or何行目,一致数]
-
         #最も一致数が高いやつ探す
         for line in range(send_position,len(now_element)):#任意の揃えたい場所から最後まで
-
             now_element_score=compare_element(now_element[line],goal_element)#任意のnowの場所の一致数を取得
-            print(now_element_score)
-
-            if match_score[1] < now_element_score:
-                match_score=[line,now_element_score]
-        
+        if match_score[1] < now_element_score:
+            match_score=[line,now_element_score]
         match_position=match_score[0]
 
         return match_position
@@ -95,72 +85,61 @@ def column_row_send(now_board,goal_board,is_row,send_position):#(現在の盤面
 
     now_element=count_column_row(now_board,is_row)
     goal_element=count_column_row_any(goal_board,is_row,send_position)#goalの任意の場所の各要素数を取得
-
     now_match_position=serch_most_match(now_element,goal_element,send_position)
     print(f"{now_match_position}番目")
+    operate_array=[]#詰めるための操作を記録
 
     #False(0):列,True(1):行
     #列:column(横方向)で寄せる場合
-    if is_row==False:
-        #0層に揃える場合
-        if send_position==0:
-            p=22#抜き型番号,全部1,256
-            x=0#左端
-            y=now_match_position-256#いい感じになるよ(多分)
-            s=0#上
-            return [p,x,y,s]
-    
-        operate_array=[]#詰めるための操作を記録
+    #0層に揃える場合
+    if send_position==0 and is_row==False:
+        p=22#抜き型番号,全部1,256
+        x=0#左端
+        y=now_match_position-256#いい感じになる
+        s=0#上
+        return [p,x,y,s]
+    elif send_position==0 and is_row==True:
+        p=24#抜き型番号,全部1,256
+        x=now_match_position-256#いい感じになるよ
+        y=0#一番上
+        s=2#左
+        return [p,x,y,s]
 
+
+    #1層以降
+    if is_row==False:
         #そろうまでループ
-        #2層以降
         while(now_match_position!=send_position):
             p=23##抜き型番号,横に1段ずつ,256
             x=0#左端
             if (now_match_position % 2==0 and send_position % 2==0) or (now_match_position % 2==1 and send_position % 2==1):#偶奇が一致してる
                 y=send_position+1#そのままでかぶる
-                print("一致")
+
             else:
                 y=send_position#そのままでもかぶらない
-                print("不一致")
+
             s=0#上
 
-            shorten_distance=(now_match_position-y)//2 + (now_match_position-y)%2#詰めることができる距離
+            shorten_distance=(now_match_position-y)//2 + (now_match_position-y)%2#詰めた距離
             now_match_position -= shorten_distance#更新後
-
             operate_array.append([p,x,y,s])
-    
+            print(shorten_distance)
 
-
-    #行:row(縦方向)で寄せる場合
-    if is_row==True:
-        #0層に揃える場合
-        if send_position==0:
-            p=24#抜き型番号,全部1,256
-            x=now_match_position-256#いい感じになるよ(多分)
-            y=0#一番上
-            s=2#上
-            return [p,x,y,s]
-    
-        operate_array=[]#詰めるための操作を記録
-
+    else:#行:row(縦方向)で寄せる場合
         #そろうまでループ
-        #2層以降
         while(now_match_position!=send_position):
-            p=23##抜き型番号,横に1段ずつ,256
+            p=24##抜き型番号,横に1段ずつ,256
             if (now_match_position % 2==0 and send_position % 2==0) or (now_match_position % 2==1 and send_position % 2==1):#偶奇が一致してる
                 x=send_position+1#そのままでかぶる
-                print("一致")
             else:
                 x=send_position#そのままでもかぶらない
-                print("不一致")
-            y=0#左端
-            s=2#上
+            y=0#上端
+            s=2#左
 
-            shorten_distance=(now_match_position-y)//2 + (now_match_position-y)%2#詰めることができる距離
+            shorten_distance=(now_match_position-x)//2 + (now_match_position-x)%2#詰めた距離
             now_match_position -= shorten_distance#更新後
-
             operate_array.append([p,x,y,s])
+            print(shorten_distance)
 
 
     return operate_array
