@@ -101,7 +101,6 @@ def column_row_send(now_board,goal_board,is_row,send_position):#(現在の盤面
     operate_array=[]#詰めるための操作を記録
 
     #False(0):列,True(1):行
-    #列:column(横方向)で寄せる場合
     #0層に揃える場合
     if send_position==0 and is_row==False:
         p=22#抜き型番号,全部1,256
@@ -128,7 +127,6 @@ def column_row_send(now_board,goal_board,is_row,send_position):#(現在の盤面
 
             else:
                 y=send_position#そのままでもかぶらない
-
             s=0#上
 
             shorten_distance=(now_match_position-y)//2 + (now_match_position-y)%2#詰めた距離
