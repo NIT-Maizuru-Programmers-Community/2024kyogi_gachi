@@ -7,7 +7,6 @@ goal_board=[[1,2,3,2,1],
 
 
 board_row=[list(x) for x in zip(*goal_board)]#行で参照のため転地
-
 print(board_row)
 
 
