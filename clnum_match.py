@@ -1,4 +1,4 @@
-layer=1 #n層目
+layer=3 #n層目
 wide=5
 height=5
 goal_board=[[1,2,3,2,1],
@@ -50,12 +50,36 @@ def fitnum(now_board,goal_board,layer,wide,height):
             else:
                 continue
             break
-            
-
-
-
     
-    return [now_count,goal_count,evalution_value,excess_index,shortage_index]
+    move_num=shortage_index
+    p=[]
+    x=[]
+    y=[]
+    s=[]
+    for i in range(abs(shortage_index[1]-excess_index[1])+abs(shortage_index[0]-excess_index[0])):
+        if move_num[1]!=excess_index[1] and move_num[0]!=excess_index[0]:
+            if move_num[1]<excess_index[1]:
+                move_num[1]+=1
+                p.append(0)
+                x.append(move_num[1])
+                y.append(move_num[0])
+                s.append(3)
+            if move_num[1]>excess_index[1]:
+                move_num[1]-=1
+                p.append(0)
+                x.append(move_num[1])
+                y.append(move_num[0])
+                s.append(2)
+        if move_num[1]==excess_index[1] and move_num[0]!=excess_index[0]:
+            move_num[0]-=1
+            p.append(0)
+            x.append(move_num[1])
+            y.append(move_num[0])
+            s.append(0)
+
+
+
+    return [now_count,goal_count,evalution_value,excess_index,shortage_index,p,x,y,s]
 
 
 ans=fitnum(now_board,goal_board,layer,wide,height)
