@@ -13,20 +13,18 @@ class karial(board_reload_fujii.BoardOperation):
         self.goal=goal_board
         self.use_cut_type=cut_type
 
-
-
         
         self.operate_board=[]#ここに操作を追加
         self.operation_board=now_board
 
-        for column in range(0,now_board):
+        for column in range(0,now_board):#列をそろえる
             self.array_operation=array_send.column_row_send(now_board,goal_board,column)
             self.operate_board=self.operate_board.extend(self.array_operation)
 
 
-            for turn_num in range(0,self.array_operation):
-                self.array_operation_position=[self.array_operation[turn_num][1],self.array_operation[turn_num][2]]
-                self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)
+        for turn_num in range(0,self.array_operation):#ボードの更新
+            self.array_operation_position=[self.array_operation[turn_num][1],self.array_operation[turn_num][2]]
+            self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)
 
 
 
