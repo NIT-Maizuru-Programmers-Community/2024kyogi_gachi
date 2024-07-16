@@ -19,6 +19,13 @@ for column in range(len(goal_board[0])):
 
 print(board_row_jisaku)
 
+
+a=[[1,2,4,2]]
+c=[[2,2,3,2]]
+
+a.extend(c)
+print(a)
+
 #print(get_num(goal_board))
 #tuple = [list(x) for x in zip(*goal_board)]#転地
 
