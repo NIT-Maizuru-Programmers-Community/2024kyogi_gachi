@@ -1,4 +1,4 @@
-layer=0 #n層目
+layer=2 #n層目
 wide=5
 height=5
 goal_board=[[1,2,3,2,1],
@@ -19,6 +19,7 @@ def fitnum(now_board,goal_board,layer,wide,height):
     x=[]
     y=[]
     s=[]
+    ans=[]
 
     now_count=[0,0,0,0]  #現在の盤面におけるそれぞれの数字の数
     goal_count=[0,0,0,0] #正解の盤面におけるそれぞれの数字の数
@@ -60,7 +61,7 @@ def fitnum(now_board,goal_board,layer,wide,height):
                 continue
             break
     
-    move_num=shortage_index
+    move_num=shortage_index.copy()
     for i in range(abs(shortage_index[1]-excess_index[1])+abs(shortage_index[0]-excess_index[0])):
         if move_num[1]!=excess_index[1] and move_num[0]!=excess_index[0]:
             if move_num[1]<excess_index[1]:
@@ -81,10 +82,18 @@ def fitnum(now_board,goal_board,layer,wide,height):
             x.append(move_num[1])
             y.append(move_num[0])
             s.append(0)
+    
+    for i in range(len(p)):
+        t=[0,0,0,0]
+        t[0]=p[i]
+        t[1]=x[i]
+        t[2]=y[i]
+        t[3]=s[i]
+        ans.append(t)
 
 
 
-    return [p,x,y,s]
+    return [ans]
 
 
 ans=fitnum(now_board,goal_board,layer,wide,height)
