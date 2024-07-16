@@ -34,7 +34,7 @@ class karial(board_reload_fujii.BoardOperation):
                 self.element_operation=clmatch_num.fitnum(now_board,goal_board,column,wide,height)#ボード情報の取得
 
                 if self.array_operation !=True:
-                    self.operate_board=self.operate_board.extend(self.element_operation)
+                    self.operate_board.extend(self.element_operation)
 
                     self.array_operation_position=[self.array_operation[turn_num][1],self.array_operation[turn_num][2]]
                     self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)
@@ -43,18 +43,13 @@ class karial(board_reload_fujii.BoardOperation):
             
 
 
-            self.array_operation=array_send.column_row_send(now_board,goal_board,column)#順番を一致させる
+            self.array_operation=clmatch.clmatch(now_board,goal_board,column,wide,height)#順番を一致させる
             self.operate_board=self.operate_board.extend(self.array_operation)
-
             for turn_num in range(0,self.array_operation):#ボードの更新
                 self.array_operation_position=[self.array_operation[turn_num][1],self.array_operation[turn_num][2]]
                 self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)
 
-            
-
-
-
-
+        print(self.operate_board)
         
 
         return self.operate_board

@@ -3,11 +3,10 @@ import general_patterns
 import output
 import time
 import algorithm
-import sys
 import board_reload_fujii
 
 
-class simu(judge.Judgec,board_reload_fujii.BoardOperation,algorithm.karial):
+class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
 
     def set(self):
         self.correct_board=[[1,2,3],[1,2,3],[1,2,3]]#正解の盤面

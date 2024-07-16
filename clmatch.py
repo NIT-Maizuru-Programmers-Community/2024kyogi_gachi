@@ -118,4 +118,4 @@ def clmatch(now_board,goal_board,layer,width,height):
         
     return (nowboard_log,now_board)
 
-print(clmatch(now_board,goal_board,dir,layer,width,height))
+#print(clmatch(now_board,goal_board,layer,width,height))

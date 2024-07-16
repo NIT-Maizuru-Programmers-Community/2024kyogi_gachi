@@ -99,5 +99,5 @@ def column_row_send(now_board,goal_board,send_position):#(現在の盤面,ゴー
     return operate_array
     
 
-print(column_row_send(now_board,goal_board,soroeruretu))
+#print(column_row_send(now_board,goal_board,soroeruretu))
 #返り値はextendを使って追加して
