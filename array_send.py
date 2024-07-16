@@ -79,7 +79,7 @@ def column_row_send(now_board,goal_board,send_position):#(現在の盤面,ゴー
         x=0#左端
         y=now_match_position-256
         s=0#上
-        return [p,x,y,s]
+        return [[p,x,y,s]]
 
     #1層以降
     #そろうまでループ
@@ -101,3 +101,4 @@ def column_row_send(now_board,goal_board,send_position):#(現在の盤面,ゴー
 
 #print(column_row_send(now_board,goal_board,soroeruretu))
 #返り値はextendを使って追加して
+#print(column_row_send(now_board,goal_board,2))

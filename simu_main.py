@@ -47,3 +47,4 @@ class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
 
 
 simul=simu()
+simul.set()

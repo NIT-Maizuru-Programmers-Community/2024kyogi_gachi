@@ -1,6 +1,7 @@
 #アルゴリズム入れる用
 #入力は(現在の盤面,正解の盤面,使用できる抜き型)がよい
 #出力は(抜き型の番号,使用する座標(x),使用する座標(y),詰める方向)がよいよ
+
 import clmatch_num
 import clmatch
 import array_send
@@ -9,47 +10,49 @@ import board_reload_fujii
 class karial(board_reload_fujii.BoardOperation):
     
     def algo(self,now_board,goal_board,cut_type):
-        self.now=now_board
-        self.goal=goal_board
+        self.now_board=now_board
+        self.goal_board=goal_board
         self.use_cut_type=cut_type
 
         
-        self.operate_board=[]#ここに操作を追加
-        self.operation_board=now_board
+        self.array_operate_board=[]#ここに操作を追加
+        self.operation_board=self.now_board.copy()
 
-        for column in range(0,now_board):
-            self.array_operation=array_send.column_row_send(now_board,goal_board,column)#一致度高いやつ寄せる
-            self.operate_board=self.operate_board.extend(self.array_operation)
 
-            for turn_num in range(0,self.array_operation):#ボードの更新
+        for column in range(0,len(self.now_board)):
+            self.array_operation=array_send.column_row_send(self.operation_board,self.goal_board,column)#一致度高いやつ寄せる
+            self.array_operate_board.extend(self.array_operation)
+
+ 
+            for turn_num in range(0,len(self.array_operation)):#ボードの更新
                 self.array_operation_position=[self.array_operation[turn_num][1],self.array_operation[turn_num][2]]
                 self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)
 
 
 
-            is_element_correct=False
-            height=self.goal
-            wide=self.goal[0]
-            while is_element_correct==False:#各要素の個数をそろえる
-                self.element_operation=clmatch_num.fitnum(now_board,goal_board,column,wide,height)#ボード情報の取得
-
-                if self.array_operation !=True:
-                    self.operate_board.extend(self.element_operation)
-
-                    self.array_operation_position=[self.array_operation[turn_num][1],self.array_operation[turn_num][2]]
-                    self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)
+            self.is_element_correct=False
+            self.height=len(self.goal_board)
+            self.wide=len(self.goal_board[0])
+            while self.is_element_correct==False:#各要素の個数をそろえる
+                self.element_operation=clmatch_num.fitnum(self.operation_board,self.goal_board,column,self.wide,self.height)#ボード情報の取得
+                if self.element_operation ==True:
+                    self.is_element_correct=self.element_operation
                 else:
-                    is_element_correct=self.element_operation
+                    self.array_operate_board.extend(self.element_operation)
+                    print(f"{self.element_operation}個ある！！！")
+                    for turn_num in range(0,len(self.element_operation)):#ボードの更新
+                        self.array_operation_position=[self.element_operation[turn_num][1],self.element_operation[turn_num][2]]
+                        self.operation_board=self.board_update(self.element_operation[turn_num][0], self.array_operation_position, self.element_operation[turn_num][3], self.operation_board)
             
 
 
-            self.array_operation=clmatch.clmatch(now_board,goal_board,column,wide,height)#順番を一致させる
-            self.operate_board=self.operate_board.extend(self.array_operation)
-            for turn_num in range(0,self.array_operation):#ボードの更新
-                self.array_operation_position=[self.array_operation[turn_num][1],self.array_operation[turn_num][2]]
-                self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)
+            self.match_operation=clmatch.clmatch(self.operation_board,self.goal_board,column,self.wide,self.height)#順番を一致させる
+            self.array_operate_board.extend(self.match_operation)
+            for turn_num in range(0,len(self.match_operation)):#ボードの更新
+                self.array_operation_position=[self.match_operation[turn_num][1],self.match_operation[turn_num][2]]
+                self.operation_board=self.board_update(self.match_operation[turn_num][0], self.array_operation_position, self.match_operation[turn_num][3], self.operation_board)
 
-        print(self.operate_board)
+        print(self.array_operate_board)
         
 
-        return self.operate_board
+        return self.array_operate_board
