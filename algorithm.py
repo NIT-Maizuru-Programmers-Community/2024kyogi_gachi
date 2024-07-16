@@ -17,14 +17,40 @@ class karial(board_reload_fujii.BoardOperation):
         self.operate_board=[]#ここに操作を追加
         self.operation_board=now_board
 
-        for column in range(0,now_board):#列をそろえる
-            self.array_operation=array_send.column_row_send(now_board,goal_board,column)
+        for column in range(0,now_board):
+            self.array_operation=array_send.column_row_send(now_board,goal_board,column)#一致度高いやつ寄せる
             self.operate_board=self.operate_board.extend(self.array_operation)
 
+            for turn_num in range(0,self.array_operation):#ボードの更新
+                self.array_operation_position=[self.array_operation[turn_num][1],self.array_operation[turn_num][2]]
+                self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)
 
-        for turn_num in range(0,self.array_operation):#ボードの更新
-            self.array_operation_position=[self.array_operation[turn_num][1],self.array_operation[turn_num][2]]
-            self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)
+
+
+            is_element_correct=False
+            height=self.goal
+            wide=self.goal[0]
+            while is_element_correct==False:#各要素の個数をそろえる
+                self.element_operation=clmatch_num.fitnum(now_board,goal_board,column,wide,height)#ボード情報の取得
+
+                if self.array_operation !=True:
+                    self.operate_board=self.operate_board.extend(self.element_operation)
+
+                    self.array_operation_position=[self.array_operation[turn_num][1],self.array_operation[turn_num][2]]
+                    self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)
+                else:
+                    is_element_correct=self.element_operation
+            
+
+
+            self.array_operation=array_send.column_row_send(now_board,goal_board,column)#順番を一致させる
+            self.operate_board=self.operate_board.extend(self.array_operation)
+
+            for turn_num in range(0,self.array_operation):#ボードの更新
+                self.array_operation_position=[self.array_operation[turn_num][1],self.array_operation[turn_num][2]]
+                self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)
+
+            
 
 
 
