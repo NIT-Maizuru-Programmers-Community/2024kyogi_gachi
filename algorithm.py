@@ -1,8 +1,8 @@
 #アルゴリズム入れる用
 #入力は(現在の盤面,正解の盤面,使用できる抜き型)がよい
 #出力は(抜き型の番号,使用する座標(x),使用する座標(y),詰める方向)がよいよ
-import clmuch_num
-import clmuch
+import clmatch_num
+import clmatch
 import array_send
 import board_reload_fujii
 
