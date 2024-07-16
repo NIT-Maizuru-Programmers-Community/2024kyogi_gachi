@@ -20,6 +20,10 @@ class karial(board_reload_fujii.BoardOperation):
 
 
         for column in range(0,len(self.now_board)):
+            print(f"{column}層目")
+
+
+
             self.array_operation=array_send.column_row_send(self.operation_board,self.goal_board,column)#一致度高いやつ寄せる
             self.array_operate_board.extend(self.array_operation)
             print(f"{self.array_operation}#一致度高いやつ寄せる")

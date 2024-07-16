@@ -34,10 +34,12 @@ def clmatch(now_board,goal_board,layer,width,height):
         now_list = now_board[layer]
         target=goal_list[unknown_x] #target
         c = unknown_x
+        print(f"{target}ターゲット")
         
         #unknown_x地点から,ゴールのものと一致するピース(target)が見つかるまでcをカウント
         while(now_list[c] != target):
             c += 1
+            print(now_list[c])
         
         #(c-unknown_x)は不一致ピースの幅
         #不一致ピースの幅が0の場合はunknown_xを1ずらす
