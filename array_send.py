@@ -70,7 +70,6 @@ def column_row_send(now_board,goal_board,send_position):#(現在の盤面,ゴー
     now_element=count_column_row(now_board)
     goal_element=count_element(goal_board[send_position])
     now_match_position=serch_most_match(now_element,goal_element,send_position)
-    print(f"{now_match_position}番目")
     operate_array=[]#詰めるための操作を記録
 
     #False(0):列,True(1):行
@@ -96,7 +95,6 @@ def column_row_send(now_board,goal_board,send_position):#(現在の盤面,ゴー
         shorten_distance=(now_match_position-y)//2 + (now_match_position-y)%2#詰めた距離
         now_match_position -= shorten_distance#更新後
         operate_array.append([p,x,y,s])
-        print(shorten_distance)
      
     return operate_array
     
