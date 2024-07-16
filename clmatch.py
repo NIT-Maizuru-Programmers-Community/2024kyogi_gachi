@@ -62,7 +62,7 @@ def clmatch(now_board,goal_board,layer,width,height):
         #now_boardを更新
         move=BoardOperation()
         now_board = move.board_update(cutter_num, [unknown_x, layer], 2, now_board)
-        nowboard_log.append([cutter_num, [unknown_x, layer], 2])
+        nowboard_log.append([cutter_num, unknown_x, layer, 2])
 
         #unknown_xを更新するのは,ちょうど2^n=(c-unknown_x)を満たすような整数nだったとき
         if(2**find_n(c-unknown_x) == c-unknown_x):

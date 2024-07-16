@@ -184,7 +184,7 @@ class BoardOperation:
                         change_board_data([x, y], 5) #移動済みをマーク=5
                     else:
                         break
-            print(self.board)
+
             for line in range(board_line_size): #空いているところを埋める
                 if(is_xy):
                     y = line
