@@ -29,8 +29,7 @@ class BoardOperation:
             print("cover case error!!")
         self.reshape_cutter_size()
         self.update_cutter_position()
-        #print(f"posi={self.cutter_LU_posi}")
-        #print(f"cutter size={self.cutter_size}")
+        
         #ボードの操作
         self.change_board()
 
@@ -67,55 +66,6 @@ class BoardOperation:
         else:
             self.cutterPosi_is_error = False
 
-        # inside = [True, True, True, True]
-        # over_left_upper = [False, False, False, True]
-        # over_left_lower = [False, True, False, False]
-        # over_right_upper = [False, False, True, False]
-        # over_right_lower = [True, False, False, False]
-        # over_upper = [False, False, True, True]
-        # over_lower = [True, True, False, False]
-        # over_left = [False, True, False, True]
-        # over_right = [True, False, True, False]
-
-        # corners_is_inside = []
-        # corners_is_inside.append(self.is_inside(self.cutter_LU_posi)) #左上
-
-        # corners_is_inside.append(self.is_inside([self.cutter_LU_posi[0] + self.cutter_size[0] - 1, 
-        #                                     self.cutter_LU_posi[1]])) #右上
-        
-        # corners_is_inside.append(self.is_inside([self.cutter_LU_posi[0], 
-        #                                     self.cutter_LU_posi[1] + self.cutter_size[1] - 1])) #左下
-        
-        # corners_is_inside.append(self.is_inside([self.cutter_LU_posi[0] + self.cutter_size[0] - 1,
-        #                                     self.cutter_LU_posi[1] + self.cutter_size[1] - 1])) #右下
-
-        # if(corners_is_inside == inside):
-        #     self.cover_case = 0
-        # elif(corners_is_inside == over_left_upper):
-        #     self.cover_case = 1
-        # elif(corners_is_inside == over_left_lower):
-        #     self.cover_case = 2
-        # elif(corners_is_inside == over_right_upper):
-        #     self.cover_case = 3
-        # elif(corners_is_inside == over_right_lower):
-        #     self.cover_case = 4
-        # elif(corners_is_inside == over_upper):
-        #     self.cover_case = 5
-        # elif(corners_is_inside == over_lower):
-        #     self.cover_case = 6
-        # elif(corners_is_inside == over_left):
-        #     self.cover_case = 7
-        # elif(corners_is_inside == over_right):
-        #     self.cover_case = 8
-        # elif(self.cutter_LU_posi[0] < 0 
-        #         and self.cutter_LU_posi[0] + self.cutter_size[0] - 1 >= self.board_size[0] - 1
-        #         and self.cutter_LU_posi[1] < 0
-        #         and self.cutter_LU_posi[1] + self.cutter_size[1] - 1 >= self.board_size[1] - 1):
-        #     self.cover_case = 9 #すべて覆い、ボードより大きい
-        # else:
-        #     self.cover_case = 10 #かぶり箇所無し
-        # print(self.cutter_LU_posi[0] + self.cutter_size[0] - 1,self.board_size[0] - 1,self.cutter_LU_posi[1] + self.cutter_size[1] - 1,self.board_size[1] - 1)
-
     def reshape_cutter_size(self): #型のサイズを変更
         reshape_left = 0
         reshape_right = 0
@@ -140,25 +90,6 @@ class BoardOperation:
             self.cutter_LU_posi[0] = 0
         if(self.cutter_LU_posi[1] < 0):
             self.cutter_LU_posi[1] = 0
-
-        # if(self.cover_case == 1):
-        #     self.cutter_LU_posi = [0, 0]
-        # elif(self.cover_case == 2):
-        #     self.cutter_LU_posi = [0, self.cutter_LU_posi[1]]
-        # elif(self.cover_case == 3):
-        #     self.cutter_LU_posi = [self.cutter_LU_posi[0], 0]
-        # elif(self.cover_case == 4):
-        #     self.cutter_LU_posi = self.cutter_LU_posi #変更なし
-        # elif(self.cover_case == 5):
-        #     self.cutter_LU_posi = [self.cutter_LU_posi[0], 0]
-        # elif(self.cover_case == 6):
-        #     self.cutter_LU_posi = self.cutter_LU_posi #変更なし
-        # elif(self.cover_case == 7):
-        #     self.cutter_LU_posi = [0, self.cutter_LU_posi[1]]
-        # elif(self.cover_case == 8):
-        #     self.cutter_LU_posi = self.cutter_LU_posi #変更なし
-        # elif(self.cover_case == 9):
-        #     self.cutter_LU_posi = [0, 0]
 
     def change_board(self): #型を適用してボードを更新
         def get_board_data(position): #ボードの指定した座標にある値を返す
