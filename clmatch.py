@@ -2,25 +2,16 @@ from board_reload_fujii import BoardOperation
 import numpy
 
 #dir=1 #0:上 1:左
-layer=0 #n層目
-goal_board=[[3,1,3,2,2],
-            [0,2,1,1,2],
-            [2,1,3,0,2],
-            [3,1,3,2,3],
-            [2,1,3,0,1]]
+layer=2 #n層目
+goal_board=[[1,2,3],[1,2,3],[1,2,3]]
 
-now_board=[[3,2,3,2,1],
-           [3,2,0,1,2],
-           [2,1,3,3,2],
-           [2,1,3,2,3],
-           [0,1,3,0,1]]
-width=5
-height=5
+now_board=[[1, 2, 3], [1, 2, 3], [3, 2, 1]]
+width=3
+height=3
 
 def clmatch(now_board,goal_board,layer,width,height):
 
     unknown_x = 0 #未知部分の最初のx座標(=一致部の最後のx座標+1),最初はすべて未知
-    unknown_y = 0
     cutter_num = 0
     goal_list = goal_board[layer]
     nowboard_log=[]
@@ -34,12 +25,23 @@ def clmatch(now_board,goal_board,layer,width,height):
         now_list = now_board[layer]
         target=goal_list[unknown_x] #target
         c = unknown_x
-        print(f"{target}ターゲット")
+        print(f"{target}:ターゲット")
         
         #unknown_x地点から,ゴールのものと一致するピース(target)が見つかるまでcをカウント
         while(now_list[c] != target):
+            print(f"{unknown_x}:unknown_x")
             c += 1
-            print(now_list[c])
+            print(f"{c}:c加算後")
+            print(f"{now_list[c]}:now_list[c]")
+
+        # for i in range(len(now_list)):
+        #     if now_list[i]==target:
+        #         c=i
+        #         break
+        #     print(f"{unknown_x}:unknown_x")
+        #     print(f"{c}:c")
+        #     print(f"{now_list[c]}:now_list[c]")
+
         
         #(c-unknown_x)は不一致ピースの幅
         #不一致ピースの幅が0の場合はunknown_xを1ずらす
@@ -120,4 +122,4 @@ def clmatch(now_board,goal_board,layer,width,height):
         
     return (nowboard_log,now_board)
 
-#print(clmatch(now_board,goal_board,layer,width,height))
+print(clmatch(now_board,goal_board,layer,width,height))
