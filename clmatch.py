@@ -29,7 +29,7 @@ def clmatch(now_board,goal_board,layer,width,height):
     goal_list = goal_board[layer]
     nowboard_log=[]
 
-    print("HI!")
+    #print("HI!")
 
     #上方向
 
