@@ -24,7 +24,7 @@ class karial(board_reload_fujii.BoardOperation):
 
         
         self.array_operate_board=[]#ここに操作を追加
-        self.array_execution_time=[]
+        self.array_execution_time=[]#実行時間リスト
         self.operation_board = copy.deepcopy(self.now_board)
         
 
@@ -57,19 +57,18 @@ class karial(board_reload_fujii.BoardOperation):
                 self.element_operation=clmatch_num.fitnum(self.operation_board,self.goal_board,column,self.wide,self.height)#ボード情報の取得
 
 
-                #実行時間の取得
-                self.end = self.get_time()
-                self.times=self.end-self.start_time
-                if self.element_operation ==True:
-                    print("追加できない時間")
-                else:
-                    for _ in range(len(self.element_operation)):
-                        self.array_execution_time.append(self.times)
+                
                 # print(f"{len(self.array_execution_time)}self.element_operation")
 
                 if self.element_operation ==True:
                     self.is_element_correct=self.element_operation
                 else:
+                    #実行時間の取得
+                    self.end = self.get_time()
+                    self.times=self.end-self.start_time
+                    for _ in range(len(self.element_operation)):
+                        self.array_execution_time.append(self.times)
+
                     self.array_operate_board.extend(self.element_operation)
                     #print(f"{self.element_operation}#各要素の個数をそろえる")
                     for turn_num in range(0,len(self.element_operation)):#ボードの更新
@@ -102,6 +101,6 @@ class karial(board_reload_fujii.BoardOperation):
             #print(f"{self.operation_board}#順番を一致させる盤面")
 
         print(self.array_operate_board)
-        print(self.array_execution_time)
+        #print(self.array_execution_time)
 
         return (self.array_operate_board,self.array_execution_time)
