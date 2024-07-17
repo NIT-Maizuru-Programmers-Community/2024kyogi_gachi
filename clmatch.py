@@ -38,14 +38,14 @@ def clmatch(now_board,goal_board,layer,width,height):
         now_list = now_board[layer]
         target=goal_list[unknown_x] #target
         c = unknown_x
-        print(f"{target}:ターゲット")
+        #print(f"{target}:ターゲット")
         
         #unknown_x地点から,ゴールのものと一致するピース(target)が見つかるまでcをカウント
         while(now_list[c] != target):
-            print(f"{unknown_x}:unknown_x")
+            #print(f"{unknown_x}:unknown_x")
             c += 1
-            print(f"{c}:c加算後")
-            print(f"{now_list[c]}:now_list[c]")
+            #print(f"{c}:c加算後")
+            #print(f"{now_list[c]}:now_list[c]")
 
         # for i in range(len(now_list)):
         #     if now_list[i]==target:
@@ -60,8 +60,8 @@ def clmatch(now_board,goal_board,layer,width,height):
         #不一致ピースの幅が0の場合はunknown_xを1ずらす
         if(c-unknown_x == 0):
             unknown_x += 1
-            print("!!")
-            print(f"{unknown_x}:unko")
+            #print("!!")
+            #print(f"{unknown_x}:unko")
             continue
 
         #不一致ピースの幅が0以外の場合,変更を加える必要があるので使用する抜き型を決定
@@ -88,8 +88,8 @@ def clmatch(now_board,goal_board,layer,width,height):
             #unknown_x+=int(2**find_n(c-unknown_x))
             unknown_x+=1
 
-        print(f"{now_list}:now_list")
-        print(f"{unknown_x}:unknown_x")
+        #print(f"{now_list}:now_list")
+        #print(f"{unknown_x}:unknown_x")
 
     #左方向
 #     if(dir == 1):
@@ -139,4 +139,4 @@ def clmatch(now_board,goal_board,layer,width,height):
         
     return (nowboard_log,now_board)
 
-print(clmatch(now_board,goal_board,layer,width,height))
+#print(clmatch(now_board,goal_board,layer,width,height))

@@ -24,7 +24,7 @@ class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
         self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type)#アルゴリズム呼び出し
         self.start_time = time.time()#開始時間
 
-        for turn in range(1,self.call_algotithm+1):
+        for turn in range(1,len(self.call_algotithm)+1):
             self.end = self.get_time()
             self.turn_algorithm=self.call_algotithm[turn-1]#そのターンの操作
 
