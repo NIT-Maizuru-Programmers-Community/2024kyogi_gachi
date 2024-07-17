@@ -3,9 +3,22 @@ import numpy
 
 #dir=1 #0:上 1:左
 layer=2 #n層目
-goal_board=[[1,2,3],[1,2,3],[1,2,3]]
 
-now_board=[[1, 2, 3], [1, 2, 3], [3, 2, 1]]
+goal_board=[[1,2,3],[1,2,3],[1,2,3]]
+now_board=[[1,2,3],[1,2,3],[3,2,1]]
+
+# goal_board=[[3,1,3,2,2],
+#             [0,2,1,3,2],
+#             [2,1,3,0,2],
+#             [3,1,3,2,3],
+#             [2,1,3,0,1]]
+
+# now_board=[[3,2,3,2,1],
+#            [3,2,0,1,2],
+#            [0,1,3,2,2],
+#            [2,1,3,2,3],
+#            [0,1,3,0,1]]
+
 width=3
 height=3
 
@@ -47,6 +60,8 @@ def clmatch(now_board,goal_board,layer,width,height):
         #不一致ピースの幅が0の場合はunknown_xを1ずらす
         if(c-unknown_x == 0):
             unknown_x += 1
+            print("!!")
+            print(f"{unknown_x}:unko")
             continue
 
         #不一致ピースの幅が0以外の場合,変更を加える必要があるので使用する抜き型を決定
@@ -70,9 +85,11 @@ def clmatch(now_board,goal_board,layer,width,height):
 
         #unknown_xを更新するのは,ちょうど2^n=(c-unknown_x)を満たすような整数nだったとき
         if(2**find_n(c-unknown_x) == c-unknown_x):
-            unknown_x+=int(2**find_n(c-unknown_x))
+            #unknown_x+=int(2**find_n(c-unknown_x))
+            unknown_x+=1
 
-            #print(now_board)
+        print(f"{now_list}:now_list")
+        print(f"{unknown_x}:unknown_x")
 
     #左方向
 #     if(dir == 1):
