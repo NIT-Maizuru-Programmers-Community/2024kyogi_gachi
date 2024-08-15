@@ -33,7 +33,7 @@ class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
 
             self.relord_board=self.board_update(self.turn_algorithm[0],self.cutter_position,self.turn_algorithm[3],self.now_board)
             #処理後の盤面取得( cutter_num, cutter_LU_posi, move_direction, board):
-            #print(f"{self.relord_board}self.relord_board")
+            print(f"{self.relord_board}self.relord_board")
 
             self.correct=self.judge(self.relord_board,self.correct_board)#正誤判定
 
