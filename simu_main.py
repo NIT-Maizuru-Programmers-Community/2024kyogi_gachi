@@ -6,7 +6,7 @@ import algorithm
 import board_reload_fujii
 
 
-class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
+class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOperation):
 
     def set(self):
         self.correct_board=[[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3]]#正解の盤面
@@ -25,12 +25,11 @@ class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
         self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type)#アルゴリズム呼び出し,
         self.end_time = time.time()#終了時間
 
-        self.process_time=self.end_time-self.start_time
 
         #print(self.now_board)
-        for turn in range(1,len(self.call_algotithm[0])+1):
+        for turn in range(1,len(self.call_algotithm)+1):
             #self.end = self.get_time()
-            self.turn_algorithm=self.call_algotithm[0][turn-1]#そのターンの操作
+            self.turn_algorithm=self.call_algotithm[turn-1]#そのターンの操作
 
             self.cutter_position=[self.turn_algorithm[1],self.turn_algorithm[2]]#使用した座標
 
@@ -43,10 +42,10 @@ class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
             self.now_board=self.relord_board.copy()#盤面書き換え
             
 
-            self.times=self.call_algotithm[1][turn-1]
+            self.time=self.end_time-self.start_time
             #実行時間
 
-            output.log_output(self.relord_board,turn,self.times,self.turn_algorithm[0],self.cutter_position,self.turn_algorithm[3],self.correct[1])
+            output.log_output(self.relord_board,turn,self.time,self.turn_algorithm[0],self.cutter_position,self.turn_algorithm[3],self.correct[1])
             #relord_board,turn,time,use_type,use_coodenate,move_direc,TF
 
         

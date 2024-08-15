@@ -2,7 +2,7 @@
 #入力は(現在の盤面,正解の盤面,使用できる抜き型)がよい
 #出力は(抜き型の番号,使用する座標(x),使用する座標(y),詰める方向)がよいよ
 
-class karial:
+class algorithm_tentative:
     
     
     def algo(self,now_board,correct_board,cut_type):
@@ -16,4 +16,4 @@ class karial:
         self.y=1
         self.shorten_direc=2
 
-        return [self.use_type,self.x,self.y,self.shorten_direc]
+        return [[self.use_type,self.x,self.y,self.shorten_direc],[self.use_type,self.x,self.y,self.shorten_direc]]
