@@ -23,7 +23,7 @@ class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
 
         self.start_time = time.time()#開始時間
         self.call_algotithm_time=self.algo(self.now_board,self.correct_board,self.use_type,self.start_time)#アルゴリズム呼び出し
-        print(self.call_algotithm_time[0])
+        #print(self.call_algotithm_time[0])
 
         #print(self.now_board)
         for turn in range(1,len(self.call_algotithm_time[0])+1):
