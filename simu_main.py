@@ -30,7 +30,8 @@ class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
         self.end_time = time.time()#終了時間
         self.times=self.end_time-self.start_time#実行時間
 
-        #print(self.call_algotithm_time[0])
+        #print(self.call_algotithm)
+        print(len(self.call_algotithm))
 
 
         #print(self.now_board)
