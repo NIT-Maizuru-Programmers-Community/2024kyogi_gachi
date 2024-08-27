@@ -16,15 +16,13 @@ class karial(board_reload_fujii.BoardOperation):
         self.now_time=time.time()
         return self.now_time
     
-    def algo(self,now_board,goal_board,cut_type,start_time):
+    def algo(self,now_board,goal_board,cut_type):
         self.now_board=now_board
         self.goal_board=goal_board
         self.use_cut_type=cut_type
-        self.start_time=start_time
 
         
         self.array_operate_board=[]#ここに操作を追加
-        self.array_execution_time=[]#実行時間リスト
         self.operation_board = copy.deepcopy(self.now_board)
         
 
@@ -36,12 +34,7 @@ class karial(board_reload_fujii.BoardOperation):
             self.array_operate_board.extend(self.array_operation)
             #print(f"{self.array_operation}#一致度高いやつ寄せる")
 
-            #実行時間の取得
-            self.end = self.get_time()
-            self.times=self.end-self.start_time
-            if self.array_operation:
-                for _ in range(len(self.array_operation)):
-                    self.array_execution_time.append(self.times)
+            
             #print(len(self.array_execution_time))
 
             for turn_num in range(0,len(self.array_operation)):#ボードの更新
@@ -63,11 +56,7 @@ class karial(board_reload_fujii.BoardOperation):
                 if self.element_operation ==True:
                     self.is_element_correct=self.element_operation
                 else:
-                    #実行時間の取得
-                    self.end = self.get_time()
-                    self.times=self.end-self.start_time
-                    for _ in range(len(self.element_operation)):
-                        self.array_execution_time.append(self.times)
+                    
 
                     self.array_operate_board.extend(self.element_operation)
                     #print(f"{self.element_operation}#各要素の個数をそろえる")
@@ -81,12 +70,7 @@ class karial(board_reload_fujii.BoardOperation):
 
             self.match_operation=clmatch.clmatch(self.operation_board,self.goal_board,column,self.wide,self.height)#順番を一致させる
 
-            #実行時間の取得
-            self.end = self.get_time()
-            self.times=self.end-self.start_time
-            if self.match_operation[0]:
-                for _ in range(len(self.match_operation[0])):
-                    self.array_execution_time.append(self.times)
+            
             # print(f"{len(self.array_execution_time)}self.match_operation")
             # print(f"{len(self.match_operation[0])}リストながさ")
 
@@ -103,4 +87,4 @@ class karial(board_reload_fujii.BoardOperation):
         print(self.array_operate_board)
         #print(self.array_execution_time)
 
-        return (self.array_operate_board,self.array_execution_time)
+        return (self.array_operate_board)
