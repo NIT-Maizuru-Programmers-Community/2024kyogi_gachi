@@ -24,6 +24,7 @@ class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOp
         self.start_time = time.time()#開始時間
         self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type)#アルゴリズム呼び出し,
         self.end_time = time.time()#終了時間
+        print(len(self.call_algotithm))
 
 
         #print(self.now_board)
@@ -35,7 +36,7 @@ class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOp
 
             self.relord_board=self.board_update(self.turn_algorithm[0],self.cutter_position,self.turn_algorithm[3],self.now_board)
             #処理後の盤面取得( cutter_num, cutter_LU_posi, move_direction, board):
-            print(f"{self.relord_board}self.relord_board")
+            #print(f"{self.relord_board}self.relord_board")
 
             self.correct=self.judge(self.relord_board,self.correct_board)#正誤判定
 
