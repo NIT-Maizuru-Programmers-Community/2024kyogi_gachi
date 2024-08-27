@@ -13,12 +13,11 @@ TorFk=24#正誤
 ###################################
 
 
-def log_output(board,turn,time,use_type,use_coodenate,move_direc,TF):
+def log_output(turn,time,use_type,use_coodenate,move_direc,TF):
     write_lock = threading.Lock()
 
     log ={
-        turn:{
-           'board': board, 
+        turn:{ 
            'turn': turn, 
            'time': time, 
            'use_type':use_type, 
