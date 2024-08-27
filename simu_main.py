@@ -4,13 +4,17 @@ import output
 import time
 import algorithm
 import board_reload_fujii
+import numpy as np
 
 
 class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
 
     def set(self):
-        self.correct_board=[[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3]]#正解の盤面
-        self.now_board=[[1,1,1],[2,2,2],[3,3,3],[1,1,1],[2,2,2],[3,3,3]]#現在の盤面
+        first_board = np.random.randint(0, 4, (256, 256))
+        self.correct_board=first_board.tolist() #正解の盤面
+        shuffled_elements = np.random.permutation(first_board.flatten())
+        second_board = shuffled_elements.reshape(256, 256)
+        self.now_board=second_board.tolist() #現在の盤面
         self.use_type=general_patterns.general_patterns_cells.copy()#使用できる抜き型
 
         self.relord_judge_log()
