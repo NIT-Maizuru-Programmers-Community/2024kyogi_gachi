@@ -16,7 +16,6 @@ soroeruretu=2
 
 #寄せる動作を大会基準の配列で返す
 def column_row_send(now_board,goal_board,send_position):#(現在の盤面,ゴール盤面,行か列か,何列目または何行目をそろえるのか)
-    #send_directionがTrueなら行で揃える,Falseなら列で
 
     def count_element(board_array):#入力された1行または列の各要素数を取得
         element=[0,0,0,0]

@@ -42,7 +42,6 @@ class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOp
 
             self.now_board=self.relord_board.copy()#盤面書き換え
             
-
             self.time=self.end_time-self.start_time
             #実行時間
 
