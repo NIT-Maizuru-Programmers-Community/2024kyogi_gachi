@@ -10,10 +10,10 @@ import numpy as np
 class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
 
     def set(self):
-        first_board = np.random.randint(0, 4, (100, 100))
+        first_board = np.random.randint(0, 4, (5, 5))
         self.correct_board=first_board.tolist() #正解の盤面
         shuffled_elements = np.random.permutation(first_board.flatten())
-        second_board = shuffled_elements.reshape(100, 100)
+        second_board = shuffled_elements.reshape(5, 5)
         self.now_board=second_board.tolist() #現在の盤面
         self.use_type=general_patterns.general_patterns_cells.copy()#使用できる抜き型
 
@@ -43,7 +43,7 @@ class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
 
             self.relord_board=self.board_update(self.turn_algorithm[0],self.cutter_position,self.turn_algorithm[3],self.now_board)
             #処理後の盤面取得( cutter_num, cutter_LU_posi, move_direction, board):
-            #print(f"{self.relord_board}self.relord_board")
+            print(f"{self.relord_board}self.relord_board")
 
             self.correct=self.judge(self.relord_board,self.correct_board)#正誤判定
 
@@ -59,3 +59,4 @@ class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
 
 simul=simu()
 simul.set()
+#simul.relord_judge_log()

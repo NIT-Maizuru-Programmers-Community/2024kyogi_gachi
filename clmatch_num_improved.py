@@ -50,7 +50,7 @@ def fitnum(now_board,goal_board,layer,wide,height):
         if evalution_value[k]<0:
             depth=0
             found=False
-            while True:
+            for d in range(layer+1,height):
                 for i in range(depth): #左側処理
                     y_index = -excess_index[0] + 1 + i
                     x_index = excess_index[1] - depth + i
@@ -59,18 +59,18 @@ def fitnum(now_board,goal_board,layer,wide,height):
                         shortage_index[1]=x_index
                         found=True
                         break
+
                 if found:
-                    break
+                    print("やぁ")
+                    continue
 
                 y_index=-excess_index[0]+depth+1 #中央処理
                 x_index=excess_index[1]
                 if(y_index < height and 0 <= x_index < wide and now_board[y_index][x_index] == k):
                     shortage_index[0]=y_index
                     shortage_index[1]=x_index
-                    found=True
-                    break
-                if found:
-                    break
+                    #print("やぁ")
+                    continue
 
                 for i in range(depth): #右側処理
                     y_index=-excess_index[0]+depth-i
@@ -80,8 +80,11 @@ def fitnum(now_board,goal_board,layer,wide,height):
                         shortage_index[1]=x_index
                         found=True
                         break
+
                 if found:
-                    break
+                    #print("やぁ")
+                    continue
+
                 depth+=1
     
     move_num=shortage_index.copy()
