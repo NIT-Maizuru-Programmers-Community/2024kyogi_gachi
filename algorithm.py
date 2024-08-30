@@ -50,24 +50,19 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
             #print(f"{self.operation_board}#一致度高いやつ寄せる盤面")
 
 
-            self.is_element_correct=False
-            while self.is_element_correct==False:#各要素の個数をそろえる
-                self.element_operation=clmatch_num.fitnum(self.operation_board,self.goal_board,column,self.wide,self.height)#ボード情報の取得
-                
-                # print(f"{len(self.array_execution_time)}self.element_operation")
+            #各要素の個数をそろえる
+            self.element_operation=clmatch_num_cutting.fitnum(self.operation_board,self.goal_board,column,self.wide,self.height)#ボード情報の取得
+            # print(f"{len(self.array_execution_time)}self.element_operation")
+            self.array_operate_board.extend(self.element_operation[0])
+            #print(f"{self.element_operation}#各要素の個数をそろえる")
+            self.operation_board=copy.deepcopy(self.element_operation[1])
 
-                if self.element_operation ==True:
-                    self.is_element_correct=self.element_operation
-                else:
-                    
 
-                    self.array_operate_board.extend(self.element_operation)
-                    #print(f"{self.element_operation}#各要素の個数をそろえる")
-                    for turn_num in range(0,len(self.element_operation)):#ボードの更新
-                        self.array_operation_position=[self.element_operation[turn_num][1],self.element_operation[turn_num][2]]
-                        self.operation_board=self.board_update(self.element_operation[turn_num][0], self.array_operation_position, self.element_operation[turn_num][3], self.operation_board)
+
+            
             
             #print(f"{self.operation_board}#各要素の個数をそろえる盤面")
+
 
 
 
