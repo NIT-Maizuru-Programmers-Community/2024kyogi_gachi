@@ -25,6 +25,8 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
         self.now_board=now_board
         self.goal_board=goal_board
         self.use_cut_type=cut_type
+        self.height=len(self.goal_board)
+        self.wide=len(self.goal_board[0])
 
         
         self.array_operate_board=[]#ここに操作を追加
@@ -49,12 +51,8 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
 
 
             self.is_element_correct=False
-            self.height=len(self.goal_board)
-            self.wide=len(self.goal_board[0])
             while self.is_element_correct==False:#各要素の個数をそろえる
                 self.element_operation=clmatch_num.fitnum(self.operation_board,self.goal_board,column,self.wide,self.height)#ボード情報の取得
-
-
                 
                 # print(f"{len(self.array_execution_time)}self.element_operation")
 

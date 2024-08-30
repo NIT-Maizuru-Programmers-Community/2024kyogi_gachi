@@ -63,10 +63,9 @@ def clmatch(now_board,goal_board,layer,width):
         
         if cutter_scale==1:
             return 0
+        
 
-
-
-
+        
 
     operate_board=[]#ここに操作情報を追加
     move=BoardOperation()
@@ -77,7 +76,6 @@ def clmatch(now_board,goal_board,layer,width):
 
         operate_board.append([23,-256+goal_place,layer,2])
 
-    
     for place in range(1,width-1):
         while(now_board[layer][place]!=goal_board[layer][place]):
             goal_place=search_goal(now_board[layer],place,goal_board[layer][place])
@@ -90,11 +88,6 @@ def clmatch(now_board,goal_board,layer,width):
             s=2
             now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
             operate_board.append([p,x,y,s])
-
-
-
-
-
         
     return (operate_board,now_board)
 
