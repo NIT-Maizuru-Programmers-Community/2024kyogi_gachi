@@ -24,7 +24,7 @@ class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOp
         self.start_time = time.time()#開始時間
         self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type)#アルゴリズム呼び出し,
         self.end_time = time.time()#終了時間
-        print(len(self.call_algotithm))
+        print(f"{len(self.call_algotithm)}手かかりました")
 
 
         #print(self.now_board)
