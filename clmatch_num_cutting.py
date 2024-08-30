@@ -49,28 +49,28 @@ def fitnum(now_board,goal_board,layer,wide,height):
 
         #抜き型番号の決定
         if cutter_scale==128:
-            return 21
+            return [21,128]
         
         if cutter_scale==64:
-            return 18
+            return [18,64]
         
         if cutter_scale==32:
-            return 15
+            return [15,32]
         
         if cutter_scale==16:
-            return 12
+            return [12,16]
         
         if cutter_scale==8:
-            return 9
+            return [9,8]
         
         if cutter_scale==4:
-            return 6
+            return [6,4]
         
         if cutter_scale==2:
-            return 3
+            return [3,2]
         
         if cutter_scale==1:
-            return 0
+            return [0,1]
 
 
 
@@ -129,13 +129,17 @@ def fitnum(now_board,goal_board,layer,wide,height):
             now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
             operate_board.append([p,x,y,s])
 
-        while shortage_index[0]!=excess_index[0]-1:
+
+        while shortage_index[0]!=excess_index[0]+1:
 
             cloce_distance=shortage_index[0]-excess_index[0]-1#詰める距離
-            p=search_cutter(cloce_distance)
+            cutter_num_scale=search_cutter(cloce_distance)
+
+            p=cutter_num_scale[0]
             x=excess_index[1]
             y=excess_index[0]-1
             s=0
+            shortage_index[0]=shortage_index[0]-cutter_num_scale[1]
 
             now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
             operate_board.append([p,x,y,s])
@@ -150,12 +154,11 @@ def fitnum(now_board,goal_board,layer,wide,height):
         operate_board.append([p,x,y,s])
 
         now_count=count_element(now_board[layer])  #現在の盤面におけるそれぞれの数字の数
-    
 
-
-    return [ans,now_board]
+    return [operate_board,now_board]
 
 
 ans=fitnum(now_board,goal_board,layer,wide,height)
+print(ans[0])
 
 #print(ans)
