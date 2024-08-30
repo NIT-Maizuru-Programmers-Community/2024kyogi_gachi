@@ -35,6 +35,8 @@ def fitnum(now_board,goal_board,layer,wide,height):
     
     def search_cutter(cloce_distance):#抜き型の番号決める
         cutter_scale_array=[128,64,32,16,8,4,2,1]
+        #print(f"{cloce_distance}cloce_distance")
+
         #general_patterns_width=[1,2,2,2,4,4,4,8,8,8,16,16,16,32,32,32,64,64,64,128,128,128,256,256,256]
         #general_patterns_p=    [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19 ,20 ,21 ,22 ,23 ,24 ]
         scale_num=0
@@ -78,10 +80,10 @@ def fitnum(now_board,goal_board,layer,wide,height):
     now_count=count_element(now_board[layer])  #現在の盤面におけるそれぞれの数字の数
     goal_count=count_element(goal_board[layer]) #正解の盤面におけるそれぞれの数字の数
 
-    completion=False
-    if evalution_value[0]==0 and evalution_value[1]==0 and evalution_value[2]==0 and evalution_value[3]==0:
-        completion=True
-        return completion
+    # completion=False
+    # if evalution_value[0]==0 and evalution_value[1]==0 and evalution_value[2]==0 and evalution_value[3]==0:
+    #     completion=True
+    #     return completion
 
     
     while now_count!=goal_count:
@@ -129,7 +131,7 @@ def fitnum(now_board,goal_board,layer,wide,height):
 
         while shortage_index[0]!=excess_index[0]-1:
 
-            cloce_distance=excess_index[0]-1-shortage_index[0]#詰める距離
+            cloce_distance=shortage_index[0]-excess_index[0]-1#詰める距離
             p=search_cutter(cloce_distance)
             x=excess_index[1]
             y=excess_index[0]-1
@@ -148,7 +150,6 @@ def fitnum(now_board,goal_board,layer,wide,height):
         operate_board.append([p,x,y,s])
 
         now_count=count_element(now_board[layer])  #現在の盤面におけるそれぞれの数字の数
-        goal_count=count_element(goal_board[layer]) #正解の盤面におけるそれぞれの数字の数
     
 
 
