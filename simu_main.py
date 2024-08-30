@@ -28,7 +28,10 @@ class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOp
         self.start_time = time.time()#開始時間
         self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type)#アルゴリズム呼び出し,
         self.end_time = time.time()#終了時間
+        self.time=self.end_time-self.start_time#かかった時間
+
         print(f"{len(self.call_algotithm)}手かかりました")
+        print(f"{self.time}秒かかりました")
 
 
         #print(self.now_board)
@@ -46,7 +49,6 @@ class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOp
 
             self.now_board=self.relord_board.copy()#盤面書き換え
             
-            self.time=self.end_time-self.start_time
             #実行時間
 
             output.log_output(self.relord_board,turn,self.time,self.turn_algorithm[0],self.cutter_position,self.turn_algorithm[3],self.correct[1])

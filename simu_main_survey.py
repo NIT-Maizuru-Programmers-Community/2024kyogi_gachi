@@ -10,10 +10,10 @@ import numpy as np
 class simu(judge.Judgec,algorithm_survey.algorithm_tentative,board_reload_fujii.BoardOperation):
 
     def set(self):
-        first_board = np.random.randint(0, 4, (256, 256))
+        first_board = np.random.randint(0, 4, (50, 50))
         self.correct_board=first_board.tolist() #正解の盤面
         shuffled_elements = np.random.permutation(first_board.flatten())
-        second_board = shuffled_elements.reshape(256, 256)
+        second_board = shuffled_elements.reshape(50, 50)
         self.now_board=second_board.tolist() #現在の盤面
         self.use_type=general_patterns.general_patterns_cells.copy()#使用できる抜き型
 
@@ -28,13 +28,20 @@ class simu(judge.Judgec,algorithm_survey.algorithm_tentative,board_reload_fujii.
         self.start_time = time.time()#開始時間
         self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type)#アルゴリズム呼び出し,
         self.end_time = time.time()#終了時間
-        print(f"{len(self.call_algotithm)}手かかりました")
+        self.time=self.end_time-self.start_time#実行時間
+
+        print(f"{len(self.call_algotithm[0])}手かかりました")
+        print(f"array_sendは{self.call_algotithm[1][0]}手かかりました")
+        print(f"clmatch_num_cuttingは{self.call_algotithm[1][1]}手かかりました")
+        print(f"clmatch_cuttingは{self.call_algotithm[1][2]}手かかりました")
+        print(f"{self.time}秒かかりました")
+        
 
 
         #print(self.now_board)
-        for turn in range(1,len(self.call_algotithm)+1):
+        for turn in range(1,len(self.call_algotithm[0])+1):
             #self.end = self.get_time()
-            self.turn_algorithm=self.call_algotithm[turn-1]#そのターンの操作
+            self.turn_algorithm=self.call_algotithm[0][turn-1]#そのターンの操作
 
             self.cutter_position=[self.turn_algorithm[1],self.turn_algorithm[2]]#使用した座標
 
@@ -46,8 +53,6 @@ class simu(judge.Judgec,algorithm_survey.algorithm_tentative,board_reload_fujii.
 
             self.now_board=self.relord_board.copy()#盤面書き換え
             
-            self.time=self.end_time-self.start_time
-            #実行時間
 
             output.log_output(self.relord_board,turn,self.time,self.turn_algorithm[0],self.cutter_position,self.turn_algorithm[3],self.correct[1])
             #relord_board,turn,time,use_type,use_coodenate,move_direc,TF
