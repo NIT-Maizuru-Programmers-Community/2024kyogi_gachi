@@ -10,6 +10,17 @@ py.init()    # Pygameを初期化
 turn = 1
 path_B = 'log.json'
 
+Tboard=[
+         [3, 0, 1, 0, 3, 3, 3, 0, 2, 1, 3, 0, 1, 1, 1], 
+         [1, 3, 2, 0, 0, 1, 2, 2, 2, 3, 2, 2, 3, 3, 2], 
+         [0, 0, 1, 3, 0, 2, 1, 3, 1, 0, 1, 0, 0, 3, 0], 
+         [3, 0, 2, 3, 1, 0, 2, 3, 0, 0, 2, 2, 0, 2, 1], 
+         [1, 0, 3, 1, 2, 2, 0, 0, 2, 0, 0, 2, 2, 3, 2], 
+         [0, 0, 1, 2, 1, 1, 3, 3, 2, 3, 1, 2, 0, 0, 3], 
+         [2, 1, 0, 1, 2, 0, 2, 2, 2, 1, 3, 4, 0, 2, 0], 
+         [1, 1, 3, 1, 1, 2, 1, 2, 0, 3, 1, 3, 2, 0, 1]
+       ]
+
 write_block = threading.Lock()
 load_block = threading.Lock()
 
@@ -42,7 +53,28 @@ font = py.font.SysFont(None, 60)
 text1 = font.render("NEXT", True, (0,0,0))
 text2 = font.render("BACK", True, (0,0,0))
 
+def masu_num_search(y,x):
+            if board_date[y][x] == 0:  
+                #py.draw.rect(screen, RED, (x * Masu_size, y * Masu_size, Masu_size, Masu_size))
+                screen.blit(zero_text,(x * Masu_size,  y * Masu_size))
+                
 
+            elif board_date[y][x] == 1:
+                #py.draw.rect(screen, BLUE, (x * Masu_size, y * Masu_size, Masu_size, Masu_size))
+                screen.blit(one_text,(x * Masu_size,  y * Masu_size))
+
+            elif board_date[y][x] == 2:
+                #py.draw.rect(screen, YELLOW, (x * Masu_size, y * Masu_size, Masu_size, Masu_size))
+                screen.blit(two_text,(x * Masu_size,  y * Masu_size))
+
+            elif board_date[y][x] == 3:
+                #py.draw.rect(screen, GREEN, (x * Masu_size, y * Masu_size, Masu_size, Masu_size))
+                screen.blit(three_text,(x * Masu_size,  y * Masu_size))
+
+
+def TF_search(y,x):
+     if board_date[y][x] == Tboard[y][x]:
+        py.draw.rect(screen, RED, (x * Masu_size, y * Masu_size, Masu_size, Masu_size))
 
 
 
@@ -68,20 +100,15 @@ while running:
     turn_text = font.render(f"turn:{board_turn}", True, (0,0,0))
     TF_text = font.render(f"TF:{(100-TF)}%", True, (0,0,0))
     time_text = font.render(f"time:{time}s", True, (0,0,0))
+    zero_text = font.render(f"0", True, (0,0,0))
+    one_text = font.render(f"1", True, (0,0,0))
+    two_text = font.render(f"2", True, (0,0,0))
+    three_text = font.render(f"3", True, (0,0,0))
 
     for y in range(board_y):
         for x in range(board_x):
-            if board_date[y][x] == 0:  
-                py.draw.rect(screen, RED, (x * Masu_size, y * Masu_size, Masu_size, Masu_size))
-
-            elif board_date[y][x] == 1:
-                py.draw.rect(screen, BLUE, (x * Masu_size, y * Masu_size, Masu_size, Masu_size))
-
-            elif board_date[y][x] == 2:
-                py.draw.rect(screen, YELLOW, (x * Masu_size, y * Masu_size, Masu_size, Masu_size))
-
-            elif board_date[y][x] == 3:
-                py.draw.rect(screen, GREEN, (x * Masu_size, y * Masu_size, Masu_size, Masu_size))
+            TF_search(y,x)
+            masu_num_search(y,x)
     
     py.draw.rect(screen, (255, 0, 0), button)
     py.draw.rect(screen, (0, 255, 0), button2)
