@@ -75,74 +75,80 @@ def fitnum(now_board,goal_board,layer,wide,height):
 
     operate_board=[]#詰めるための操作を記録
     move=BoardOperation()
-    completion=False
     now_count=count_element(now_board[layer])  #現在の盤面におけるそれぞれの数字の数
     goal_count=count_element(goal_board[layer]) #正解の盤面におけるそれぞれの数字の数
-    
-    
-    evalution_value=[0,0,0,0] #評価値
-    for i in range(4): #過分、不足、満足を評価
-        evalution_value[i]=now_count[i]-goal_count[i]
 
+    completion=False
     if evalution_value[0]==0 and evalution_value[1]==0 and evalution_value[2]==0 and evalution_value[3]==0:
         completion=True
         return completion
+
     
-    excess_index=[layer,0] #過分のインデックス
-    for k in range(4): #過分のインデックス取得
-        if evalution_value[k]>0:
-            excess_index[1]=now_board[layer].index(k)
-            break
+    while now_count!=goal_count:
     
-    shortage_index=[0,0] #不足のインデックス
-    for k in range(4): #不足のインデックス取得
-        if evalution_value[k]<0:
-            for i in range(layer+1,height):
-                for j in range(wide):
-                    if now_board[i][j]==k:
-                        shortage_index[0]=i
-                        shortage_index[1]=j
-                        break
+        evalution_value=[0,0,0,0] #評価値
+        for i in range(4): #過分、不足、満足を評価
+            evalution_value[i]=now_count[i]-goal_count[i]
+
+
+        excess_index=[layer,0] #過分のインデックス
+        for k in range(4): #過分のインデックス取得
+            if evalution_value[k]>0:
+                excess_index[1]=now_board[layer].index(k)
+                break
+
+        shortage_index=[0,0] #不足のインデックス
+        for k in range(4): #不足のインデックス取得
+            if evalution_value[k]<0:
+                for i in range(layer+1,height):
+                    for j in range(wide):
+                        if now_board[i][j]==k:
+                            shortage_index[0]=i
+                            shortage_index[1]=j
+                            break
+                    else:
+                        continue
+                    break
                 else:
                     continue
                 break
+
+
+        if shortage_index[1]!=excess_index[1]:
+            p=23
+            y=shortage_index[0]
+            if shortage_index[1]<excess_index[1]:
+                s=3#右に寄せる
+                x=shortage_index[1]+wide-excess_index[1]
             else:
-                continue
-            break
+                s=2#左に寄せる
+                x=shortage_index[1]-excess_index[1]-1
+            
+            now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
+            operate_board.append([p,x,y,s])
 
-    
-    if shortage_index[1]!=excess_index[1]:
-        p=23
-        y=shortage_index[0]
-        if shortage_index[1]<excess_index[1]:
-            s=3#右に寄せる
-            x=shortage_index[1]+wide-excess_index[1]
-        else:
-            s=2#左に寄せる
-            x=shortage_index[1]-excess_index[1]-1
-        
-        now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
-        operate_board.append([p,x,y,s])
-    
-    while shortage_index[0]!=excess_index[0]-1:
+        while shortage_index[0]!=excess_index[0]-1:
 
-        cloce_distance=excess_index[0]-1-shortage_index[0]#詰める距離
-        p=search_cutter(cloce_distance)
+            cloce_distance=excess_index[0]-1-shortage_index[0]#詰める距離
+            p=search_cutter(cloce_distance)
+            x=excess_index[1]
+            y=excess_index[0]-1
+            s=0
+
+            now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
+            operate_board.append([p,x,y,s])
+
+        #目的地の1つ下まで詰めるため、1つ上に
+        p=0
         x=excess_index[1]
-        y=excess_index[0]-1
+        y=excess_index[0]
         s=0
 
         now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
         operate_board.append([p,x,y,s])
-    
-    #目的地の1つ下まで詰めるため、1つ上に
-    p=0
-    x=excess_index[1]
-    y=excess_index[0]
-    s=0
 
-    now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
-    operate_board.append([p,x,y,s])
+        now_count=count_element(now_board[layer])  #現在の盤面におけるそれぞれの数字の数
+        goal_count=count_element(goal_board[layer]) #正解の盤面におけるそれぞれの数字の数
     
 
 
