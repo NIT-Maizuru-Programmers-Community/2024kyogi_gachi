@@ -100,7 +100,7 @@ class karial(board_reload_fujii.BoardOperation):
 
             #print(f"{self.operation_board}#順番を一致させる盤面")
 
-        print(self.array_operate_board)
+        #print(self.array_operate_board)
         #print(self.array_execution_time)
 
         return (self.array_operate_board,self.array_execution_time)

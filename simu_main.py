@@ -4,13 +4,17 @@ import output
 import time
 import algorithm
 import board_reload_fujii
+import numpy as np
 
 
 class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
 
     def set(self):
-        self.correct_board=[[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3]]#正解の盤面
-        self.now_board=[[1,1,1],[2,2,2],[3,3,3],[1,1,1],[2,2,2],[3,3,3]]#現在の盤面
+        first_board = np.random.randint(0, 4, (50, 50))
+        self.correct_board=first_board.tolist() #正解の盤面
+        shuffled_elements = np.random.permutation(first_board.flatten())
+        second_board = shuffled_elements.reshape(50, 50)
+        self.now_board=second_board.tolist() #現在の盤面
         self.use_type=general_patterns.general_patterns_cells.copy()#使用できる抜き型
 
         self.relord_judge_log()
@@ -23,6 +27,7 @@ class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
 
         self.start_time = time.time()#開始時間
         self.call_algotithm_time=self.algo(self.now_board,self.correct_board,self.use_type,self.start_time)#アルゴリズム呼び出し
+        print
 
         #print(self.now_board)
         for turn in range(1,len(self.call_algotithm_time[0])+1):
@@ -33,7 +38,7 @@ class simu(judge.Judgec,algorithm.karial,board_reload_fujii.BoardOperation):
 
             self.relord_board=self.board_update(self.turn_algorithm[0],self.cutter_position,self.turn_algorithm[3],self.now_board)
             #処理後の盤面取得( cutter_num, cutter_LU_posi, move_direction, board):
-            print(f"{self.relord_board}self.relord_board")
+            #print(f"{self.relord_board}self.relord_board")
 
             self.correct=self.judge(self.relord_board,self.correct_board)#正誤判定
 
