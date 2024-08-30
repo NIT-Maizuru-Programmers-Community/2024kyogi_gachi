@@ -128,7 +128,7 @@ def fitnum(now_board,goal_board,layer,wide,height):
                 x=shortage_index[1]+wide-excess_index[1]
             else:
                 s=2#左に寄せる
-                x=-255+shortage_index[1]-excess_index[1]-1
+                x=-256+shortage_index[1]-excess_index[1]
             
             now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
             operate_board.append([p,x,y,s])
