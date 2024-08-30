@@ -6,6 +6,7 @@
 
 import clmatch_num
 import clmatch
+import clmatch_cutting
 import array_send
 import board_reload_fujii
 import copy
@@ -70,7 +71,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
 
 
 
-            self.match_operation=clmatch.clmatch(self.operation_board,self.goal_board,column,self.wide,self.height)#順番を一致させる
+            self.match_operation=clmatch_cutting.clmatch(self.operation_board,self.goal_board,column,self.wide)#順番を一致させる
 
             
             # print(f"{len(self.array_execution_time)}self.match_operation")

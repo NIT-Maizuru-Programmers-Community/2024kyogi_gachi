@@ -18,7 +18,7 @@ def log_output(board,turn,time,use_type,use_coodenate,move_direc,TF):
 
     log ={
         turn:{
-           'board': board, 
+           #'board': board, 
            'turn': turn, 
            'time': time, 
            'use_type':use_type, 

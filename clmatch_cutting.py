@@ -3,13 +3,19 @@ import numpy
 
 #dir=1 #0:上 1:左
 layer=0 #n層目
-width=30
+width=5
 
-goal_board=[[1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,2,2,2,2,2,2,1,1,1,1,1,1],
-            [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,2,2,2,2,2,2,1,1,1,1,1,1]]
+goal_board=[[3,1,3,2,2,1,2,3,3],
+            [0,2,1,3,2,1,1,1,1],
+            [2,1,3,0,2,1,1,1,1],
+            [3,1,3,2,3,1,1,1,1],
+            [2,1,3,0,1,1,1,1,1]]
 
-now_board=[[3,3,3,3,3,3,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2],
-           [3,3,3,3,3,3,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2]]
+now_board=[[3,2,3,2,1,3,3,2,1],
+           [3,2,0,1,2,1,1,1,1],
+           [0,1,3,2,2,1,1,1,1],
+           [2,1,3,2,3,1,1,1,1],
+           [0,1,3,0,1,1,1,1,1]]
 
 
 def clmatch(now_board,goal_board,layer,width):
@@ -28,10 +34,10 @@ def clmatch(now_board,goal_board,layer,width):
         scale_num=0
         while(cutter_scale_array[scale_num]>cloce_distance):
             scale_num+=1
-        print(f"{scale_num}scale_num")
+        #print(f"{scale_num}scale_num")
         
         cutter_scale=cutter_scale_array[scale_num]#抜き型の大きさ
-        print(f"{cutter_scale}cutter_scale")
+        #print(f"{cutter_scale}cutter_scale")
 
         #抜き型番号の決定
         if cutter_scale==128:
@@ -92,4 +98,4 @@ def clmatch(now_board,goal_board,layer,width):
         
     return (operate_board,now_board)
 
-print(clmatch(now_board,goal_board,layer,width))
+#print(clmatch(now_board,goal_board,layer,width))
