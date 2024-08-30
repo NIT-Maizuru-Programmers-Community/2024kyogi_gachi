@@ -79,25 +79,26 @@ def fitnum(now_board,goal_board,layer,wide,height):
     move=BoardOperation()
     now_count=count_element(now_board[layer])  #現在の盤面におけるそれぞれの数字の数
     goal_count=count_element(goal_board[layer]) #正解の盤面におけるそれぞれの数字の数
+    evalution_value=[0,0,0,0] #評価値
+    for i in range(4): #過分、不足、満足を評価
+        evalution_value[i]=now_count[i]-goal_count[i]
 
     # completion=False
     # if evalution_value[0]==0 and evalution_value[1]==0 and evalution_value[2]==0 and evalution_value[3]==0:
     #     completion=True
     #     return completion
 
-    
-    while now_count!=goal_count:
-    
-        evalution_value=[0,0,0,0] #評価値
-        for i in range(4): #過分、不足、満足を評価
-            evalution_value[i]=now_count[i]-goal_count[i]
 
 
+    
+    while evalution_value[0]!=0 or evalution_value[1]!=0 or evalution_value[2]!=0 or evalution_value[3]!=0:
         excess_index=[layer,0] #過分のインデックス
         for k in range(4): #過分のインデックス取得
             if evalution_value[k]>0:
                 excess_index[1]=now_board[layer].index(k)
                 break
+        
+        #print(f"{excess_index}excess_index")
 
         shortage_index=[0,0] #不足のインデックス
         for k in range(4): #不足のインデックス取得
@@ -114,9 +115,12 @@ def fitnum(now_board,goal_board,layer,wide,height):
                 else:
                     continue
                 break
+        
+        #print(f"{shortage_index}shortage_index")
+        #print(now_board)
 
 
-        if shortage_index[1]!=excess_index[1]:
+        if shortage_index[1]!=excess_index[1]:#x座標揃える
             p=23
             y=shortage_index[0]
             if shortage_index[1]<excess_index[1]:
@@ -124,20 +128,21 @@ def fitnum(now_board,goal_board,layer,wide,height):
                 x=shortage_index[1]+wide-excess_index[1]
             else:
                 s=2#左に寄せる
-                x=shortage_index[1]-excess_index[1]-1
+                x=-255+shortage_index[1]-excess_index[1]-1
             
             now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
             operate_board.append([p,x,y,s])
+        #print(f"{now_board}x座標揃える")
 
 
-        while shortage_index[0]!=excess_index[0]+1:
+        while shortage_index[0]!=excess_index[0]+1:#y座標の1つ下まで持ってくる
 
             cloce_distance=shortage_index[0]-excess_index[0]-1#詰める距離
             cutter_num_scale=search_cutter(cloce_distance)
 
             p=cutter_num_scale[0]
             x=excess_index[1]
-            y=excess_index[0]-1
+            y=excess_index[0]+1
             s=0
             shortage_index[0]=shortage_index[0]-cutter_num_scale[1]
 
@@ -153,7 +158,13 @@ def fitnum(now_board,goal_board,layer,wide,height):
         now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
         operate_board.append([p,x,y,s])
 
+
+
+
         now_count=count_element(now_board[layer])  #現在の盤面におけるそれぞれの数字の数
+        for i in range(4): #過分、不足、満足を評価
+            evalution_value[i]=now_count[i]-goal_count[i]
+        #print(f"{evalution_value}evalution_value")
 
     return [operate_board,now_board]
 
