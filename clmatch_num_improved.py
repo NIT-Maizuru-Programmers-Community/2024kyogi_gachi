@@ -48,44 +48,18 @@ def fitnum(now_board,goal_board,layer,wide,height):
     shortage_index=[0,0] #不足のインデックス
     for k in range(4): #不足のインデックス取得
         if evalution_value[k]<0:
-            depth=0
-            found=False
-            for d in range(layer+1,height):
-                for i in range(depth): #左側処理
-                    y_index = -excess_index[0] + 1 + i
-                    x_index = excess_index[1] - depth + i
-                    if(y_index < height and 0 <= x_index < wide and now_board[y_index][x_index] == k):
-                        shortage_index[0]=y_index
-                        shortage_index[1]=x_index
-                        found=True
+            for i in range(layer+1,height):
+                for j in range(wide):
+                    if now_board[i][j]==k:
+                        shortage_index[0]=i
+                        shortage_index[1]=j
                         break
-
-                if found:
-                    print("やぁ")
+                else:
                     continue
-
-                y_index=-excess_index[0]+depth+1 #中央処理
-                x_index=excess_index[1]
-                if(y_index < height and 0 <= x_index < wide and now_board[y_index][x_index] == k):
-                    shortage_index[0]=y_index
-                    shortage_index[1]=x_index
-                    #print("やぁ")
-                    continue
-
-                for i in range(depth): #右側処理
-                    y_index=-excess_index[0]+depth-i
-                    x_index=excess_index[1]+1+i
-                    if(y_index < height and 0 <= x_index < wide and now_board[y_index][x_index] == k):
-                        shortage_index[0]=y_index
-                        shortage_index[1]=x_index
-                        found=True
-                        break
-
-                if found:
-                    #print("やぁ")
-                    continue
-
-                depth+=1
+                break
+            else:
+                continue
+            break
     
     move_num=shortage_index.copy()
     for i in range(abs(shortage_index[1]-excess_index[1])+abs(shortage_index[0]-excess_index[0])):
@@ -124,4 +98,4 @@ def fitnum(now_board,goal_board,layer,wide,height):
 
 ans=fitnum(now_board,goal_board,layer,wide,height)
 
-#print(ans)
+print(ans)
