@@ -60,7 +60,7 @@ def fitnum(now_board,goal_board,layer,wide,height):
             else:
                 continue
             break
-
+    
     move_num=shortage_index.copy()
     for i in range(abs(shortage_index[1]-excess_index[1])+abs(shortage_index[0]-excess_index[0])):
         if move_num[1]!=excess_index[1] and move_num[0]!=excess_index[0]:
@@ -98,4 +98,4 @@ def fitnum(now_board,goal_board,layer,wide,height):
 
 ans=fitnum(now_board,goal_board,layer,wide,height)
 
-#print(ans)
+print(ans)

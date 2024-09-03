@@ -2,6 +2,7 @@
 #入力は(現在の盤面,正解の盤面,使用できる抜き型)がよい
 #出力は(抜き型の番号,使用する座標(x),使用する座標(y),詰める方向)がよいよ
 
+import clmatch_num_improved
 import clmatch_num
 import clmatch
 import array_send
@@ -47,7 +48,7 @@ class karial(board_reload_fujii.BoardOperation):
             self.height=len(self.goal_board)
             self.wide=len(self.goal_board[0])
             while self.is_element_correct==False:#各要素の個数をそろえる
-                self.element_operation=clmatch_num.fitnum(self.operation_board,self.goal_board,column,self.wide,self.height)#ボード情報の取得
+                self.element_operation=clmatch_num_improved.fitnum(self.operation_board,self.goal_board,column,self.wide,self.height)#ボード情報の取得
 
 
                 
