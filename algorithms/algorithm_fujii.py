@@ -1,6 +1,10 @@
 #アルゴリズム入れる用
 #入力は(現在の盤面,正解の盤面,使用できる抜き型)がよい
 #出力は(抜き型の番号,使用する座標(x),使用する座標(y),詰める方向)がよいよ
+import sys
+import os
+# 相対パスを使用して一つ上の階層のパスを追加
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import numpy as np
 import board_reload_fujii
