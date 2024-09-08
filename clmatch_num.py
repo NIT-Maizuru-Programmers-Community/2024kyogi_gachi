@@ -98,4 +98,4 @@ def fitnum(now_board,goal_board,layer,wide,height):
 
 ans=fitnum(now_board,goal_board,layer,wide,height)
 
-#print(ans)
+print(ans)
