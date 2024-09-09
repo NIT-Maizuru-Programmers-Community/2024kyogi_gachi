@@ -10,11 +10,13 @@ import copy
 import numpy as np
 import board_reload_fujii
 import judge as J
+import general_patterns
 
 class MyAlgo:
-    def __init__(self, board_height, board_width, special_cutter_quantity) -> None:
+    def __init__(self, board_height, board_width, special_cutter_quantity, cutter_size) -> None:
         self.height = board_height
         self.width = board_width
+        self.cutter_size = cutter_size
         self.special_cutter_quantity = special_cutter_quantity
         self.board_op = board_reload_fujii.BoardOperation()
         self.log = []
@@ -46,6 +48,11 @@ class MyAlgo:
     def force_search(self, x, y):
         min_distance_data = [9999999, 0, 0] #distance, cutter_num, move_direction
         for cutter_num_1 in range(25 + self.special_cutter_quantity):
+            cutter_height = self.cutter_size[cutter_num_1][0]
+            cutter_width = self.cutter_size[cutter_num_1][1]
+            if cutter_height > self.height and cutter_width > self.width:
+                break
+
             for move_direction in range(4):
                 next_board = self.board_op.board_update(cutter_num_1, [x, y], move_direction, copy.deepcopy(self.now))
                 total_distance = self.evaluation(next_board)
@@ -81,11 +88,18 @@ class MyAlgo:
 
 
 def main():
+    cutters = general_patterns.general_patterns_cells
+    cutter_size = []
+    for i in range(len(cutters)):
+        height = len(cutters[i])
+        width = len(cutters[i][0])
+        cutter_size.append([height, width])
+
     start_board = [[0, 1, 2, 1], [3, 0, 1 ,0], [2, 3, 0, 2], [2, 3, 0, 2]]
     correct_board = [[0, 2, 0, 2], [2, 3, 0, 2], [1, 3, 1, 0], [2, 0, 1, 3]]
     height = len(start_board)
     width = len(start_board[0])
-    my_algo = MyAlgo(height, width, 0)
+    my_algo = MyAlgo(height, width, 0, cutter_size)
     judge = J.Judgec()
     board_op = board_reload_fujii.BoardOperation()
 
