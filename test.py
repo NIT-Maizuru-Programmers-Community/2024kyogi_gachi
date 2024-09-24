@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 '''
 y=0
 x=2
@@ -118,3 +119,11 @@ def fitnum(now_board,goal_board,layer,wide,height):
 ans=fitnum(now_board,goal_board,layer,wide,height)
 
 #print(ans)
+=======
+
+now_board_layer=[2,3,5,1,6,3,4]
+
+
+
+key1=["name","age","kind"]
+>>>>>>> 3be772613f8b25095da27d82e6e12065f5413cec
