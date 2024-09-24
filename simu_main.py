@@ -7,6 +7,9 @@ import board_reload_fujii
 import numpy as np
 
 
+
+#logへの書き出しありのバージョン
+#log_softで見れるように
 class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOperation):
 
     def set(self):

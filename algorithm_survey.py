@@ -4,9 +4,8 @@
 
 
 
-import clmatch_num
+
 import clmatch_num_cutting
-import clmatch
 import clmatch_cutting
 import array_send
 import board_reload_fujii
