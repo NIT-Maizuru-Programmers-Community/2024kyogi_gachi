@@ -21,3 +21,5 @@ def log_output(operate_board,algorithm_turn):
         with open('result.json', 'a') as f:
             json.dump(result, f,indent=3)
     
+    return True
+    

@@ -7,7 +7,7 @@ import board_reload_fujii
 import numpy as np
 import server_get
 import copy
-
+import server_send
 
 class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOperation):
 
@@ -30,10 +30,11 @@ class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOp
         self.algorithm_turn=len(self.call_algotithm)#かかった手数
 
         output_server.log_output(self.call_algotithm,self.algorithm_turn)#resultのファイルに書き込み
+        server_send.server_send()
 
         self.end_time = time.time()#終了時間
         self.time=self.end_time-self.start_time#かかった時間
-        
+
         print(f"{self.algorithm_turn}手かかりました")
         print(f"{self.time}秒かかりました")
 
