@@ -19,12 +19,12 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
         self.now_time=time.time()
         return self.now_time
     
-    def algo(self,now_board,goal_board,cut_type):
+    def algo(self,now_board,goal_board,cut_type,width,height):
         self.now_board=now_board
         self.goal_board=goal_board
         self.use_cut_type=cut_type
-        self.height=len(self.goal_board)
-        self.wide=len(self.goal_board[0])
+        self.height=height
+        self.wide=width
 
         
         self.array_operate_board=[]#ここに操作を追加

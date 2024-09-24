@@ -32,21 +32,28 @@ def server_get():
     width=board_data['board']['width']
     height=board_data['board']['height']
 
+    general_number=general_data['n']#一般抜型の個数
+    general_data_patterns=general_data['patterns']#一般抜き型の情報が格納
+    print()
+
+    #一般抜型を取得
+    general_patterns=[]#ここに一般抜型を追加
+    for general in range(general_number):
+        pattern_data=general_data_patterns[general]#patternsのdataを取得
+        pattern_height=pattern_data['height']
+        pattern=make_list(pattern_data['cells'],pattern_height)
+        general_patterns.append(pattern)
+
+
     start_board=make_list(start_board_str,height)
     goal_board=make_list(goal_board_str,height)
 
-    
-
-
-
-
-
     print("取得完了")
 
-    return start_board,goal_board
+    return start_board,goal_board,general_patterns,width,height
 
 
 # リクエスト時のURLを出力する
 #pprint.pprint(vars(response))
 
-server_get()
+#print(server_get())
