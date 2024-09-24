@@ -2,38 +2,22 @@
 import json
 import threading
 
-###############    仮    ###########
-boardk=[[1,2,3],[1,3,1]]#盤面
-turnk=1#ターン数
-timek=21.1#時間
-use_typek=5#使用した型
-use_coordinatek=[1,1]#使用した型
-move_direck=1#動かした方向
-TorFk=24#正誤
-###################################
 
 
-def log_output(board,turn,time,use_type,use_coodenate,move_direc,TF):
+def log_output(operate_board,algorithm_turn):
     write_lock = threading.Lock()
+    output_operate_board=[]#辞書型を追加
+    for turn in range(algorithm_turn):
+        opperate_data={"p":operate_board[turn][0],"x":operate_board[turn][1],"y":operate_board[turn][2],"s":operate_board[turn][3]}
+        output_operate_board.append(opperate_data)
 
-    log ={
-        turn:{
-           #'board': board, 
-           'turn': turn, 
-           'time': time, 
-           'use_type':use_type, 
-           'use_coodenate':use_coodenate, 
-           'move_direc':move_direc, 
-           'TF':TF
-           }
+    result ={
+        "n":algorithm_turn,
+        "ops":output_operate_board
     }
     
+
     with write_lock:
-        with open('log.json', 'a') as f:
-            if turn==1:
-                f.write("[")
-            json.dump(log, f,indent=3)
-            if TF==0:
-                 f.write("]")
-            elif TF>0:
-                 f.write(",")
+        with open('result.json', 'a') as f:
+            json.dump(result, f,indent=3)
+    
