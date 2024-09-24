@@ -1,5 +1,5 @@
 import numpy as np
-import general_patterns
+import standard_patterns
 
 class BoardOperation:
     def __init__(self):
@@ -10,7 +10,7 @@ class BoardOperation:
         #     [[1, 0], [1, 0]],
         #     [[1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0], [1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0]]
         #     ]
-        self.cutter = general_patterns.general_patterns_cells
+        self.cutter = standard_patterns.general_patterns_cells
 
     def board_update(self, cutter_num, cutter_LU_posi, move_direction, board):
         self.cutter_num = cutter_num

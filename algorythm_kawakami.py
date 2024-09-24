@@ -1,6 +1,6 @@
 import judge
 import board_reload_fujii
-import general_patterns
+import standard_patterns
 
 start_board=[[0,2,0,3,1],
            [3,1,1,1,0],

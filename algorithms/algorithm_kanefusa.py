@@ -3,7 +3,7 @@
 #出力は(抜き型の番号,使用する座標(x),使用する座標(y),詰める方向)がよいよ
 import judge
 import board_reload_fujii
-import general_patterns
+import standard_patterns
 
 class algo_kanefusa(board_reload_fujii.BoardOperation):
     def algo(self,now_board,correct_board,cut_type):
