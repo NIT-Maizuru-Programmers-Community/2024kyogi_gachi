@@ -18,7 +18,7 @@ class simu(judge.Judgec,algorithm_survey.algorithm_tentative,board_reload_fujii.
         shuffled_elements = np.random.permutation(first_board.flatten())
         second_board = shuffled_elements.reshape(256, 256)
         self.now_board=second_board.tolist() #現在の盤面
-        self.use_type=standard_patterns.general_patterns_cells.copy()#使用できる抜き型
+        self.use_type=standard_patterns.standard_patterns_cells.copy()#使用できる抜き型
 
         self.relord_judge_log()
 
