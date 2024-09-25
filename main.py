@@ -9,6 +9,16 @@ import server_get
 import copy
 import server_send
 
+
+
+#サーバーとの送受信ができる
+
+
+#cd "C:\Users\ryory\Desktop\procom\2024年度\procon-server"
+#procon-server_win.exe -c input.json -l :8080 -start 1s
+
+
+#コマンドプロンプトで上のコマンドを実行してからmainを実行
 class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOperation):
 
     def set(self):
