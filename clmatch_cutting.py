@@ -73,7 +73,7 @@ def clmatch(now_board,goal_board,layer,width):
     if now_board[layer][0] != goal_board[layer][0]:#1回目の処理
         goal_place=search_goal(now_board[layer],0,goal_board[layer][0])
         now_board = move.board_update(23, [-256+goal_place, layer], 2, now_board)
-
+        
         operate_board.append([23,-256+goal_place,layer,2])
 
     for place in range(1,width-1):
