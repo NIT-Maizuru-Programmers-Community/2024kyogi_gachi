@@ -26,3 +26,4 @@ def server_send(operate_board,algorithm_turn):
     # レスポンスボディを出力する
     pprint.pprint(response)
     print(response.text)
+    print("送信完了")
