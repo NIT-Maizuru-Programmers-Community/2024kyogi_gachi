@@ -33,7 +33,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
 
 
         #一般抜き型を使用できるように
-        #just_typeとgeneral_usableを作成
+        #just_typeを作成
         for just in range(25,len(cut_type)):
             just_cut=cut_type[just][0]
             cutter_distance=0
@@ -60,10 +60,22 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
             if is_exist==False:
                 just_type.append([just,cutter_distance,sharpen_distance])
 
+        #general_usableを作成
         for just in range(0,len(cut_type)):
             general_cut=cut_type[just][0]
+            cutter_distance=0
+            sharpen_distance=0
+            is_exist=False
+            for sharpen in range(0,len(just_cut)):#削る距離カウント
+                print(sharpen)
+                if just_cut[sharpen]==1:
+                    break
+                sharpen_distance+=1
+            
+            if sharpen_distance==len(just_cut):#上全部が0の場合飛ばす
+                continue
 
-        
+
 
 
 
