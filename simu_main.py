@@ -2,7 +2,11 @@ import judge
 import standard_patterns
 import output
 import time
+
 import algorithm
+import algorithm_general
+import algorithm_shuffle
+
 import board_reload_fujii
 import numpy as np
 
@@ -10,6 +14,7 @@ import numpy as np
 
 #logへの書き出しありのバージョン
 #log_softで見れるように
+#継承するクラスのファイル名を変更してアルゴリズム変更
 class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOperation):
 
     def set(self):
@@ -19,6 +24,8 @@ class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOp
         second_board = shuffled_elements.reshape(256, 256)
         self.now_board=second_board.tolist() #現在の盤面
         self.use_type=standard_patterns.standard_patterns_cells.copy()#使用できる抜き型
+        self.wide=len(self.correct_board[0])
+        self.height=len(self.correct_board)
 
         self.relord_judge_log()
 
@@ -29,7 +36,7 @@ class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOp
     def relord_judge_log(self):
 
         self.start_time = time.time()#開始時間
-        self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type)#アルゴリズム呼び出し,
+        self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type,self.wide,self.height)#アルゴリズム呼び出し,
         self.end_time = time.time()#終了時間
         self.time=self.end_time-self.start_time#かかった時間
 

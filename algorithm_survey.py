@@ -20,12 +20,12 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
         self.now_time=time.time()
         return self.now_time
     
-    def algo(self,now_board,goal_board,cut_type):
+    def algo(self,now_board,goal_board,cut_type,wide,height):
         self.now_board=now_board
         self.goal_board=goal_board
         self.use_cut_type=cut_type
-        self.height=len(self.goal_board)
-        self.wide=len(self.goal_board[0])
+        self.height=height
+        self.wide=wide
         self.array_operation_count=0
         self.element_operation_count=0
         self.match_operation_count=0
@@ -40,43 +40,29 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
             #print(f"{column}層目")
 
 
-            self.array_operation=array_send.column_row_send(self.operation_board,self.goal_board,column)#一致度高いやつ寄せる
+            #一致度高いやつ寄せる
+            self.array_operation=array_send.column_row_send(self.operation_board,self.goal_board,column)
             self.array_operate_board.extend(self.array_operation)
-            #print(f"{self.array_operation}#一致度高いやつ寄せる")
-
-            self.array_operation_count+=len(self.array_operation)
-
-            
-            #print(len(self.array_execution_time))
-
             for turn_num in range(0,len(self.array_operation)):#ボードの更新
                 self.array_operation_position=[self.array_operation[turn_num][1],self.array_operation[turn_num][2]]
                 self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)        
-            #print(f"{self.operation_board}#一致度高いやつ寄せる盤面")
+                       
+            self.array_operation_count+=len(self.array_operation)
+
 
 
             #各要素の個数をそろえる
             self.element_operation=clmatch_num_cutting.fitnum(self.operation_board,self.goal_board,column,self.wide,self.height)#ボード情報の取得
-            # print(f"{len(self.array_execution_time)}self.element_operation")
             self.array_operate_board.extend(self.element_operation[0])
-            #print(f"{self.element_operation}#各要素の個数をそろえる")
             self.operation_board=copy.deepcopy(self.element_operation[1])
-            #print(f"{self.operation_board}#各要素の個数をそろえる盤面")
 
             self.element_operation_count+=len(self.element_operation[0])
 
 
 
-
-            self.match_operation=clmatch_cutting.clmatch(self.operation_board,self.goal_board,column,self.wide)#順番を一致させる
-            #self.match_operation=clmatch.clmatch(self.operation_board,self.goal_board,column,self.wide,self.height)#順番を一致させる
-            # print(f"{len(self.array_execution_time)}self.match_operation")
-            # print(f"{len(self.match_operation[0])}リストながさ")
+            #順番を一致させる
+            self.match_operation=clmatch_cutting.clmatch(self.operation_board,self.goal_board,column,self.wide)
             self.array_operate_board.extend(self.match_operation[0])
-            #print(f"{self.match_operation}#順番を一致させる")
-            # for turn_num in range(0,len(self.match_operation[0])):#ボードの更新
-            #     self.array_operation_position=[self.match_operation[0][turn_num][1],self.match_operation[0][turn_num][2]]
-            #     self.operation_board=self.board_update(self.match_operation[0][turn_num][0], self.array_operation_position, self.match_operation[0][turn_num][3], self.operation_board)
             self.operation_board=copy.deepcopy(self.match_operation[1])
             #print(f"{self.operation_board}#順番を一致させる盤面")
 
