@@ -1,6 +1,6 @@
 from board_reload_fujii import BoardOperation
 
-
+#一般抜き型は25番から始まる
 
 cutter_scale_array=[128,64,32,16,8,4,2,1]
 cloce_distance=31 #間隔（幅）
