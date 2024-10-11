@@ -13,13 +13,14 @@ import numpy as np
 class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOperation):
 
     def set(self):
-        first_board = np.random.randint(0, 4, (256, 256))
+        first_board = np.random.randint(0, 4, (10,10))
         self.correct_board=first_board.tolist() #正解の盤面
         shuffled_elements = np.random.permutation(first_board.flatten())
-        second_board = shuffled_elements.reshape(256, 256)
+        second_board = shuffled_elements.reshape(10,10)
         self.now_board=second_board.tolist() #現在の盤面
         self.use_type=standard_patterns.standard_patterns_cells.copy()#使用できる抜き型
-
+        self.width=len(first_board[1])
+        self.height=len(first_board)
         self.relord_judge_log()
 
     def get_time(self):
@@ -29,7 +30,7 @@ class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOp
     def relord_judge_log(self):
 
         self.start_time = time.time()#開始時間
-        self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type)#アルゴリズム呼び出し,
+        self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type,self.width,self.height)#アルゴリズム呼び出し,
         self.end_time = time.time()#終了時間
         self.time=self.end_time-self.start_time#かかった時間
 
