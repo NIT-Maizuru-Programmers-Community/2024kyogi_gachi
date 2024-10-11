@@ -6,6 +6,7 @@
 
 import clmatch_num_cutting
 import clmatch_cutting
+import clmatch_general
 import array_send
 import board_reload_fujii
 import copy
@@ -139,11 +140,10 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
 
 
             #順番を一致させる
-            self.match_operation=clmatch_cutting.clmatch(self.operation_board,self.goal_board,column,self.wide)
+            self.match_operation=clmatch_general.clmatch(self.operation_board,self.goal_board,column,self.wide,just_type,general_usable)
             self.array_operate_board.extend(self.match_operation[0])
             self.operation_board=copy.deepcopy(self.match_operation[1])
             #print(f"{self.operation_board}#順番を一致させる盤面")
-
 
         #print(self.array_operate_board)
         #print(self.array_execution_time)
