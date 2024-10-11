@@ -52,7 +52,7 @@ now_board=[[3,2,3,2,1,3,3,2,1],
            [0,1,3,0,1,1,1,1,1]]
 
 
-def clmatch(now_board,goal_board,just_type,general_usable,layer,width):
+def clmatch(now_board,goal_board,layer,width,just_type,general_usable):
 
     def search_goal(now_board_layer,start_place,goal_num):#goalと一致している場所を取得
 
