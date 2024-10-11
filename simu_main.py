@@ -18,14 +18,19 @@ import numpy as np
 class simu(judge.Judgec,algorithm.algorithm_tentative,board_reload_fujii.BoardOperation):
 
     def set(self):
-        first_board = np.random.randint(0, 4, (256, 256))
+        first_board = np.random.randint(0, 4, (50, 50))
         self.correct_board=first_board.tolist() #正解の盤面
         shuffled_elements = np.random.permutation(first_board.flatten())
-        second_board = shuffled_elements.reshape(256, 256)
+        second_board = shuffled_elements.reshape(50, 50)
         self.now_board=second_board.tolist() #現在の盤面
         self.use_type=standard_patterns.standard_patterns_cells.copy()#使用できる抜き型
         self.wide=len(self.correct_board[0])
         self.height=len(self.correct_board)
+
+        general=[[[1,1,1,0,0,0,0,1,1],[1,1,1,0,0,0,0,1,1]],[[1,1,1],[0,0,0]]]
+        
+        self.use_type.extend(general)
+
 
         self.relord_judge_log()
 

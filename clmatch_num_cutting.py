@@ -1,4 +1,5 @@
 from board_reload_fujii import BoardOperation
+import algorithm_general
 
 layer=2 #n層目
 wide=5
