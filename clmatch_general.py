@@ -65,14 +65,12 @@ def clmatch(now_board,goal_board,just_type,general_usable,layer,width):
     def search_cutter(cloce_distance,standard_combination):#抜き型の番号決める
         cutter_scale_array=[128,64,32,16,8,4,2,1]
         scale_num=0
-
+        cutter_info=[]#[番号,一般(1)か定型か(0),詰める幅]
 
         #just_type：[general_num,cutter_distance,sharpen_distance_left]
         #general_usable.append：[general_num,general_distance,cutter_distance,sharpen_distance_left]
 
-        for i in range(len(just_type)):
-            if(just_type[i][1] == cloce_distance):
-                return just_type[i][1]
+
 
         for i in range(len(just_type)):
             if(just_type[i][1] in standard_combination):
@@ -87,30 +85,6 @@ def clmatch(now_board,goal_board,just_type,general_usable,layer,width):
         
         cutter_scale=cutter_scale_array[scale_num] #抜き型の大きさ
 
-        #抜き型番号の決定
-        if cutter_scale==128:
-            return 20
-        
-        if cutter_scale==64:
-            return 17
-        
-        if cutter_scale==32:
-            return 14
-        
-        if cutter_scale==16:
-            return 11
-        
-        if cutter_scale==8:
-            return 8
-        
-        if cutter_scale==4:
-            return 5
-        
-        if cutter_scale==2:
-            return 2
-        
-        if cutter_scale==1:
-            return 0
         
 
         
@@ -126,14 +100,21 @@ def clmatch(now_board,goal_board,just_type,general_usable,layer,width):
 
 
     for place in range(1,width-1):
-        while(now_board[layer][place]!=goal_board[layer][place]):
-            goal_place=search_goal(now_board[layer],place,goal_board[layer][place])
+        goal_place=search_goal(now_board[layer],place,goal_board[layer][place])
+        cloce_distance=goal_place-place #詰める距離
+        standard_combination=making_combination(cloce_distance)#bitの1が多い順にソート済み
+        cutter_info=search_cutter(cloce_distance,standard_combination)#[番号,一般(1)か定型か(0),詰める幅]
 
-            cloce_distance=goal_place-place #詰める距離
-            standard_combination=making_combination(cloce_distance)#bitの1が多い順にソート済み
-
-            p=search_cutter(cloce_distance,standard_combination)
-            x=place
+        for info in cutter_info:
+            if info[1]==0:#定型
+                p=info[0]
+                x=place
+                goal_place=goal_place-info[2]
+            else:
+                #[抜き型番号,幅,詰めれる距離,削った距離]
+                p=general_usable[info[0]][0]
+                x=goal_place-(general_usable[info[0]][1]+general_usable[info[0]][3])
+                goal_place=goal_place-info[2]
             y=layer
             s=2
             now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
