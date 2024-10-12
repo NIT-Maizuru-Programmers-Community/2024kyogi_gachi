@@ -35,7 +35,8 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
 
 
         #一般を使える形に
-        for general_num in range(25,len(cut_type)): #一般は25から
+        #一般を使える形に
+        for general_num in range(0,len(cut_type)): #一般は25から
 
             general_cut=cut_type[general_num][0]#今回のループの一番上
             cutter_distance=0#詰める距離
@@ -61,6 +62,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
 
             while general_distance+sharpen_distance_left!=len(general_cut)-sharpen_distance_right:#左の削る距離+詰める距離+間の距離==抜き型の大きさ-右側の削る距離
                 is_exist=False#while内部でのis_existの再定義
+                is_exist_standard=False
                 is_exist_just=False
 
                 for cutter in range(general_distance+sharpen_distance_left,len(general_cut)-sharpen_distance_right):#詰めれる距離カウント
@@ -68,18 +70,14 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
                         break
                     cutter_distance+=1
                 general_distance=cutter_distance+between_count
-                
-                if general_distance!=cutter_distance:#general_usableを追加
-                    for search in range(0,len(general_usable)):#同じ長さのやつがないか探す
 
-                        for i in range(0,len(cutter_scale_array)):#定型と同じ距離詰めるなら省く
-                            if cutter_scale_array[i]==cutter_distance:
-                                is_exist=True
-                                break
-                        
-                        if is_exist==True:
-                            break
-                        
+                for i in range(0,len(cutter_scale_array)):#定型と同じ距離詰めるなら省く
+                    if cutter_scale_array[i]==cutter_distance:
+                        is_exist_standard=True
+                        break
+                
+                if (is_exist_standard==False):#general_usableを追加
+                    for search in range(0,len(general_usable)):#同じ長さのやつがないか探す
                         if general_usable[search][2]==cutter_distance:#幅詰める距離が同じ場合、幅がより小さいものを取得
                             is_exist=True
                             if general_usable[search][1] > general_distance:
@@ -90,25 +88,15 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
                     if is_exist==False:
                         general_usable.append([general_num,general_distance,cutter_distance,sharpen_distance_left])
                 
-                else:
+                if (is_exist_standard==False) and (cutter_distance==general_distance):
                     #just_typeを追加
-                    
-                    print(f"{cutter_distance}cutter_distance")
-                    for i in range(0,len(cutter_scale_array)):#定型と同じ距離詰めるなら省く
-                        if cutter_scale_array[i]==cutter_distance:
+                    for search in range(0,len(just_type)):#同じ長さのやつがないか探す
+                        if just_type[search][1]==cutter_distance:
                             is_exist_just=True
-                            print(f"{cutter_distance}cutter_distance同じだよ")
                             break
-                    
-                    if is_exist==True:    
-                        for search in range(0,len(just_type)):#同じ長さのやつがないか探す
-                            if just_type[search][1]==cutter_distance:
-                                is_exist_just=True
-                                break
 
                     if is_exist_just==False:
                         just_type.append([general_num,cutter_distance,sharpen_distance_left])
-
             
                 for between in range(general_distance+sharpen_distance_left,len(general_cut)-sharpen_distance_right):#間カウント
                     if general_cut[between]==1:
