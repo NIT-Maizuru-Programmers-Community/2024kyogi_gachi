@@ -40,7 +40,8 @@ def clmatch(now_board,goal_board,just_type,general_usable,layer,width):
                 num=0
                 for j in range(len(composition_list)):
                     if((i>>j)&1):
-                        num+=composition_list[j]
+                        if((str(bin(i)).count('1'))!=1):
+                            num+=composition_list[j]
                 
                 #00...0の場合は考えない(00...1 ~ 11...1)
                 if(num!=0):
