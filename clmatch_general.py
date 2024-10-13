@@ -64,26 +64,36 @@ def clmatch(now_board,goal_board,just_type,general_usable,layer,width):
 
     def search_cutter(cloce_distance,standard_combination):#抜き型の番号決める
         cutter_scale_array=[128,64,32,16,8,4,2,1]
-        scale_num=0
-        cutter_info=[]#[番号,一般(1)か定型か(0),詰める幅]
-
+        cutter_info=[]#[番号,一般(1)か定型か(0)]
+        is_exist=False
         #just_type：[general_num,cutter_distance,sharpen_distance_left]
         #general_usable.append：[general_num,general_distance,cutter_distance,sharpen_distance_left]
 
 
+        while not standard_combination:#定型の組み合わせの中に一般があるか参照
+            for general in standard_combination:
+                for usable in range(0,len(general_usable)):
+                    if general==general_usable[usable][2]:#詰めれる距離参照
+                        if cloce_distance>=general_usable[usable][1]:#幅参照
+                            cutter_info.append([general_usable[usable][0],1])
+                            cloce_distance=cloce_distance-general_usable[usable][2]
+                            standard_combination=making_combination(cloce_distance)#bitの1が多い順にソート済み
+                            break
+                else:
+                    continue
+                break
 
-        for i in range(len(just_type)):
-            if(just_type[i][1] in standard_combination):
-                return just_type[i][0]
-            
-        for i in range(len(general_usable)):
-            if((general_usable[i][2] in standard_combination)and(general_usable[i][1]<cloce_distance)):
-                return general_usable[i][0]
+            else:
+                is_exist=True
 
-        while(cutter_scale_array[scale_num]>cloce_distance):
-            scale_num+=1
+            if is_exist==True:
+                break              
         
-        cutter_scale=cutter_scale_array[scale_num] #抜き型の大きさ
+
+        
+
+        return cutter_info
+
 
         
 
@@ -103,7 +113,7 @@ def clmatch(now_board,goal_board,just_type,general_usable,layer,width):
         goal_place=search_goal(now_board[layer],place,goal_board[layer][place])
         cloce_distance=goal_place-place #詰める距離
         standard_combination=making_combination(cloce_distance)#bitの1が多い順にソート済み
-        cutter_info=search_cutter(cloce_distance,standard_combination)#[番号,一般(1)か定型か(0),詰める幅]
+        cutter_info=search_cutter(cloce_distance,standard_combination)#[番号,一般(1)か定型か(0),詰めれる幅]
 
         for info in cutter_info:
             if info[1]==0:#定型
@@ -114,7 +124,7 @@ def clmatch(now_board,goal_board,just_type,general_usable,layer,width):
                 #[抜き型番号,幅,詰めれる距離,削った距離]
                 p=general_usable[info[0]][0]
                 x=goal_place-(general_usable[info[0]][1]+general_usable[info[0]][3])
-                goal_place=goal_place-info[2]
+                goal_place=goal_place-general_usable[info[0]][2]
             y=layer
             s=2
             now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
