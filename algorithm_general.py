@@ -36,7 +36,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
 
         #一般を使える形に
         #一般を使える形に
-        for general_num in range(0,len(cut_type)): #一般は25から
+        for general_num in range(25,len(cut_type)): #一般は25から
 
             general_cut=cut_type[general_num][0]#今回のループの一番上
             cutter_distance=0#詰める距離
@@ -103,6 +103,9 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
                         break
                     between_count+=1
                 general_distance=cutter_distance+between_count
+        
+        print(general_usable)
+        print("一般の計算終わり")
                 
 
 
@@ -126,9 +129,8 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
             self.array_operate_board.extend(self.element_operation[0])
             self.operation_board=copy.deepcopy(self.element_operation[1])
 
-
             #順番を一致させる
-            self.match_operation=clmatch_general.clmatch(self.operation_board,self.goal_board,column,self.wide,just_type,general_usable)
+            self.match_operation=clmatch_general.clmatch(self.operation_board, self.goal_board, column, self.wide, just_type, general_usable ,self.use_cut_type)
             self.array_operate_board.extend(self.match_operation[0])
             self.operation_board=copy.deepcopy(self.match_operation[1])
             #print(f"{self.operation_board}#順番を一致させる盤面")
