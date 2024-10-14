@@ -47,16 +47,16 @@ class simu(judge.Judgec,algorithm_survey.algorithm_tentative,board_reload_fujii.
 
 
         #print(self.now_board)
-        for turn in range(1,len(self.call_algotithm[0])+1):
-            #self.end = self.get_time()
-            self.turn_algorithm=self.call_algotithm[0][turn-1]#そのターンの操作
-            self.cutter_position=[self.turn_algorithm[1],self.turn_algorithm[2]]#使用した座標
-            self.relord_board=self.board_update(self.turn_algorithm[0],self.cutter_position,self.turn_algorithm[3],self.now_board)
-            self.now_board=self.relord_board.copy()#盤面書き換え
+        # for turn in range(1,len(self.call_algotithm[0])+1):
+        #     #self.end = self.get_time()
+        #     self.turn_algorithm=self.call_algotithm[0][turn-1]#そのターンの操作
+        #     self.cutter_position=[self.turn_algorithm[1],self.turn_algorithm[2]]#使用した座標
+        #     self.relord_board=self.board_update(self.turn_algorithm[0],self.cutter_position,self.turn_algorithm[3],self.now_board)
+        #     self.now_board=self.relord_board.copy()#盤面書き換え
             
 
-        if self.now_board==self.correct_board:
-            print("正解")
+        # if self.now_board==self.correct_board:
+        #     print("正解")
 
         
 
