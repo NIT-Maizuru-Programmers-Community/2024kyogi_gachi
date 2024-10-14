@@ -137,5 +137,9 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
 
         #print(self.array_operate_board)
         #print(self.array_execution_time)
+        if self.operation_board==self.goal_board:
+            print("正解algo")
+        else:
+            print("不正解algo")
 
-        return (self.array_operate_board)
+        return self.array_operate_board
