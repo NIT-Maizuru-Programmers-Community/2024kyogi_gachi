@@ -1,29 +1,32 @@
 import requests
 import pprint
 import json
+import output_server
 
 # リクエストパラメータを辞書型で設定する
 
 
-def server_send(operate_board,algorithm_turn):
-    param = {"token": "token1"}
 
-    output_operate_board=[]#辞書型を追加
-    for turn in range(algorithm_turn):
-        opperate_data={"p":operate_board[turn][0],"x":operate_board[turn][1],"y":operate_board[turn][2],"s":operate_board[turn][3]}
-        output_operate_board.append(opperate_data)
+param = {"token": "token1"}
 
-    data ={
-        "n":algorithm_turn,
-        "ops":output_operate_board
-    }
+# output_operate_board=[]#辞書型を追加
+# for turn in range(algorithm_turn):
+#     opperate_data={"p":operate_board[turn][0],"x":operate_board[turn][1],"y":operate_board[turn][2],"s":operate_board[turn][3]}
+#     output_operate_board.append(opperate_data)
 
-    POST_URL = "http://localhost:8080/answer"
+# data ={
+#     "n":algorithm_turn,
+#     "ops":output_operate_board
+# }
 
-    # POSTリクエストを、リクエストボディ付きで送信する
-    response = requests.post(POST_URL,params=param,json=data,verify=False)
+# print(data)
 
-    # レスポンスボディを出力する
-    pprint.pprint(response)
-    print(response.text)
-    print("送信完了")
+POST_URL = "http://localhost:8080/answer"
+
+# POSTリクエストを、リクエストボディ付きで送信する
+response = requests.post(POST_URL,params=param,json='result.json',verify=False)
+
+# レスポンスボディを出力する
+pprint.pprint(response)
+print(response.text)
+print("送信完了")
