@@ -9,23 +9,15 @@ import output_server
 
 param = {"token": "token1"}
 
-# output_operate_board=[]#辞書型を追加
-# for turn in range(algorithm_turn):
-#     opperate_data={"p":operate_board[turn][0],"x":operate_board[turn][1],"y":operate_board[turn][2],"s":operate_board[turn][3]}
-#     output_operate_board.append(opperate_data)
+# JSONファイルを開いて中身を読み込む
+with open('result.json', 'r') as file:
+    json_data = json.load(file)
 
-# data ={
-#     "n":algorithm_turn,
-#     "ops":output_operate_board
-# }
-
-# print(data)
 
 POST_URL = "http://localhost:8080/answer"
 
 # POSTリクエストを、リクエストボディ付きで送信する
-response = requests.post(POST_URL,params=param,json='result.json',verify=False)
-
+response = requests.post(POST_URL,params=param,json=json_data,verify=False)
 # レスポンスボディを出力する
 pprint.pprint(response)
 print(response.text)

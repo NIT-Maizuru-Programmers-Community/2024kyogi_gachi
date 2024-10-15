@@ -17,9 +17,10 @@ def log_output(operate_board,algorithm_turn):
     }
     
 
-    with write_lock:
-        with open('result.json', 'a') as f:
-            json.dump(result, f,indent=3)
+
+
+    with open('result.json', mode="wt", encoding="utf-8") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
     
     
     
