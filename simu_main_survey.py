@@ -14,11 +14,11 @@ import numpy as np
 class simu(judge.Judgec,algorithm_survey.algorithm_tentative,board_reload_fujii.BoardOperation):
 
     def set(self):
-        first_board = np.random.randint(0, 4, (200, 200))
+        first_board = np.random.randint(0, 4, (100, 100))
         self.correct_board=first_board.tolist() #正解の盤面
 
         shuffled_elements = np.random.permutation(first_board.flatten())
-        second_board = shuffled_elements.reshape(200, 200)
+        second_board = shuffled_elements.reshape(100, 100)
         self.now_board=second_board.tolist() #現在の盤面
 
         self.wide=len(self.correct_board[0])
@@ -38,10 +38,20 @@ class simu(judge.Judgec,algorithm_survey.algorithm_tentative,board_reload_fujii.
         self.end_time = time.time()#終了時間
         self.time=self.end_time-self.start_time#実行時間
 
+        self.operate_time=self.call_algotithm[2]
+
         print(f"{len(self.call_algotithm[0])}手かかりました")
+
         print(f"array_sendは{self.call_algotithm[1][0]}手かかりました")
+        print(f"array_sendは{self.operate_time[0]}秒かかりました")
+        
         print(f"clmatch_num_cuttingは{self.call_algotithm[1][1]}手かかりました")
+        print(f"clmatch_num_cuttingは{self.operate_time[1]}秒かかりました")
+
         print(f"clmatch_cuttingは{self.call_algotithm[1][2]}手かかりました")
+        print(f"clmatch_cuttingは{self.operate_time[2]}秒かかりました")
+
+
         print(f"{self.time}秒かかりました")
         
 
