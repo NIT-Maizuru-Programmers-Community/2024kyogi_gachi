@@ -9,7 +9,6 @@ import board_reload_fujii
 import numpy as np
 import server_get
 import copy
-import server_send
 
 
 
@@ -37,12 +36,10 @@ class simu(judge.Judgec,algorithm_general.algorithm_tentative,board_reload_fujii
     
     def algorithm_execution(self):
         self.start_time = time.time()#開始時間
-
         self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type,self.width,self.height)#アルゴリズム呼び出し
         self.algorithm_turn=len(self.call_algotithm)#かかった手数
 
-        #server_send.send(self.call_algotithm,self.algorithm_turn)
-        output_server.log_output(self.call_algotithm,self.algorithm_turn)#serverに送信
+        output_server.log_output(self.call_algotithm,self.algorithm_turn)
 
         self.end_time = time.time()#終了時間
         self.time=self.end_time-self.start_time#かかった時間

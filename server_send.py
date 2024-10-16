@@ -1,18 +1,14 @@
 import requests
 import pprint
 import json
-import output_server
 
 # リクエストパラメータを辞書型で設定する
-
-
 
 param = {"token": "token1"}
 
 # JSONファイルを開いて中身を読み込む
 with open('result.json', 'r') as file:
     json_data = json.load(file)
-
 
 POST_URL = "http://localhost:8080/answer"
 
