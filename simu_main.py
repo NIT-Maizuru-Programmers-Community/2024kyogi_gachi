@@ -3,7 +3,7 @@ import standard_patterns
 import output
 import time
 import copy
-
+import kanefusa
 import algorithm
 import algorithm_general
 import algorithm_shuffle
@@ -19,20 +19,23 @@ import numpy as np
 class simu(judge.Judgec,algorithm_general.algorithm_tentative,algorithm.algorithm_tentative):
 
     def set(self):
-        first_board = np.random.randint(0, 4, (25, 25))
+        x=200
+        y=200
+        n=256#一般抜き型の数
+        
+        first_board = np.random.randint(0, 4, (x, y))
         self.correct_board=first_board.tolist() #正解の盤面
         shuffled_elements = np.random.permutation(first_board.flatten())
-        second_board = shuffled_elements.reshape(25, 25)
+        second_board = shuffled_elements.reshape(x, y)
         self.now_board=second_board.tolist() #現在の盤面
         self.use_type=standard_patterns.standard_patterns_cells.copy()#使用できる抜き型
         self.wide=len(self.correct_board[0])
         self.height=len(self.correct_board)
 
-        general=[[[1,1,1,1,1,0,0,1,1],[1,1,1,0,0,0,0,1,1]],[[1,1,1],[0,0,0]]]
+        general=kanefusa.generate_random_lists(n)
         
         self.use_type.extend(general)
         self.move=BoardOperation(self.use_type)
-
 
         self.relord_judge_log()
 
@@ -49,8 +52,6 @@ class simu(judge.Judgec,algorithm_general.algorithm_tentative,algorithm.algorith
 
         print(f"generalは{len(self.call_algotithm)}手かかりました")
         print(f"{self.time}秒かかりました")
-
-
 
         self.start_time = time.time()#開始時間
         self.call_algotithm_cut=self.algo_cut(self.now_board,self.correct_board,self.use_type,self.wide,self.height)#アルゴリズム呼び出し,
