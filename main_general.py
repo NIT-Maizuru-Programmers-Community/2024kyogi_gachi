@@ -1,9 +1,7 @@
 import judge
 import standard_patterns
 import output_server
-import output
 import time
-import algorithm
 import algorithm_general
 import board_reload_fujii
 import numpy as np
@@ -20,7 +18,7 @@ import copy
 
 
 #コマンドプロンプトで上のコマンドを実行してからmainを実行
-class simu(judge.Judgec,algorithm_general.algorithm_tentative,board_reload_fujii.BoardOperation):
+class main(judge.Judgec,algorithm_general.algorithm_tentative,board_reload_fujii.BoardOperation):
 
     def set(self):
         self.now_board,self.correct_board,self.general_patterns,self.width,self.height=server_get.server_get()
@@ -61,5 +59,5 @@ class simu(judge.Judgec,algorithm_general.algorithm_tentative,board_reload_fujii
 
 
 
-simul=simu()
-simul.set()
+mainl=main()
+mainl.set()

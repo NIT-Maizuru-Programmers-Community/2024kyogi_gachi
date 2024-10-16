@@ -63,7 +63,6 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
             while general_distance+sharpen_distance_left!=len(general_cut)-sharpen_distance_right:#左の削る距離+詰める距離+間の距離==抜き型の大きさ-右側の削る距離
                 is_exist=False#while内部でのis_existの再定義
                 is_exist_standard=False
-                is_exist_just=False
 
                 for cutter in range(general_distance+sharpen_distance_left,len(general_cut)-sharpen_distance_right):#詰めれる距離カウント
                     if general_cut[cutter]==0:
@@ -88,15 +87,6 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
                     if is_exist==False:
                         general_usable.append([general_num,general_distance,cutter_distance,sharpen_distance_left])
                 
-                if (is_exist_standard==False) and (cutter_distance==general_distance):
-                    #just_typeを追加
-                    for search in range(0,len(just_type)):#同じ長さのやつがないか探す
-                        if just_type[search][1]==cutter_distance:
-                            is_exist_just=True
-                            break
-
-                    if is_exist_just==False:
-                        just_type.append([general_num,cutter_distance,sharpen_distance_left])
             
                 for between in range(general_distance+sharpen_distance_left,len(general_cut)-sharpen_distance_right):#間カウント
                     if general_cut[between]==1:
@@ -107,13 +97,10 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
         print(general_usable)
         print("一般の計算終わり")
                 
-
-
         
 
         for column in range(0,len(self.now_board)):
-            #print(f"{column}層目")
-
+            print(f"{column}層目")
 
             #一致度高いやつ寄せる
             self.array_operation=array_send.column_row_send(self.operation_board,self.goal_board,column)
@@ -122,7 +109,6 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
             for turn_num in range(0,len(self.array_operation)):
                 self.array_operation_position=[self.array_operation[turn_num][1],self.array_operation[turn_num][2]]
                 self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)        
-
 
             #各要素の個数をそろえる
             self.element_operation=clmatch_num_cutting.fitnum(self.operation_board,self.goal_board,column,self.wide,self.height)
@@ -133,10 +119,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
             self.match_operation=clmatch_general.clmatch(self.operation_board, self.goal_board, column, self.wide, just_type, general_usable ,self.use_cut_type)
             self.array_operate_board.extend(self.match_operation[0])
             self.operation_board=copy.deepcopy(self.match_operation[1])
-            #print(f"{self.operation_board}#順番を一致させる盤面")
 
-        #print(self.array_operate_board)
-        #print(self.array_execution_time)
         if self.operation_board==self.goal_board:
             print("正解algo")
         else:

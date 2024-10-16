@@ -1,5 +1,4 @@
 from board_reload_fujii import BoardOperation
-import algorithm_general
 
 layer=2 #n層目
 wide=5
@@ -36,42 +35,20 @@ def fitnum(now_board,goal_board,layer,wide,height):
     
     def search_cutter(cloce_distance):#抜き型の番号決める
         cutter_scale_array=[128,64,32,16,8,4,2,1]
-        #print(f"{cloce_distance}cloce_distance")
-
+        cutter_number=[21,18,15,12,9,6,3,0]
+        cutter_info=[]#ここに使用する抜型番号を追加
         #general_patterns_width=[1,2,2,2,4,4,4,8,8,8,16,16,16,32,32,32,64,64,64,128,128,128,256,256,256]
         #general_patterns_p=    [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19 ,20 ,21 ,22 ,23 ,24 ]
-        scale_num=0
-        while(cutter_scale_array[scale_num]>cloce_distance):
-            scale_num+=1
-        #print(f"{scale_num}scale_num")
-        
-        cutter_scale=cutter_scale_array[scale_num]#抜き型の大きさ
-        #print(f"{cutter_scale}cutter_scale")
 
-        #抜き型番号の決定
-        if cutter_scale==128:
-            return [21,128]
+        while(cloce_distance!=0):
+            scale_num=0
+            while(cutter_scale_array[scale_num]>cloce_distance):
+                scale_num+=1
+            cutter_info.append(cutter_number[scale_num])
+            cloce_distance-=cutter_scale_array[scale_num]
         
-        if cutter_scale==64:
-            return [18,64]
-        
-        if cutter_scale==32:
-            return [15,32]
-        
-        if cutter_scale==16:
-            return [12,16]
-        
-        if cutter_scale==8:
-            return [9,8]
-        
-        if cutter_scale==4:
-            return [6,4]
-        
-        if cutter_scale==2:
-            return [3,2]
-        
-        if cutter_scale==1:
-            return [0,1]
+        return cutter_info
+
 
 
 
@@ -136,16 +113,15 @@ def fitnum(now_board,goal_board,layer,wide,height):
         #print(f"{now_board}x座標揃える")
 
 
-        while shortage_index[0]!=excess_index[0]+1:#y座標の1つ下まで持ってくる
+        #y座標の1つ下まで持ってくる
+        cloce_distance=shortage_index[0]-excess_index[0]-1#詰める距離
+        cutter_num_scale=search_cutter(cloce_distance)
 
-            cloce_distance=shortage_index[0]-excess_index[0]-1#詰める距離
-            cutter_num_scale=search_cutter(cloce_distance)
-
-            p=cutter_num_scale[0]
+        for cutter in cutter_num_scale:
+            p=cutter
             x=excess_index[1]
             y=excess_index[0]+1
             s=0
-            shortage_index[0]=shortage_index[0]-cutter_num_scale[1]
 
             now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
             operate_board.append([p,x,y,s])
@@ -159,9 +135,6 @@ def fitnum(now_board,goal_board,layer,wide,height):
         now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新
         operate_board.append([p,x,y,s])
 
-
-
-
         now_count=count_element(now_board[layer])  #現在の盤面におけるそれぞれの数字の数
         for i in range(4): #過分、不足、満足を評価
             evalution_value[i]=now_count[i]-goal_count[i]
@@ -170,7 +143,7 @@ def fitnum(now_board,goal_board,layer,wide,height):
     return [operate_board,now_board]
 
 
-#ans=fitnum(now_board,goal_board,layer,wide,height)
-#print(ans[0])
+# ans=fitnum(now_board,goal_board,layer,wide,height)
+# print(ans[0])
 
 #print(ans)
