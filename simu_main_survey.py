@@ -14,11 +14,11 @@ import numpy as np
 class simu(judge.Judgec,algorithm_survey.algorithm_tentative,board_reload_fujii.BoardOperation):
 
     def set(self):
-        first_board = np.random.randint(0, 4, (100, 100))
+        first_board = np.random.randint(0, 4, (50, 50))
         self.correct_board=first_board.tolist() #正解の盤面
 
         shuffled_elements = np.random.permutation(first_board.flatten())
-        second_board = shuffled_elements.reshape(100, 100)
+        second_board = shuffled_elements.reshape(50, 50)
         self.now_board=second_board.tolist() #現在の盤面
 
         self.wide=len(self.correct_board[0])
