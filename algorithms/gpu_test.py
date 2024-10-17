@@ -1,17 +1,13 @@
-#アルゴリズム入れる用
-#入力は(現在の盤面,正解の盤面,使用できる抜き型)がよい
-#出力は(抜き型の番号,使用する座標(x),使用する座標(y),詰める方向)がよいよ
 import sys
 import os
+import time
 # 相対パスを使用して一つ上の階層のパスを追加
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-
-import time
-from datetime import datetime
 import copy
 import numpy as np
+import cupy as cp  # CuPyをインポート
 import random
-import board_reload_fujii
+import board_reload_gpu as board_reload_fujii
 import judge as J
 import general_patterns
 import create_random_board
@@ -26,33 +22,28 @@ class MyAlgo:
         self.log = []
     
     def algo(self, now_board, correct_board):
-        self.now = copy.deepcopy(now_board)
-        self.correct = correct_board
+        self.now = now_board  # NumPy配列をCuPy配列に変換
+        self.correct = correct_board  # NumPy配列をCuPy配列に変換
 
         def all_position():
-            #すべての座標を探索
-            recommended_action = [9999999, 0, 0, 0] #distance, cutter_num, [x, y], move_direction
+            # すべての座標を探索
+            recommended_action = [9999999, 0, 0, 0]  # distance, cutter_num, [x, y], move_direction
             for y in range(self.height):
                 for x in range(self.width):
-                    
-                    def check_pass_position(): #True: continue 
-                        if random.random() > 0.2 or self.height * 0.7 < y:
+                    def check_pass_position():  # True: continue 
+                        if random.random() > 0.2 or self.height * 0.8 < y:
                             return True
                         return False
                     
                     if check_pass_position():
                         continue
                     print("position=", x, y)
-                    force_start = datetime.now()
-                    min_distance_data =  self.force_search(x, y)
-                    force_end = datetime.now()
-                    print("force_time=", force_end - force_start)
-                    #print("min_distance_data=", min_distance_data)
+                    min_distance_data = self.force_search(x, y)
                     if recommended_action[0] > min_distance_data[0]:
                         recommended_action[0] = min_distance_data[0]
-                        recommended_action[1] = min_distance_data[1] #cutter_num
+                        recommended_action[1] = min_distance_data[1]  # cutter_num
                         recommended_action[2] = [x ,y]
-                        recommended_action[3] = min_distance_data[2] #direction
+                        recommended_action[3] = min_distance_data[2]  # direction
             return [recommended_action[1], recommended_action[2], recommended_action[3], recommended_action[0]]
         
         recommended_action = all_position()
@@ -60,32 +51,22 @@ class MyAlgo:
 
         return recommended_action
 
-    #ある座標に対してスコアと最適な型と方向を求める
+    # ある座標に対してスコアと最適な型と方向を求める
     def force_search(self, x, y):
-        min_distance_data = [9999999, 0, 0] #distance, cutter_num, move_direction
+        min_distance_data = [9999999, 0, 0]  # distance, cutter_num, move_direction
         for cutter_num_1 in range(25 + self.special_cutter_quantity):
-            if cutter_num_1 == 4:
-                break
             cutter_height = self.cutter_size[cutter_num_1][0]
             cutter_width = self.cutter_size[cutter_num_1][1]
             if cutter_height > self.height and cutter_width > self.width:
                 break
 
             for move_direction in range(4):
-                if self.check_board_change([x, y], cutter_num_1, move_direction) == False: #変化のない操作はしないようにする
-                    #print("skiped!!", "posi=", [x, y], "cutter=", cutter_num_1, "direction=", move_direction)
+                if not self.check_board_change([x, y], cutter_num_1, move_direction):
                     continue
 
-                change_start = datetime.now()
-                next_board = self.board_op.board_update(cutter_num_1, [x, y], move_direction, copy.deepcopy(self.now))
-                change_end = datetime.now()
-                print("change_time=", change_end - change_start)
-                eval_start = datetime.now()
+                next_board = self.board_op.board_update(cutter_num_1, [x, y], move_direction, cp.asarray(self.now))
                 total_distance = self.evaluation(next_board)
-                eval_end = datetime.now()
-                print("eval_time=", eval_end - eval_start)
-                #print("total_distance=", total_distance)
-
+                
                 if min_distance_data[0] > total_distance:
                     min_distance_data[0] = total_distance
                     min_distance_data[1] = cutter_num_1
@@ -114,21 +95,17 @@ class MyAlgo:
             if ((direction == 0 and (p_y + cutter_height) >= self.height)
                     or (direction == 1 and p_y == 0)):
                 is_changed = False
-        # else:
-        #     next_board = self.board_op.board_update(cutter_num, position, direction, copy.deepcopy(self.now))
-        #     if next_board == self.now:
-        #         is_changed = False
-        if is_changed == True:
-            next_board = self.board_op.board_update(cutter_num, position, direction, copy.deepcopy(self.now))
-            if next_board == self.now:
+        
+        if is_changed:
+            next_board = self.board_op.board_update(cutter_num, position, direction, cp.asarray(self.now))
+            if cp.all(next_board == self.now):  # CuPyでの比較
                 is_changed = False
             
         return is_changed
 
-    #すべてのセルの正解との距離を加算
+    # すべてのセルの正解との距離を加算
     def evaluation(self, board):
         def find_closest_equal_value(board, target_value, x, y):
-            # ターゲット値と等しいすべてのインデックスを取得
             indices = [(i, j) for i in range(len(board)) for j in range(len(board[i])) if board[i][j] == target_value]
             min_manhattan_distance = float('inf')
 
@@ -142,43 +119,22 @@ class MyAlgo:
         total_distance = 0
         for i in range(self.height):
             for j in range(self.width):
-                find_start = datetime.now()
                 val = self.correct[i][j]
-                manhattan_distance = find_closest_equal_value(board, val, j, i)
+                manhattan_distance = find_closest_equal_value(cp.asnumpy(board), val, j, i)  # CuPyからNumPyへ変換
                 total_distance += manhattan_distance ** 4
-                find_end = datetime.now()
-                print("find_time=", find_end - find_start)
         
         return total_distance
-    
-    #型の種類を判別する
-    def cutter_type(self, cutter_num): #0:すべて１, 1:横, 2:縦, 3:一般抜型
-        if (cutter_num == 0 
-                or cutter_num == 1 
-                or cutter_num == 4 
-                or cutter_num == 7 
-                or cutter_num == 10 
-                or cutter_num == 13
-                or cutter_num == 16
-                or cutter_num == 19
-                or cutter_num == 22):
-            return 0
-        
-        elif (cutter_num == 2
-                or cutter_num == 5
-                or cutter_num == 8
-                or cutter_num == 11
-                or cutter_num == 14
-                or cutter_num == 17
-                or cutter_num == 20
-                or cutter_num == 23):
-            return 1
 
-        elif (cutter_num < 25):
+    # 型の種類を判別する
+    def cutter_type(self, cutter_num):  # 0:すべて１, 1:横, 2:縦, 3:一般抜型
+        if cutter_num in [0, 1, 4, 7, 10, 13, 16, 19, 22]:
+            return 0
+        elif cutter_num in [2, 5, 8, 11, 14, 17, 20, 23]:
+            return 1
+        elif cutter_num < 25:
             return 2
         else:
             return 3
-
 
 
 def main():
@@ -191,7 +147,7 @@ def main():
         width = len(cutters[i][0])
         cutter_size.append([height, width])
 
-    start_board, correct_board = create_random_board.create_board(20, 20)
+    start_board, correct_board = create_random_board.create_board(10, 10)
     print(correct_board)
 
     height = len(start_board)
@@ -201,34 +157,21 @@ def main():
     board_op = board_reload_fujii.BoardOperation()
 
     judge_result = False
-    incorrect = height * width
     incorrect_total = []
-    board = start_board
+    board = cp.asarray(start_board)
+    correct_board = cp.asarray(correct_board)
     cnt = 1
-    score = 0
-    next_score = score
-    score_is_not_changed_cnt = 0
 
-    while judge_result != True:
+    while not judge_result:
         print("cnt=", cnt)
-        recommended_action = my_algo.algo(board, correct_board)
-        print("recomm!=", recommended_action)
-        cutter = recommended_action[0]
-        posi = recommended_action[1]
-        direction = recommended_action[2]
-        next_score = recommended_action[3]
-
-        if score != 0 and abs(score - next_score) <= 2 or incorrect < height * width / 3:
-            score_is_not_changed_cnt += 1
-            if score_is_not_changed_cnt == 5:
-                break
-        else:
-            score_is_not_changed_cnt = 0
-        score = next_score
-        
-        board = board_op.board_update(cutter, posi, direction, board)
-        print("board=", board)
-        judge_result, incorrect = judge.judge(board, correct_board)
+        recommended_action = my_algo.algo(board, correct_board)  # CuPyからNumPyに変換
+        print("recomm!=", recommended_action.tolist())
+        # cutter = recommended_action[0]
+        # posi = recommended_action[1]
+        # direction = recommended_action[2]
+        # rsl_board = board_op.board_update(cutter, posi, direction, cp.asarray(board))  # CuPyからNumPyに変換
+        print("board=", board.tolist())
+        judge_result, incorrect = judge.judge(board.tolist(), correct_board.tolist())  # CuPyからNumPyに変換
         incorrect_total.append(incorrect)
         cnt += 1
     
