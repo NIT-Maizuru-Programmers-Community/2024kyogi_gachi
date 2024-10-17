@@ -5,6 +5,7 @@ import time
 import copy
 import kanefusa
 import algorithms.algorithm as algorithm
+import algorithm_tate_ippan
 import algorithm_general
 from board_reload_fujii_general import BoardOperation
 import numpy as np
