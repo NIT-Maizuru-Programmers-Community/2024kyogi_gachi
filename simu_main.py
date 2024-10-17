@@ -19,8 +19,8 @@ import numpy as np
 class simu(judge.Judgec,algorithm_general.algorithm_tentative,algorithm.algorithm_tentative):
 
     def set(self):
-        x=200
-        y=200
+        x=100
+        y=100
         n=256#一般抜き型の数
         
         first_board = np.random.randint(0, 4, (x, y))
@@ -45,13 +45,13 @@ class simu(judge.Judgec,algorithm_general.algorithm_tentative,algorithm.algorith
     
     def relord_judge_log(self):
 
-        self.start_time = time.time()#開始時間
-        self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type,self.wide,self.height)#アルゴリズム呼び出し,
-        self.end_time = time.time()#終了時間
-        self.time=self.end_time-self.start_time#かかった時間
+        # self.start_time = time.time()#開始時間
+        # self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type,self.wide,self.height)#アルゴリズム呼び出し,
+        # self.end_time = time.time()#終了時間
+        # self.time=self.end_time-self.start_time#かかった時間
 
-        print(f"generalは{len(self.call_algotithm)}手かかりました")
-        print(f"{self.time}秒かかりました")
+        # print(f"generalは{len(self.call_algotithm)}手かかりました")
+        # print(f"{self.time}秒かかりました")
 
         self.start_time = time.time()#開始時間
         self.call_algotithm_cut=self.algo_cut(self.now_board,self.correct_board,self.use_type,self.wide,self.height)#アルゴリズム呼び出し,

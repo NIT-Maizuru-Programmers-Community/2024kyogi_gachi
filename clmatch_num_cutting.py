@@ -1,4 +1,5 @@
 from board_reload_fujii import BoardOperation
+import time
 
 layer=2 #n層目
 wide=5
@@ -16,7 +17,7 @@ now_board=[[1,2,3,1,2],
            [1,1,3,0,1]]
 
 def fitnum(now_board,goal_board,layer,wide,height):
-
+    now_time=0
     def count_element(board_array):#入力された1行または列の各要素数を取得
         element=[0,0,0,0]
         for i in range(len(board_array)):
@@ -52,7 +53,6 @@ def fitnum(now_board,goal_board,layer,wide,height):
 
 
 
-
     operate_board=[]#詰めるための操作を記録
     move=BoardOperation()
     now_count=count_element(now_board[layer])  #現在の盤面におけるそれぞれの数字の数
@@ -68,7 +68,7 @@ def fitnum(now_board,goal_board,layer,wide,height):
 
 
 
-    
+
     while evalution_value[0]!=0 or evalution_value[1]!=0 or evalution_value[2]!=0 or evalution_value[3]!=0:
         excess_index=[layer,0] #過分のインデックス
         for k in range(4): #過分のインデックス取得
@@ -78,6 +78,8 @@ def fitnum(now_board,goal_board,layer,wide,height):
         
         #print(f"{excess_index}excess_index")
 
+        start_time = time.time()
+        #print(start_time)
         shortage_index=[0,0] #不足のインデックス
         for k in range(4): #不足のインデックス取得
             if evalution_value[k]<0:
@@ -93,7 +95,10 @@ def fitnum(now_board,goal_board,layer,wide,height):
                 else:
                     continue
                 break
-        
+        end_time=time.time()
+        #print(end_time)
+        now_time=now_time+(end_time-start_time)
+        #print(now_time)
         #print(f"{shortage_index}shortage_index")
         #print(now_board)
 
@@ -140,7 +145,7 @@ def fitnum(now_board,goal_board,layer,wide,height):
             evalution_value[i]=now_count[i]-goal_count[i]
         #print(f"{evalution_value}evalution_value")
 
-    return [operate_board,now_board]
+    return [operate_board,now_board,now_time]
 
 
 # ans=fitnum(now_board,goal_board,layer,wide,height)

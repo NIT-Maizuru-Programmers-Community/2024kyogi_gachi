@@ -25,6 +25,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
         self.use_cut_type=cut_type
         self.height=height
         self.wide=width
+        self.time=0
 
         
         self.array_operate_board=[]#ここに操作を追加
@@ -52,6 +53,8 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
             #print(f"{self.element_operation}#各要素の個数をそろえる")
             self.operation_board=copy.deepcopy(self.element_operation[1])
             #print(f"{self.operation_board}#各要素の個数をそろえる盤面")
+            self.time=self.time+self.element_operation[2]
+
 
 
             #順番を一致させる
@@ -65,6 +68,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
 
         if self.operation_board==self.goal_board:
             print("正解cut")
+            print(f"time={self.time}")
         else:
             print("不正解cut")
 
