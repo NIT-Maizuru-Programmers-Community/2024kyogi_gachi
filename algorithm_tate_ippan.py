@@ -138,9 +138,9 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
                     
                     if (is_exist_standard==False):#general_usableを追加
                         for search in range(0,len(general_usable_column)):#同じ長さのやつがないか探す
-                            if general_usable_column[search][2]==cutter_distance:#幅詰める距離が同じ場合、幅がより小さいものを取得
+                            if general_usable_column[search][3]==cutter_distance:#幅詰める距離が同じ場合、幅がより小さいものを取得
                                 is_exist=True
-                                if general_usable_column[search][1] > general_distance:
+                                if general_usable_column[search][2] > general_distance:
                                     general_usable_column[search]=[general_num,column,general_distance,cutter_distance,sharpen_distance]
                                     #[抜き型番号,何列目,詰める距離,上の削った距離]
                                 else:

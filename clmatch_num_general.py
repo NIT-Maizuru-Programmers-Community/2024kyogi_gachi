@@ -55,6 +55,8 @@ def fitnum(now_board,goal_board,layer,general_usable_column,cut_type,wide,height
 
     def search_cutter(cloce_distance):#抜き型の番号決める
         standard_combination=making_combination(cloce_distance)
+        print(cloce_distance)
+        print(standard_combination)
         cutter_scale_array=[128,64,32,16,8,4,2,1]
         cutter_info=[]#[番号,一般(1)か定型か(0)]
         is_exist=False
