@@ -5,7 +5,7 @@
 
 
 import clmatch_num_cutting
-import clmatch_cutting
+import algorithms.clmatch_cutting as clmatch_cutting
 import array_send
 import board_reload_fujii
 import copy
@@ -27,7 +27,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
         self.wide=width
 
         
-        self.array_operate_board=[]#ここに操作を追加
+        self.array_operate_board=[[24,0,0,1],[23,0,0,0]]#ここに操作を追加
         self.operation_board = copy.deepcopy(self.now_board)
         
 
