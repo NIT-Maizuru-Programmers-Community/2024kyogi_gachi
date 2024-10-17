@@ -19,7 +19,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
         self.now_time=time.time()
         return self.now_time
     
-    def algo(self,now_board,goal_board,cut_type,width,height):
+    def algo_gene(self,now_board,goal_board,cut_type,width,height):
         self.now_board=now_board
         self.goal_board=goal_board
         self.use_cut_type=cut_type
@@ -91,13 +91,12 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
                     between_count+=1
                 general_distance=cutter_distance+between_count
         
-        print(general_usable)
         print(f"general_usableは{len(general_usable)}")
                 
         
 
         for column in range(0,len(self.now_board)):
-            print(f"{column}層目")
+            #print(f"{column}層目")
 
             #一致度高いやつ寄せる
             self.array_operation=array_send.column_row_send(self.operation_board,self.goal_board,column)

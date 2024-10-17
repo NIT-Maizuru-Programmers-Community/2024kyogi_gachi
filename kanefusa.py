@@ -2,12 +2,15 @@ import random
 
 def generate_random_lists(n):
     random_lists = []
-    empty_list=[]
     for _ in range(n):
-        size = random.randint(1, 256)
-        first_row = [random.randint(0, 1) for _ in range(size)]
-        second_row = [0] * size  # 2行目はすべて0
-        random_lists.append([first_row, second_row])
+        size_x = random.randint(1, 256)
+        size_y = random.randint(1, 256)
+        random_one=[]
+        for y in range(0,size_y):
+            row = [random.randint(0, 1) for _ in range(size_x)]
+            random_one.append(row)
+        random_lists.append(random_one) 
+
     return random_lists
 
-
+#print(generate_random_lists(3))

@@ -34,7 +34,7 @@ class main(judge.Judgec,algorithm_general.algorithm_tentative,board_reload_fujii
     
     def algorithm_execution(self):
         self.start_time = time.time()#開始時間
-        self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type,self.width,self.height)#アルゴリズム呼び出し
+        self.call_algotithm=self.algo_gene(self.now_board,self.correct_board,self.use_type,self.width,self.height)#アルゴリズム呼び出し
         self.algorithm_turn=len(self.call_algotithm)#かかった手数
 
         output_server.log_output(self.call_algotithm,self.algorithm_turn)

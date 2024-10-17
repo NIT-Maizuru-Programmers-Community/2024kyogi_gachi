@@ -19,7 +19,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
         self.now_time=time.time()
         return self.now_time
     
-    def algo_gn(self,now_board,goal_board,cut_type,width,height):
+    def algo_tate(self,now_board,goal_board,cut_type,width,height):
         self.now_board=now_board
         self.goal_board=goal_board
         self.use_cut_type=cut_type
@@ -43,13 +43,14 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
             between_count=0#間の距離
             general_distance=cutter_distance+between_count#幅
             is_exist=False
+            row_distance=len(general_cut)
 
-            for sharpen in range(0,len(general_cut)):#左側の削る距離カウント
+            for sharpen in range(0,row_distance):#左側の削る距離カウント
                 if general_cut[sharpen]==1:
                     break
                 sharpen_distance_left+=1
             
-            if sharpen_distance_left==len(general_cut):#上全部が0の場合飛ばす
+            if sharpen_distance_left==row_distance:#上全部が0の場合飛ばす
                 continue
 
             for sharpen in reversed(general_cut):#右側の削る距離カウント
@@ -57,11 +58,11 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
                     break
                 sharpen_distance_right+=1
 
-            while general_distance+sharpen_distance_left!=len(general_cut)-sharpen_distance_right:#左の削る距離+詰める距離+間の距離==抜き型の大きさ-右側の削る距離
+            while general_distance+sharpen_distance_left!=row_distance-sharpen_distance_right:#左の削る距離+詰める距離+間の距離==抜き型の大きさ-右側の削る距離
                 is_exist=False#while内部でのis_existの再定義
                 is_exist_standard=False
 
-                for cutter in range(general_distance+sharpen_distance_left,len(general_cut)-sharpen_distance_right):#詰めれる距離カウント
+                for cutter in range(general_distance+sharpen_distance_left,row_distance-sharpen_distance_right):#詰めれる距離カウント
                     if general_cut[cutter]==0:
                         break
                     cutter_distance+=1
@@ -85,7 +86,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
                         general_usable.append([general_num,general_distance,cutter_distance,sharpen_distance_left])
                 
             
-                for between in range(general_distance+sharpen_distance_left,len(general_cut)-sharpen_distance_right):#間カウント
+                for between in range(general_distance+sharpen_distance_left,row_distance-sharpen_distance_right):#間カウント
                     if general_cut[between]==1:
                         break
                     between_count+=1
@@ -94,8 +95,9 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
 
 
         #一般を使える形に縦
-        for general_num in range(0,len(cut_type)): #一般は25から
+        for general_num in range(25,len(cut_type)): #一般は25から
             general_cut=cut_type[general_num]#今回のループで扱う抜き型
+            column_distance=len(general_cut)#縦の長さ
 
             for column in range(0, len(general_cut[0])):#各列を見ていく
                 cutter_distance=0#詰める距離
@@ -104,13 +106,14 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
                 between_count=0#間の距離
                 general_distance=cutter_distance+between_count#幅
                 is_exist=False
+                
 
                 for sharpen in general_cut:#上側の削る距離カウント
                     if sharpen[column]==1:
                         break
                     sharpen_distance+=1
                 
-                if sharpen_distance==len(general_cut):#上全部が0の場合飛ばす
+                if sharpen_distance==column_distance:#上全部が0の場合飛ばす
                     continue
 
                 for sharpen in reversed(general_cut):#下側の削る距離カウント
@@ -118,11 +121,11 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
                         break
                     sharpen_distance_under+=1
 
-                while general_distance+sharpen_distance!=len(general_cut)-sharpen_distance_under:#左の削る距離+詰める距離+間の距離==抜き型の大きさ-右側の削る距離
+                while general_distance+sharpen_distance!=column_distance-sharpen_distance_under:#左の削る距離+詰める距離+間の距離==抜き型の大きさ-右側の削る距離
                     is_exist=False#while内部でのis_existの再定義
                     is_exist_standard=False
                     
-                    for cutter in range(general_distance+sharpen_distance,len(general_cut)-sharpen_distance_under):#詰めれる距離カウント
+                    for cutter in range(general_distance+sharpen_distance,column_distance-sharpen_distance_under):#詰めれる距離カウント
                         if general_cut[cutter][column]==0:
                             break
                         cutter_distance+=1
@@ -147,7 +150,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
                             general_usable_column.append([general_num,column,general_distance,cutter_distance,sharpen_distance])
                     
                 
-                    for between in range(general_distance+sharpen_distance,len(general_cut)-sharpen_distance_under):#間カウント
+                    for between in range(general_distance+sharpen_distance,column_distance-sharpen_distance_under):#間カウント
                         if general_cut[between][column]==1:
                             break
                         between_count+=1
@@ -156,13 +159,13 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
 
 
         print(f"general_usableは{len(general_usable)}")
-        print(general_usable_column)
+        #print(general_usable_column)
         print(f"general_usable_columnは{len(general_usable_column)}")
                 
         
 
         for column in range(0,len(self.now_board)):
-            print(f"{column}層目")
+            # print(f"{column}層目")
 
             #一致度高いやつ寄せる
             self.array_operation=array_send.column_row_send(self.operation_board,self.goal_board,column)
