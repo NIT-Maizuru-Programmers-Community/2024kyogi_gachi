@@ -15,7 +15,7 @@ now_board=[[1,2,3,1,2],
            [2,1,3,2,3],
            [1,1,3,0,1]]
 
-def fitnum(now_board,goal_board,layer,wide,height):
+def fitnum(now_board,goal_board,layer,general_usable_column,cut_type,wide,height):
 
     def count_element(board_array):#入力された1行または列の各要素数を取得
         element=[0,0,0,0]
@@ -54,7 +54,7 @@ def fitnum(now_board,goal_board,layer,wide,height):
 
 
     operate_board=[]#詰めるための操作を記録
-    move=BoardOperation()
+    move=BoardOperation(cut_type)
     now_count=count_element(now_board[layer])  #現在の盤面におけるそれぞれの数字の数
     goal_count=count_element(goal_board[layer]) #正解の盤面におけるそれぞれの数字の数
     evalution_value=[0,0,0,0] #評価値
@@ -113,12 +113,20 @@ def fitnum(now_board,goal_board,layer,wide,height):
 
         #y座標の1つ下まで持ってくる
         cloce_distance=shortage_index[0]-excess_index[0]-1#詰める距離
-        cutter_num_scale=search_cutter(cloce_distance)
+        cutter_info=search_cutter(cloce_distance)
 
-        for cutter in cutter_num_scale:
-            p=cutter
-            x=excess_index[1]
-            y=excess_index[0]+1
+        for info in cutter_info:
+            if info[1]==0:#定型
+                p=info[0]
+                x=excess_index[1]
+                goal_place=goal_place-info[2]
+            else:
+                #[抜き型番号,何列目か,幅,詰めれる距離,削った距離]
+                p=general_usable_column[info[0]][0]
+                x=excess_index[1]-general_usable_column[info[0]][1]
+                goal_place=goal_place-general_usable_column[info[0]][3]
+
+            y=layer+1
             s=0
 
             now_board = move.board_update(p, [x, y], s, now_board)#ボードの更新

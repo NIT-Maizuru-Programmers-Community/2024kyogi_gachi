@@ -19,7 +19,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
         self.now_time=time.time()
         return self.now_time
     
-    def algo(self,now_board,goal_board,cut_type,width,height):
+    def algo_gn(self,now_board,goal_board,cut_type,width,height):
         self.now_board=now_board
         self.goal_board=goal_board
         self.use_cut_type=cut_type
@@ -173,7 +173,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
                 self.operation_board=self.board_update(self.array_operation[turn_num][0], self.array_operation_position, self.array_operation[turn_num][3], self.operation_board)        
 
             #各要素の個数をそろえる
-            self.element_operation=clmatch_num_general.fitnum(self.operation_board,self.goal_board,column,general_usable_column,self.wide,self.height)
+            self.element_operation=clmatch_num_general.fitnum(self.operation_board,self.goal_board,column,general_usable_column,self.use_cut_type,self.wide,self.height)
             self.array_operate_board.extend(self.element_operation[0])
             self.operation_board=copy.deepcopy(self.element_operation[1])
 

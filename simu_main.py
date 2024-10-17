@@ -15,7 +15,7 @@ import numpy as np
 #logへの書き出しありのバージョン
 #log_softで見れるように
 #継承するクラスのファイル名を変更してアルゴリズム変更
-class simu(judge.Judgec,algorithm_general.algorithm_tentative,algorithm.algorithm_tentative):
+class simu(judge.Judgec,algorithm_general.algorithm_tentative,algorithm.algorithm_tentative,algorithm_tate_ippan.algorithm_tentative):
 
     def set(self):
         x=100
@@ -45,7 +45,7 @@ class simu(judge.Judgec,algorithm_general.algorithm_tentative,algorithm.algorith
     def relord_judge_log(self):
 
         self.start_time = time.time()#開始時間
-        self.call_algotithm=self.algo(self.now_board,self.correct_board,self.use_type,self.wide,self.height)#アルゴリズム呼び出し,
+        self.call_algotithm=self.algo_gn(self.now_board,self.correct_board,self.use_type,self.wide,self.height)#アルゴリズム呼び出し,
         self.end_time = time.time()#終了時間
         self.time=self.end_time-self.start_time#かかった時間
 
