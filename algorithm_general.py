@@ -5,7 +5,6 @@
 
 
 import clmatch_num_cutting
-import clmatch_cutting
 import clmatch_general
 import array_send
 import board_reload_fujii
@@ -29,7 +28,6 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
         self.array_operate_board=[]#ここに操作を追加
         self.operation_board = copy.deepcopy(self.now_board)
         cutter_scale_array=[258,128,64,32,16,8,4,2,1]
-        just_type=[]#[抜き型番号,詰めれる距離,削った距離]
         general_usable=[]#[抜き型番号,幅,詰めれる距離,削った距離]
 
 
@@ -45,7 +43,6 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
             between_count=0#間の距離
             general_distance=cutter_distance+between_count#幅
             is_exist=False
-            is_exist_just=False
 
             for sharpen in range(0,len(general_cut)):#左側の削る距離カウント
                 if general_cut[sharpen]==1:
@@ -95,7 +92,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
                 general_distance=cutter_distance+between_count
         
         print(general_usable)
-        print("一般の計算終わり")
+        print(f"general_usableは{len(general_usable)}")
                 
         
 
@@ -116,7 +113,7 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
             self.operation_board=copy.deepcopy(self.element_operation[1])
 
             #順番を一致させる
-            self.match_operation=clmatch_general.clmatch(self.operation_board, self.goal_board, column, self.wide, just_type, general_usable ,self.use_cut_type)
+            self.match_operation=clmatch_general.clmatch(self.operation_board, self.goal_board, column, self.wide, general_usable ,self.use_cut_type)
             self.array_operate_board.extend(self.match_operation[0])
             self.operation_board=copy.deepcopy(self.match_operation[1])
 

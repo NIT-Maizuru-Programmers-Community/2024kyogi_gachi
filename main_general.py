@@ -1,4 +1,4 @@
-import judge
+import simu.judge as judge
 import standard_patterns
 import output_server
 import time

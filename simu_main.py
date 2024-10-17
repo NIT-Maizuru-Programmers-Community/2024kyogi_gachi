@@ -1,13 +1,11 @@
-import judge
+import simu.judge as judge
 import standard_patterns
-import output
+import simu.output as output
 import time
 import copy
 import kanefusa
-import algorithm
+import algorithms.algorithm as algorithm
 import algorithm_general
-import algorithm_shuffle
-
 from board_reload_fujii_general import BoardOperation
 import numpy as np
 
@@ -19,9 +17,9 @@ import numpy as np
 class simu(judge.Judgec,algorithm_general.algorithm_tentative,algorithm.algorithm_tentative):
 
     def set(self):
-        x=200
-        y=200
-        n=256#一般抜き型の数
+        x=100
+        y=100
+        n=2#一般抜き型の数
         
         first_board = np.random.randint(0, 4, (x, y))
         self.correct_board=first_board.tolist() #正解の盤面
@@ -53,13 +51,13 @@ class simu(judge.Judgec,algorithm_general.algorithm_tentative,algorithm.algorith
         print(f"generalは{len(self.call_algotithm)}手かかりました")
         print(f"{self.time}秒かかりました")
 
-        self.start_time = time.time()#開始時間
-        self.call_algotithm_cut=self.algo_cut(self.now_board,self.correct_board,self.use_type,self.wide,self.height)#アルゴリズム呼び出し,
-        self.end_time = time.time()#終了時間
-        self.time=self.end_time-self.start_time#かかった時間
+        # self.start_time = time.time()#開始時間
+        # self.call_algotithm_cut=self.algo_cut(self.now_board,self.correct_board,self.use_type,self.wide,self.height)#アルゴリズム呼び出し,
+        # self.end_time = time.time()#終了時間
+        # self.time=self.end_time-self.start_time#かかった時間
 
-        print(f"cutは{len(self.call_algotithm_cut)}手かかりました")
-        print(f"{self.time}秒かかりました")
+        # print(f"cutは{len(self.call_algotithm_cut)}手かかりました")
+        # print(f"{self.time}秒かかりました")
         
         # for turn in range(1,len(self.call_algotithm)+1):
         #     #self.end = self.get_time()

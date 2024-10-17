@@ -17,7 +17,7 @@ now_board=[[3,2,3,2,1,3,3,2,1],
            [0,1,3,0,1,1,1,1,1]]
 
 
-def clmatch(now_board,goal_board,layer,width,just_type,general_usable,cut_type):
+def clmatch(now_board,goal_board,layer,width,general_usable,cut_type):
 
     def making_combination(cloce_distance):
         cutter_scale_array=[128,64,32,16,8,4,2,1]

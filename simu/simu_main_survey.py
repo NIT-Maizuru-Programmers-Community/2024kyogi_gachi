@@ -1,8 +1,8 @@
-import judge
+import simu.judge as judge
 import standard_patterns
-import output
+import simu.output as output
 import time
-import algorithm_survey
+import simu.algorithm_survey as algorithm_survey
 import board_reload_fujii
 import numpy as np
 
