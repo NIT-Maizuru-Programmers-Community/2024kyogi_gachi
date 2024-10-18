@@ -22,10 +22,10 @@ def clmatch(now_board,goal_board,layer,width):
 
     def search_goal(now_board_layer,start_place,goal_num):#goalと一致している場所を取得
 
-        while(now_board_layer[start_place+1]!=goal_num):
+        while(now_board_layer[start_place]!=goal_num):
             start_place=start_place+1
         
-        return start_place+1
+        return start_place
     
     def search_cutter(cloce_distance):#抜き型の番号決める
         cutter_scale_array=[128,64,32,16,8,4,2,1]

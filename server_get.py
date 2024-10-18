@@ -34,7 +34,6 @@ def server_get():
 
     general_number=general_data['n']#一般抜型の個数
     general_data_patterns=general_data['patterns']#一般抜き型の情報が格納
-    print()
 
     #一般抜型を取得
     general_patterns=[]#ここに一般抜型を追加
