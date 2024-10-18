@@ -15,13 +15,19 @@ import output_server
 
 
 
-class algorithm_tentative(board_reload_fujii.BoardOperation):
+class algorithm_kill(board_reload_fujii.BoardOperation):
 
     def get_time(self):
         self.now_time=time.time()
         return self.now_time
+    
+    @staticmethod
+    def on_key_event(algo):
+        output_server.log_output(algo,len(algo))
 
-    def algo_gene(self,now_board,goal_board,cut_type,width,height):
+
+
+    def kill(self,now_board,goal_board,cut_type,width,height):
         self.now_board=now_board
         self.goal_board=goal_board
         self.use_cut_type=cut_type
@@ -117,6 +123,9 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
             self.match_operation=clmatch_general.clmatch(self.operation_board, self.goal_board, column, self.wide, general_usable ,self.use_cut_type)
             self.array_operate_board.extend(self.match_operation[0])
             self.operation_board=copy.deepcopy(self.match_operation[1])
+
+
+            keyboard.add_hotkey('k', lambda:algorithm_kill.on_key_event(self.array_operate_board))
 
 
         if self.operation_board==self.goal_board:
