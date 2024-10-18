@@ -114,4 +114,4 @@ def algo_gene(now_board,goal_board,cut_type,wide,height):
     else:
         print("不正解algo")
 
-    return array_operate_board
+    return array_operate_board,operation_board

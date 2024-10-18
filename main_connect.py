@@ -7,17 +7,12 @@ import kanefusa
 import numpy as np
 import server_get
 import copy
-
-
+import upper
 
 #サーバーとの送受信ができる
 
-
 #cd "C:\Users\ryory\Desktop\procom\2024年度\procon-server"
-#"C:\Users\taker\Downloads\procon-server"
 #procon-server_win.exe -c input.json -l :8080 -start 1s
-
-
 #コマンドプロンプトで上のコマンドを実行してからmainを実行
 
 def set(x,y,n):
@@ -47,8 +42,14 @@ def set(x,y,n):
 now_board,correct_board,use_type,width,height=set(100,100,25)   
 #x,y,n 
 
+cutter_size=[1,2,2,2,4,4,4,8,8,8,16,16,16,32,32,32,64,64,64,128,128,128,256,256,256]
+
 start_time = time.time()#開始時間
-call_algotithm=algo_func.algo_gene(now_board,correct_board,use_type,width,height)#アルゴリズム呼び出し
+call_algotithm,now_board=algo_func.algo_gene(now_board,correct_board,use_type,width,height)#アルゴリズム呼び出し
+
+
+algo=upper.MyAlgo(height,width,)
+
 algorithm_turn=len(call_algotithm)#かかった手数
 
 #output_server.log_output(call_algotithm,algorithm_turn)
@@ -56,11 +57,7 @@ algorithm_turn=len(call_algotithm)#かかった手数
 end_time = time.time()#終了時間
 time_action=end_time-start_time#かかった時間
 
-
-
-
-
-print(f"{algorithm_turn}手かかりました")
+print(f"{len(algorithm_turn)}手かかりました")
 print(f"{time_action}秒かかりました")
 
 
