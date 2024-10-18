@@ -14,6 +14,7 @@ import copy
 
 
 #cd "C:\Users\ryory\Desktop\procom\2024年度\procon-server"
+#"C:\Users\taker\Downloads\procon-server"
 #procon-server_win.exe -c input.json -l :8080 -start 1s
 
 
