@@ -8,10 +8,123 @@ from datetime import datetime
 import copy
 import numpy as np
 import random
+from multiprocessing import Pool
+
 import board_reload_fujii
 import judge as J
 import general_patterns
 import create_random_board
+
+board_op = board_reload_fujii.BoardOperation()
+
+#ある座標に対してスコアと最適な型と方向を求める
+def force_search(x, y, special_cutter_quantity, cutter_size, height, width, row, now, correct_board):
+    min_distance_data = [0, 0, 0] #distance, cutter_num, move_direction
+    for cutter_num_1 in range(25 + special_cutter_quantity):
+        cutter_height = cutter_size[cutter_num_1][0]
+        cutter_width = cutter_size[cutter_num_1][1]
+        #行、列がはみ出す場合はスキップ
+        if cutter_height > height - row or cutter_width > width:
+            break
+
+        for move_direction in range(4):
+            if move_direction == 1:
+                continue
+            if check_board_change([x, y], cutter_num_1, move_direction, cutter_size, height, width, now) == False: #変化のない操作はしないようにする
+                #print("skiped!!", "posi=", [x, y], "cutter=", cutter_num_1, "direction=", move_direction)
+                continue
+            if move_direction != 0 and cutter_type(cutter_num_1) == 2 and cutter_num_1 != 3 and cutter_num_1 != 6:
+                continue
+
+
+            # change_start = datetime.now()
+            next_board = board_op.board_update(cutter_num_1, [x, y], move_direction, copy.deepcopy(now))
+            # change_end = datetime.now()
+            # print("change_time=", change_end - change_start)
+            # eval_start = datetime.now()
+            maching_cells = evaluation(next_board, correct_board, row)
+            #print("maching_cells= ", maching_cells)
+            # eval_end = datetime.now()
+            # print("eval_time=", eval_end - eval_start)
+            #print("total_distance=", total_distance)
+
+            if min_distance_data[0] < maching_cells:
+                min_distance_data[0] = maching_cells
+                min_distance_data[1] = cutter_num_1
+                min_distance_data[2] = move_direction
+    return min_distance_data
+
+def check_board_change(position, cutter_num, direction, cutter_size, height, width, now):
+    cutter_type = cutter_type(cutter_num)
+    p_x, p_y = position
+    cutter_height, cutter_width = cutter_size[cutter_num]
+    is_changed = True
+
+    if cutter_type == 0:
+        if ((direction == 0 and (p_y + cutter_height) >= height)
+                or (direction == 1 and p_y == 0)
+                or (direction == 2 and (p_x + cutter_width) >= width)
+                or (direction == 3 and p_x == 0)):
+            is_changed = False
+
+    elif cutter_type == 1:
+        if ((direction == 2 and (p_x + cutter_width) >= width)
+                or (direction == 3 and p_x == 0)):
+            is_changed = False
+
+    elif cutter_type == 2:
+        if ((direction == 0 and (p_y + cutter_height) >= height)
+                or (direction == 1 and p_y == 0)):
+            is_changed = False
+    # else:
+    #     next_board = self.board_op.board_update(cutter_num, position, direction, copy.deepcopy(self.now))
+    #     if next_board == self.now:
+    #         is_changed = False
+    if is_changed == True:
+        next_board = board_op.board_update(cutter_num, position, direction, copy.deepcopy(now))
+        if next_board == now:
+            is_changed = False
+        
+    return is_changed
+
+#型の種類を判別する
+def cutter_type(cutter_num): #0:すべて１, 1:横, 2:縦, 3:一般抜型
+    if (cutter_num == 0 
+            or cutter_num == 1 
+            or cutter_num == 4 
+            or cutter_num == 7 
+            or cutter_num == 10 
+            or cutter_num == 13
+            or cutter_num == 16
+            or cutter_num == 19
+            or cutter_num == 22):
+        return 0
+    
+    elif (cutter_num == 2
+            or cutter_num == 5
+            or cutter_num == 8
+            or cutter_num == 11
+            or cutter_num == 14
+            or cutter_num == 17
+            or cutter_num == 20
+            or cutter_num == 23):
+        return 1
+
+    elif (cutter_num < 25):
+        return 2
+    else:
+        return 3
+    
+#特定の行でそろっている数を調べる
+def evaluation(new_board, correct, row):
+    correct_line = correct[row]
+    new_line = new_board[row + 1]
+
+    cnt = 0
+    for i in range(len(correct_line)):
+        if correct_line[i] == new_line[i]:
+            cnt += 1
+    return cnt
 
 class MyAlgo:
     def __init__(self, board_height, board_width, special_cutter_quantity, cutter_size, correct_board) -> None:
@@ -22,6 +135,7 @@ class MyAlgo:
         self.correct = correct_board
         self.board_op = board_reload_fujii.BoardOperation()
         self.log = []
+        self.p = Pool(10) #プロセス数
     
     def algo(self, now_board, row):
         self.now = copy.deepcopy(now_board)
@@ -33,23 +147,32 @@ class MyAlgo:
         def all_position():
             #すべての座標を探索
             recommended_action = [0, 0, [0, 0], 0] #distance, cutter_num, [x, y], move_direction
+            max_correct_data = []
             for y in range(self.row, self.height):
                 if y > self.row + 1:
                     continue
                 for x in range(self.width):
-                    
                     # print("position=", x, y)
                     #force_start = datetime.now()
-                    max_correct_data =  self.force_search(x, y)
-                    #print("min_distance_data= ", max_correct_data)
-                    #force_end = datetime.now()
-                    #print("force_time=", force_end - force_start)
-                    #print("min_distance_data=", min_distance_data)
-                    if recommended_action[0] < max_correct_data[0]:
-                        recommended_action[0] = max_correct_data[0]
-                        recommended_action[1] = max_correct_data[1] #cutter_num
-                        recommended_action[2] = [x ,y]
-                        recommended_action[3] = max_correct_data[2] #direction
+                    max_correct_data = self.p.map(force_search, [x, y, self.special_cutter_quantity, self.cutter_size, self.height, self.width, self.row,])
+                    #1つ目のインデックスを抽出したリストを作る
+            max_score_list = [row[0] for row in max_correct_data]
+            max_index = max_score_list.index(max(max_score_list))
+            
+            recommended_action[0] = max_correct_data[max_index][0]
+            recommended_action[1] = max_correct_data[max_index][1] #cutter_num
+            recommended_action[2] = [x ,y]
+            recommended_action[3] = max_correct_data[max_index][2] #direction
+            #max_correct_data =  self.force_search(x, y)
+            #print("min_distance_data= ", max_correct_data)
+            #force_end = datetime.now()
+            #print("force_time=", force_end - force_start)
+            #print("min_distance_data=", min_distance_data)
+            # if recommended_action[0] < max_correct_data[0]:
+            #     recommended_action[0] = max_correct_data[0]
+            #     recommended_action[1] = max_correct_data[1] #cutter_num
+            #     recommended_action[2] = [x ,y]
+            #     recommended_action[3] = max_correct_data[2] #direction
 
             return [recommended_action[1], recommended_action[2], recommended_action[3], recommended_action[0]]
 
@@ -253,75 +376,6 @@ class MyAlgo:
         #print("a-log= ", self.log)
         return next_board, has_line_cmped
 
-    #ある座標に対してスコアと最適な型と方向を求める
-    def force_search(self, x, y):
-        min_distance_data = [0, 0, 0] #distance, cutter_num, move_direction
-        for cutter_num_1 in range(25 + self.special_cutter_quantity):
-            cutter_height = self.cutter_size[cutter_num_1][0]
-            cutter_width = self.cutter_size[cutter_num_1][1]
-            #行、列がはみ出す場合はスキップ
-            if cutter_height > self.height - self.row or cutter_width > self.width:
-                break
-
-            for move_direction in range(4):
-                if move_direction == 1:
-                    continue
-                if self.check_board_change([x, y], cutter_num_1, move_direction) == False: #変化のない操作はしないようにする
-                    #print("skiped!!", "posi=", [x, y], "cutter=", cutter_num_1, "direction=", move_direction)
-                    continue
-                if move_direction != 0 and self.cutter_type(cutter_num_1) == 2 and cutter_num_1 != 3 and cutter_num_1 != 6:
-                    continue
-
-
-                # change_start = datetime.now()
-                next_board = self.board_op.board_update(cutter_num_1, [x, y], move_direction, copy.deepcopy(self.now))
-                # change_end = datetime.now()
-                # print("change_time=", change_end - change_start)
-                # eval_start = datetime.now()
-                maching_cells = self.evaluation(next_board)
-                #print("maching_cells= ", maching_cells)
-                # eval_end = datetime.now()
-                # print("eval_time=", eval_end - eval_start)
-                #print("total_distance=", total_distance)
-
-                if min_distance_data[0] < maching_cells:
-                    min_distance_data[0] = maching_cells
-                    min_distance_data[1] = cutter_num_1
-                    min_distance_data[2] = move_direction
-        return min_distance_data
-    
-    def check_board_change(self, position, cutter_num, direction):
-        cutter_type = self.cutter_type(cutter_num)
-        p_x, p_y = position
-        cutter_height, cutter_width = self.cutter_size[cutter_num]
-        is_changed = True
-
-        if cutter_type == 0:
-            if ((direction == 0 and (p_y + cutter_height) >= self.height)
-                    or (direction == 1 and p_y == 0)
-                    or (direction == 2 and (p_x + cutter_width) >= self.width)
-                    or (direction == 3 and p_x == 0)):
-                is_changed = False
-
-        elif cutter_type == 1:
-            if ((direction == 2 and (p_x + cutter_width) >= self.width)
-                    or (direction == 3 and p_x == 0)):
-                is_changed = False
-
-        elif cutter_type == 2:
-            if ((direction == 0 and (p_y + cutter_height) >= self.height)
-                    or (direction == 1 and p_y == 0)):
-                is_changed = False
-        # else:
-        #     next_board = self.board_op.board_update(cutter_num, position, direction, copy.deepcopy(self.now))
-        #     if next_board == self.now:
-        #         is_changed = False
-        if is_changed == True:
-            next_board = self.board_op.board_update(cutter_num, position, direction, copy.deepcopy(self.now))
-            if next_board == self.now:
-                is_changed = False
-            
-        return is_changed
 
     #特定の行でそろっている数を調べる
     def evaluation(self, new_board):
@@ -375,35 +429,6 @@ class MyAlgo:
         print("move X= ", pos_x, dir)
         return [pos_x, dir]
 
-
-
-    #型の種類を判別する
-    def cutter_type(self, cutter_num): #0:すべて１, 1:横, 2:縦, 3:一般抜型
-        if (cutter_num == 0 
-                or cutter_num == 1 
-                or cutter_num == 4 
-                or cutter_num == 7 
-                or cutter_num == 10 
-                or cutter_num == 13
-                or cutter_num == 16
-                or cutter_num == 19
-                or cutter_num == 22):
-            return 0
-        
-        elif (cutter_num == 2
-                or cutter_num == 5
-                or cutter_num == 8
-                or cutter_num == 11
-                or cutter_num == 14
-                or cutter_num == 17
-                or cutter_num == 20
-                or cutter_num == 23):
-            return 1
-
-        elif (cutter_num < 25):
-            return 2
-        else:
-            return 3
         
     
     def find_closest_equal_value(self, board, target_value, x, y):
@@ -504,7 +529,7 @@ def main():
         width = len(cutters[i][0])
         cutter_size.append([height, width])
 
-    start_board, correct_board = create_random_board.create_board(20, 20)
+    start_board, correct_board = create_random_board.create_board(10, 10)
     print(correct_board)
 
     height = len(start_board)
