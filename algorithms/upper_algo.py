@@ -9,10 +9,11 @@ import copy
 import numpy as np
 import random
 import board_reload_fujii
-import judge as J
-import general_patterns
+import simu.judge as J
+import standard_patterns
 import create_random_board
 import output_server
+import server_get
 
 class MyAlgo:
     def __init__(self, board_height, board_width, special_cutter_quantity, cutter_size, correct_board) -> None:
@@ -136,6 +137,7 @@ class MyAlgo:
             def move_x_y(board, log, x, y, correct_line_num):
                 next_board = board
                 target_position = self.find_closest_equal_value(board, correct_line_num, x, y)
+                cant_find_val = False
                 #print("target posi= ", target_position)
                 if target_position != None:
                     target_x = target_position[0]
@@ -157,6 +159,7 @@ class MyAlgo:
                     print("after correct_move_y")
                     cant_find_val = False
                 else:
+                    #print("cant find val")
                     cant_find_val = True
                     next_board = board
                 return [next_board, log, cant_find_val]
@@ -202,7 +205,9 @@ class MyAlgo:
                 if now_line[column] == correct_line[column]:
                     continue
                 print("not skip")
-                next_board, log, cant_find_val = move_x_y(next_board, log, column, before_line_num, correct_line[column])
+                next_board, log, is_cant_find_val = move_x_y(next_board, log, column, before_line_num, correct_line[column])
+                if is_cant_find_val == True:
+                    cant_find_val = True
 
             #y方向に1行入れ替え
             dir_up = 0
@@ -498,14 +503,17 @@ class MyAlgo:
 def main():
     main_start = datetime.now()
 
-    cutters = general_patterns.general_patterns_cells
+    start_board, correct_board, general_patterns, _, _ = server_get.server_get()
+
+    cutters = standard_patterns.standard_patterns_cells
     cutter_size = []
     for i in range(len(cutters)):
         height = len(cutters[i])
         width = len(cutters[i][0])
         cutter_size.append([height, width])
 
-    start_board, correct_board = create_random_board.create_board(20, 20)
+    #start_board, correct_board = create_random_board.create_board(20, 20)
+    print(start_board)
     print(correct_board)
 
     height = len(start_board)
@@ -532,6 +540,7 @@ def main():
     for log in my_algo.log:
         operate_board.append([log[0], log[1][0], log[1][1], log[2]])
     turns = len(my_algo.log)
+    #提出用ファイルを作成
     output_server.log_output(operate_board, turns)
 
     print("log=", my_algo.log)

@@ -1,5 +1,5 @@
 import numpy as np
-import general_patterns
+import standard_patterns
 
 def create_board(height ,width):
     first_board = np.random.randint(0, 4, (height, width))

@@ -14,6 +14,8 @@ import board_reload_fujii
 import judge as J
 import general_patterns
 import create_random_board
+import output_server
+import server_get
 
 board_op = board_reload_fujii.BoardOperation()
 
@@ -550,6 +552,14 @@ def main():
     board = my_algo.move_final_row(board)
     
     main_end = datetime.now()
+
+    #提出用にログを整形
+    operate_board = []
+    for log in my_algo.log:
+        operate_board.append([log[0], log[1][0], log[1][1], log[2]])
+    turns = len(my_algo.log)
+    #提出用ファイルを作成
+    output_server.log_output(operate_board, turns)
 
     print("log=", my_algo.log)
     print("ans_board=", board)
