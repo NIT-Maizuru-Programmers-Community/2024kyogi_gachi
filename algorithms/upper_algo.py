@@ -12,6 +12,7 @@ import board_reload_fujii
 import judge as J
 import general_patterns
 import create_random_board
+import output_server
 
 class MyAlgo:
     def __init__(self, board_height, board_width, special_cutter_quantity, cutter_size, correct_board) -> None:
@@ -525,6 +526,13 @@ def main():
     board = my_algo.move_final_row(board)
     
     main_end = datetime.now()
+
+    #提出用にログを整形
+    operate_board = []
+    for log in my_algo.log:
+        operate_board.append([log[0], log[1][0], log[1][1], log[2]])
+    turns = len(my_algo.log)
+    output_server.log_output(operate_board, turns)
 
     print("log=", my_algo.log)
     print("ans_board=", board)
