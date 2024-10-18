@@ -10,6 +10,8 @@ import array_send
 import board_reload_fujii
 import copy
 import time
+import keyboard
+import output_server
 
 
 
@@ -19,6 +21,12 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
         self.now_time=time.time()
         return self.now_time
     
+    @staticmethod
+    def on_key_event(algo):
+        output_server.log_output(algo,len(algo))
+
+
+
     def algo_gene(self,now_board,goal_board,cut_type,width,height):
         self.now_board=now_board
         self.goal_board=goal_board
@@ -116,9 +124,16 @@ class algorithm_tentative(board_reload_fujii.BoardOperation):
             self.array_operate_board.extend(self.match_operation[0])
             self.operation_board=copy.deepcopy(self.match_operation[1])
 
+
+            keyboard.add_hotkey('k', lambda:algorithm_tentative.on_key_event(self.array_operate_board))
+
+
         if self.operation_board==self.goal_board:
             print("正解algo")
         else:
             print("不正解algo")
 
         return self.array_operate_board
+
+
+
