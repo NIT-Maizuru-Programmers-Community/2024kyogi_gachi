@@ -16,7 +16,9 @@ def server_get():
         return board_list
 
 
-    param = {"token": "token1"}
+    param = {"token": "maizuru0478a4402bcf6769308a8d8fcafcf261bbb7ad87b911d2d0ee69a295d"}
+    #トークン↓
+    #maizuru0478a4402bcf6769308a8d8fcafcf261bbb7ad87b911d2d0ee69a295d
 
     # get()メソッドでGETリクエストを送信する
     response = requests.get("http://localhost:8080/problem", params=param)
