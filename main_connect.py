@@ -50,6 +50,8 @@ call_algotithm,now_board=algo_func.algo_gene(now_board,correct_board,use_type,wi
 
 algo=upper.MyAlgo(height,width,)
 
+
+
 algorithm_turn=len(call_algotithm)#かかった手数
 
 #output_server.log_output(call_algotithm,algorithm_turn)
