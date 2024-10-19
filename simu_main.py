@@ -18,9 +18,9 @@ import numpy as np
 class simu(judge.Judgec,algorithm_general.algorithm_tentative,algorithm.algorithm_tentative,algorithm_tate_ippan.algorithm_tentative):
 
     def set(self):
-        x=256
-        y=256
-        n=256#一般抜き型の数
+        x=64  
+        y=64
+        n=25#一般抜き型の数
         
         first_board = np.random.randint(0, 4, (x, y))
         self.correct_board=first_board.tolist() #正解の盤面

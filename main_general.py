@@ -18,7 +18,6 @@ import copy
 #procon-server_win.exe -c input.json -l :8080 -start 1s
 
 
-#コマンドプロンプトで上のコマンドを実行してからmainを実行
 class main(judge.Judgec,algorithm_general.algorithm_tentative,board_reload_fujii.BoardOperation):
 
     def set(self):

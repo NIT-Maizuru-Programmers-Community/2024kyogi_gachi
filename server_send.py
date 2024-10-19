@@ -10,7 +10,7 @@ param = {"token": "maizuru0478a4402bcf6769308a8d8fcafcf261bbb7ad87b911d2d0ee69a2
 with open('result.json', 'r') as file:
     json_data = json.load(file)
 
-POST_URL = "http://localhost:8080/answer"
+POST_URL = "http://172.29.1.2:80/answer"
 
 # POSTリクエストを、リクエストボディ付きで送信する
 response = requests.post(POST_URL,params=param,json=json_data,verify=False)
