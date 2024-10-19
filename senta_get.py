@@ -5,7 +5,7 @@ import pprint
 param = {"token": "token1"}
 
 # get()メソッドでGETリクエストを送信する
-response = requests.get("http://localhost:8000/problem", params=param)
+response = requests.get("http://localhost:8080/problem", params=param)
 
 
 get_data = vars(response) 

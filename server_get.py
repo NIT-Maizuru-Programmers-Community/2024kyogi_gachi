@@ -17,11 +17,13 @@ def server_get():
 
 
     param = {"token": "maizuru0478a4402bcf6769308a8d8fcafcf261bbb7ad87b911d2d0ee69a295d"}
+  
     #トークン↓
     #maizuru0478a4402bcf6769308a8d8fcafcf261bbb7ad87b911d2d0ee69a295d
 
     # get()メソッドでGETリクエストを送信する
     response = requests.get("http://172.29.1.2:80/problem", params=param)
+
 
     get_data=vars(response)
     board = get_data['_content']
