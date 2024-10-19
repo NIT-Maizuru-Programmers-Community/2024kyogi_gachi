@@ -6,10 +6,12 @@ import json
 import threading
 import numpy as np
 
+import time as tm
+
 py.init()    # Pygameを初期化
 turn = 1
-path_B = 'logg.json'
-Tturn = 819
+path_B = 'log.json'
+Tturn = 28
 
 i = 0
 
@@ -119,7 +121,7 @@ while running:
     screen.blit(TF_text,(800, 150))
     #screen.blit(time_text,(500, 700))
 
-
+    print(turn)
     board_date = BOARD[turn-1][str(turn)]["board"]
     board_turn =  BOARD[turn-1][str(turn)]["turn"]
     TF =  BOARD[turn-1][str(turn)]["TF"]
@@ -137,6 +139,10 @@ while running:
                 turn = turn-1
     
     screen.fill(WHITE)
+
+    if Tturn == turn:
+        turn = 1
+    tm.sleep(0.5)
 
 
 

@@ -8,19 +8,23 @@ from datetime import datetime
 import copy
 import numpy as np
 import random
+from multiprocessing import freeze_support
 from multiprocessing import Pool
 
 import board_reload_fujii
-import judge as J
-import general_patterns
+import simu.judge as J
+import standard_patterns
 import create_random_board
 import output_server
 import server_get
+import simu.output as output
 
 board_op = board_reload_fujii.BoardOperation()
+if __name__ == '__main__':
+    freeze_support()
 
 #ある座標に対してスコアと最適な型と方向を求める
-def force_search(x, y, special_cutter_quantity, cutter_size, height, width, row, now, correct_board):
+def force_search(x, y, special_cutter_quantity, correct, cutter_size, height, width, now, row):
     min_distance_data = [0, 0, 0] #distance, cutter_num, move_direction
     for cutter_num_1 in range(25 + special_cutter_quantity):
         cutter_height = cutter_size[cutter_num_1][0]
@@ -40,11 +44,11 @@ def force_search(x, y, special_cutter_quantity, cutter_size, height, width, row,
 
 
             # change_start = datetime.now()
-            next_board = board_op.board_update(cutter_num_1, [x, y], move_direction, copy.deepcopy(now))
+            next_board = board_op.board_update(cutter_num_1, copy.deepcopy([x, y]), move_direction, copy.deepcopy(now))
             # change_end = datetime.now()
             # print("change_time=", change_end - change_start)
             # eval_start = datetime.now()
-            maching_cells = evaluation(next_board, correct_board, row)
+            maching_cells = evaluation(next_board, correct, row)
             #print("maching_cells= ", maching_cells)
             # eval_end = datetime.now()
             # print("eval_time=", eval_end - eval_start)
@@ -55,6 +59,9 @@ def force_search(x, y, special_cutter_quantity, cutter_size, height, width, row,
                 min_distance_data[1] = cutter_num_1
                 min_distance_data[2] = move_direction
     return min_distance_data
+
+def force_search_wrapper(args):
+    return force_search(*args)
 
 def check_board_change(position, cutter_num, direction, cutter_size, height, width, now):
     cutter_type = cutter_type(cutter_num)
@@ -83,7 +90,7 @@ def check_board_change(position, cutter_num, direction, cutter_size, height, wid
     #     if next_board == self.now:
     #         is_changed = False
     if is_changed == True:
-        next_board = board_op.board_update(cutter_num, position, direction, copy.deepcopy(now))
+        next_board = board_op.board_update(cutter_num, copy.deepcopy(position), direction, copy.deepcopy(now))
         if next_board == now:
             is_changed = False
         
@@ -137,7 +144,6 @@ class MyAlgo:
         self.correct = correct_board
         self.board_op = board_reload_fujii.BoardOperation()
         self.log = []
-        self.p = Pool(10) #プロセス数
     
     def algo(self, now_board, row):
         self.now = copy.deepcopy(now_board)
@@ -149,37 +155,41 @@ class MyAlgo:
         def all_position():
             #すべての座標を探索
             recommended_action = [0, 0, [0, 0], 0] #distance, cutter_num, [x, y], move_direction
-            max_correct_data = []
+            settings = []
             for y in range(self.row, self.height):
                 if y > self.row + 1:
                     continue
                 for x in range(self.width):
-                    # print("position=", x, y)
-                    #force_start = datetime.now()
-                    max_correct_data = self.p.map(force_search, [x, y, self.special_cutter_quantity, self.cutter_size, self.height, self.width, self.row,])
-                    #1つ目のインデックスを抽出したリストを作る
-            max_score_list = [row[0] for row in max_correct_data]
-            max_index = max_score_list.index(max(max_score_list))
-            
-            recommended_action[0] = max_correct_data[max_index][0]
-            recommended_action[1] = max_correct_data[max_index][1] #cutter_num
-            recommended_action[2] = [x ,y]
-            recommended_action[3] = max_correct_data[max_index][2] #direction
-            #max_correct_data =  self.force_search(x, y)
-            #print("min_distance_data= ", max_correct_data)
-            #force_end = datetime.now()
-            #print("force_time=", force_end - force_start)
-            #print("min_distance_data=", min_distance_data)
-            # if recommended_action[0] < max_correct_data[0]:
-            #     recommended_action[0] = max_correct_data[0]
-            #     recommended_action[1] = max_correct_data[1] #cutter_num
-            #     recommended_action[2] = [x ,y]
-            #     recommended_action[3] = max_correct_data[2] #direction
+                    settings.append([x, y, self.special_cutter_quantity, self.correct, self.cutter_size, self.height, self.width, self.now, self.row])
+            with Pool(processes=2) as pool:
+                result =  pool.map(force_search_wrapper, settings)
 
-            return [recommended_action[1], recommended_action[2], recommended_action[3], recommended_action[0]]
+            maching_val = []
+            for one_data in result:
+                maching_val.append(one_data[0])
+            max_val_index = maching_val.index(max(maching_val))
 
-        def fill_blanks(now_board, log):
-            def move_correct_y(x, y, target_y, next_board, log):
+            max_movement = maching_val[max_val_index]
+            #当該インデックスからｘ座標を逆算
+            if (max_val_index + 1) % self.width == 0:
+                max_posi_x = self.width - 1
+            else:
+                max_posi_x = (max_val_index + 1) % self.width - 1
+            #当該インデックスからy座標を逆算
+            if (max_val_index + 1) % self.width == 0:
+                max_posi_y = (max_val_index + 1) / self.width
+            else:
+                max_posi_y = ((max_val_index + 1) / self.width) + 1
+                
+            cutter_num = maching_val[max_val_index][1]
+            posi = [max_posi_x, max_posi_y]
+            dir = maching_val[max_val_index][2]
+            maching_cells = maching_val[max_val_index][0]
+            return [cutter_num, posi, dir, maching_cells]
+            #return [recommended_action[1], recommended_action[2], recommended_action[3], recommended_action[0]]
+
+        def fill_blanks(now_board):
+            def move_correct_y(x, y, target_y, next_board):
                 dir_up = 0
                 cutter_list, is_zero_distance = move_y(y, target_y)
                 print("cutter list=", cutter_list, is_zero_distance)
@@ -188,24 +198,24 @@ class MyAlgo:
                     print("cutter_size= ", cutter_size)
                     cutter_num = self.search_cutter(cutter_size)
                     posi = [x, self.row + 2]
-                    next_board = self.board_op.board_update(cutter_num, posi, dir_up, copy.deepcopy(next_board))
-                    log.append([cutter_num, posi, dir_up])
+                    next_board = self.board_op.board_update(cutter_num, copy.deepcopy(posi), dir_up, copy.deepcopy(next_board))
+                    self.log.append([cutter_num, posi, dir_up])
                 
                 if is_zero_distance:
                     #y方向に1つ上に移動
                     posi = [x, self.row + 1]
                     cutter_num = 0
-                    next_board = self.board_op.board_update(cutter_num, posi, dir_up, copy.deepcopy(next_board))
-                    log.append([cutter_num, posi, dir_up])
+                    next_board = self.board_op.board_update(cutter_num, copy.deepcopy(posi), dir_up, copy.deepcopy(next_board))
+                    self.log.append([cutter_num, posi, dir_up])
                 else:
                     #y方向に2つ上に移動
                     posi = [x, self.row + 1]
                     cutter_num = 3
-                    next_board = self.board_op.board_update(cutter_num, posi, dir_up, copy.deepcopy(next_board))
-                    log.append([cutter_num, posi, dir_up])
-                return next_board, log
+                    next_board = self.board_op.board_update(cutter_num, copy.deepcopy(posi), dir_up, copy.deepcopy(next_board))
+                    self.log.append([cutter_num, posi, dir_up])
+                return next_board
             
-            def move_correct_y2(x, y, target_y, next_board, log):
+            def move_correct_y2(x, y, target_y, next_board):
                 dir_up = 0
                 cutter_list, is_zero_distance = move_y(y, target_y)
                 print("cutter list=", cutter_list, is_zero_distance)
@@ -214,22 +224,22 @@ class MyAlgo:
                     print("cutter_size= ", cutter_size)
                     cutter_num = self.search_cutter(cutter_size)
                     posi = [x, self.row + 2]
-                    next_board = self.board_op.board_update(cutter_num, posi, dir_up, copy.deepcopy(next_board))
-                    log.append([cutter_num, posi, dir_up])
+                    next_board = self.board_op.board_update(cutter_num, copy.deepcopy(posi), dir_up, copy.deepcopy(next_board))
+                    self.log.append([cutter_num, posi, dir_up])
                 
                 if is_zero_distance:
                     #y方向に1つ上に移動
                     posi = [x, self.row]
                     cutter_num = 0
-                    next_board = self.board_op.board_update(cutter_num, posi, dir_up, copy.deepcopy(next_board))
-                    log.append([cutter_num, posi, dir_up])
+                    next_board = self.board_op.board_update(cutter_num, copy.deepcopy(posi), dir_up, copy.deepcopy(next_board))
+                    self.log.append([cutter_num, posi, dir_up])
                 else:
                     #y方向に2つ上に移動
                     posi = [x, self.row]
                     cutter_num = 3
-                    next_board = self.board_op.board_update(cutter_num, posi, dir_up, copy.deepcopy(next_board))
-                    log.append([cutter_num, posi, dir_up])
-                return next_board, log
+                    next_board = self.board_op.board_update(cutter_num, copy.deepcopy(posi), dir_up, copy.deepcopy(next_board))
+                    self.log.append([cutter_num, posi, dir_up])
+                return next_board
             
             def move_y(y, target_y):
                 print("y= ", y)
@@ -257,35 +267,41 @@ class MyAlgo:
                     if cutter_size != 0:
                         cutter_list.append(int(cutter_size))
             
-            def move_x_y(board, log, x, y, correct_line_num):
+            def move_x_y(board, x, y, correct_line_num):
                 next_board = board
                 target_position = self.find_closest_equal_value(board, correct_line_num, x, y)
+                cant_find_val = False
                 #print("target posi= ", target_position)
                 if target_position != None:
                     target_x = target_position[0]
                     target_y = target_position[1]
                     print("target posi=", target_position, target_x)
                     rlt = self.move_x(x, target_x)
+                    print("rlt= ", rlt)
                     if rlt != None:
                         posi_x = rlt[0]
+                        print("posi_x= ", posi_x)
                         dir = rlt[1]
                         posi = [posi_x, target_y]
+                        print("posi1= ", posi)
                         cutter_num = 23 #上の行がすべて１の256
-                        next_board = self.board_op.board_update(cutter_num, posi, dir, copy.deepcopy(board))
+                        next_board = self.board_op.board_update(cutter_num, copy.deepcopy(posi), dir, copy.deepcopy(board))
                         print("moved X board=", next_board)
-                        log.append([cutter_num, posi, dir])
+                        print("posi2= ", posi)
+                        self.log.append([cutter_num, posi, dir])
                     
                     print("before correct_move_y")
-                    next_board, log = move_correct_y(x, y, target_y, next_board, log)
+                    next_board = move_correct_y(x, y, target_y, next_board)
                     print("moved Y board=", next_board)
                     print("after correct_move_y")
                     cant_find_val = False
                 else:
+                    #print("cant find val")
                     cant_find_val = True
                     next_board = board
-                return [next_board, log, cant_find_val]
+                return [next_board, cant_find_val]
             
-            def move_x_y2(x, y, board, log, correct_line_num):
+            def move_x_y2(x, y, board, correct_line_num):
                 target_position = self.find_closest_equal_value(board, correct_line_num, x, y)
                 if target_position != None:
                     target_x = target_position[0]
@@ -296,21 +312,22 @@ class MyAlgo:
                         dir = rlt[1]
                         posi = [posi_x, target_y]
                         cutter_num = 23 #上の行がすべて１の256
-                        next_board = self.board_op.board_update(cutter_num, posi, dir, copy.deepcopy(board))
+                        next_board = self.board_op.board_update(cutter_num, copy.deepcopy(posi), dir, copy.deepcopy(board))
                         #print([cutter_num, posi, dir])
-                        log.append([cutter_num, posi, dir])
+                        self.log.append([cutter_num, posi, dir])
                     else:
                         next_board = board
                     #その行まで移動
-                    next_board, log = move_correct_y2(x, y, target_y, next_board, log)
+                    next_board = move_correct_y2(x, y, target_y, next_board)
                     print(next_board)
                 else:
                     print("no target")
                     posi = [x, y]
                     dir = 0
                     cutter_num = 0
-                    next_board = self.board_op.board_update(cutter_num, posi, dir, copy.deepcopy(board))
-                return [next_board, log]
+                    next_board = self.board_op.board_update(cutter_num, copy.deepcopy(posi), dir, copy.deepcopy(board))
+                    self.log.append([cutter_num, posi, dir])
+                return next_board
 
             before_line_num = self.row + 1
             now_line = now_board[before_line_num]
@@ -326,12 +343,14 @@ class MyAlgo:
                 if now_line[column] == correct_line[column]:
                     continue
                 print("not skip")
-                next_board, log, cant_find_val = move_x_y(next_board, log, column, before_line_num, correct_line[column])
+                next_board, is_cant_find_val = move_x_y(next_board, column, before_line_num, correct_line[column])
+                if is_cant_find_val == True:
+                    cant_find_val = True
 
             #y方向に1行入れ替え
             dir_up = 0
             next_board = self.board_op.board_update(23, [0, self.row], dir_up, copy.deepcopy(next_board))
-            log.append([23, [0, self.row], dir_up])
+            self.log.append([23, [0, self.row], dir_up])
 
             if cant_find_val == True:
                 print("cant find val = True")
@@ -340,9 +359,9 @@ class MyAlgo:
                     for column in range(self.width):
                         if upper_line[column] == correct_line[column]:
                             continue
-                        next_board, log = move_x_y2(column, self.row, next_board, log, correct_line[column])
+                        next_board = move_x_y2(column, self.row, next_board, correct_line[column])
                         upper_line = next_board[self.row]
-            return [next_board, log]
+            return next_board
         
         all_posi_start = datetime.now()
         recommended_action = all_position()
@@ -354,21 +373,21 @@ class MyAlgo:
         print("first_maching_cells= ", first_maching_cells)
         if first_maching_cells >= recommended_action[3] - 1:
             fill_start = datetime.now()
-            next_board, self.log = fill_blanks(copy.deepcopy(self.now), self.log)
+            next_board = fill_blanks(copy.deepcopy(self.now))
             fill_end = datetime.now()
             print("fill_time=", fill_end - fill_start)
             has_line_cmped = True
             print("filled")
         else:
             print("recommended", recommended_action)
-            next_board = self.board_op.board_update(recommended_action[0], recommended_action[1], recommended_action[2], copy.deepcopy(self.now))
+            next_board = self.board_op.board_update(recommended_action[0], copy.deepcopy(recommended_action[1]), recommended_action[2], copy.deepcopy(self.now))
             self.log.append(recommended_action[0:3])
             if recommended_action[3] == self.width:
                 #y方向に1行入れ替え
                 dir_up = 0
                 cutter_num = 23
                 posi = [0, self.row]
-                next_board = self.board_op.board_update(cutter_num, posi, dir_up, copy.deepcopy(next_board))
+                next_board = self.board_op.board_update(cutter_num, copy.deepcopy(posi), dir_up, copy.deepcopy(next_board))
                 self.log.append([cutter_num, posi, dir_up])
                 has_line_cmped = True
             else:
@@ -378,17 +397,6 @@ class MyAlgo:
         #print("a-log= ", self.log)
         return next_board, has_line_cmped
 
-
-    #特定の行でそろっている数を調べる
-    def evaluation(self, new_board):
-        correct_line = self.correct[self.row]
-        new_line = new_board[self.row + 1]
-
-        cnt = 0
-        for i in range(len(correct_line)):
-            if correct_line[i] == new_line[i]:
-                cnt += 1
-        return cnt
 
     def search_cutter(self, cutter_scale):#抜き型の番号決める
         #抜き型番号の決定
@@ -431,6 +439,9 @@ class MyAlgo:
         print("move X= ", pos_x, dir)
         return [pos_x, dir]
 
+
+
+    
         
     
     def find_closest_equal_value(self, board, target_value, x, y):
@@ -515,7 +526,7 @@ class MyAlgo:
                 print("cutter_num", cutter_num)
                 posi = [column, self.height - 1]
                 dir = 2
-                next_board = self.board_op.board_update(cutter_num, posi, dir, copy.deepcopy(next_board))
+                next_board = self.board_op.board_update(cutter_num, copy.deepcopy(posi), dir, copy.deepcopy(next_board))
                 print("next_board= ", next_board)
                 self.log.append([cutter_num, posi, dir])
         return next_board
@@ -524,14 +535,21 @@ class MyAlgo:
 def main():
     main_start = datetime.now()
 
-    cutters = general_patterns.general_patterns_cells
+    #問題を取得
+    #start_board, correct_board, general_patterns, _, _ = server_get.server_get()
+
+    cutters = standard_patterns.standard_patterns_cells
     cutter_size = []
     for i in range(len(cutters)):
         height = len(cutters[i])
         width = len(cutters[i][0])
         cutter_size.append([height, width])
 
-    start_board, correct_board = create_random_board.create_board(10, 10)
+    #問題をランダムで生成
+    start_board, correct_board = create_random_board.create_board(32, 32)
+    # start_board = [[1, 1, 0], [0, 0, 0], [3, 1, 0]]
+    # correct_board = [[0, 1, 0], [0, 3, 1], [0, 0, 1]]
+    print(start_board)
     print(correct_board)
 
     height = len(start_board)
@@ -558,7 +576,7 @@ def main():
     for log in my_algo.log:
         operate_board.append([log[0], log[1][0], log[1][1], log[2]])
     turns = len(my_algo.log)
-    #提出用ファイルを作成
+    #提出用ファイルに保存
     output_server.log_output(operate_board, turns)
 
     print("log=", my_algo.log)
@@ -571,5 +589,24 @@ def main():
         print("NG")
     print("number-of-times= ", len(my_algo.log))
     print("main-time=", main_end - main_start)
+
+    for turn in range(1,len(operate_board)+1):
+        #self.end = self.get_time()
+        turn_algorithm=operate_board[turn-1]#そのターンの操作
+
+        cutter_position=[turn_algorithm[1],turn_algorithm[2]]#使用した座標
+
+        relord_board=board_op.board_update(turn_algorithm[0],cutter_position,turn_algorithm[3],start_board)
+        #処理後の盤面取得( cutter_num, cutter_LU_posi, move_direction, board):
+        #print(f"{self.relord_board}self.relord_board")
+
+        correct=judge.judge(relord_board,correct_board)#正誤判定
+
+        start_board=relord_board.copy()#盤面書き換え
+        
+        #実行時間
+
+        output.log_output(relord_board,turn,0,turn_algorithm[0],cutter_position,turn_algorithm[3],correct[1])
+    #     #relord_board,turn,time,use_type,use_coodenate,move_direc,TF
 
 main()
